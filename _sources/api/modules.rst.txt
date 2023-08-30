@@ -1,0 +1,7 @@
+singler
+=======
+
+.. toctree::
+   :maxdepth: 4
+
+   singler

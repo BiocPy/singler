@@ -1,0 +1,21 @@
+singler package
+===============
+
+Submodules
+----------
+
+singler.skeleton module
+-----------------------
+
+.. automodule:: singler.skeleton
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: singler
+   :members:
+   :undoc-members:
+   :show-inheritance:
