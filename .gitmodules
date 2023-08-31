@@ -1,0 +1,15 @@
+[submodule "src/singler/extern/singlepp"]
+	path = src/singler/extern/singlepp
+	url = https://github.com/LTLA/singlepp
+[submodule "src/singler/extern/knncolle"]
+	path = src/singler/extern/knncolle
+	url = https://github.com/LTLA/knncolle
+[submodule "src/singler/extern/annoy"]
+	path = src/singler/extern/annoy
+	url = https://github.com/spotify/Annoy
+[submodule "src/singler/extern/hnswlib"]
+	path = src/singler/extern/hnswlib
+	url = https://github.com/nmslib/hnswlib
+[submodule "src/singler/extern/CppKmeans"]
+	path = src/singler/extern/kmeans
+	url = https://github.com/LTLA/CppKmeans
