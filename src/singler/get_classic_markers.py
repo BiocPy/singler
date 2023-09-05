@@ -1,10 +1,10 @@
 from numpy import ndarray, int32, float64, uintp
 from delayedarray import DelayedArray
 from mattress import tatamize
-from typing import Union, Sequence, Optional
+from typing import Union, Sequence, Optional, Any
 
 from . import cpphelpers as lib
-from .utils import _factorize
+from .utils import _factorize, _clean_matrix
 from .InternalMarkers import InternalMarkers
 
 
@@ -68,6 +68,8 @@ def get_classic_markers(
     if nrefs != len(features):
         raise ValueError("length of 'ref' and 'features' should be the same")
 
+    tmp_ref = []
+    tmp_features = []
     for i in range(nrefs):
         curref = ref[i]
         curshape = curref.shape
@@ -77,6 +79,13 @@ def get_classic_markers(
             raise ValueError("number of rows of 'ref' should be equal to the length of the corresponding 'features'")
         if curshape[1] != len(labels[i]):
             raise ValueError("number of columns of 'ref' should be equal to the length of the corresponding 'labels'")
+
+        r, f = _clean_matrix(curref, features[i], assay_type, check_missing)
+        tmp_ref.append(r)
+        tmp_features.append(f)
+
+    ref = tmp_ref
+    features = tmp_features
 
     # Defining the intersection of features.
     last = set()
