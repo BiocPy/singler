@@ -1,6 +1,7 @@
 from numpy import ndarray, int32, float64, uintp
 from delayedarray import DelayedArray
 from mattress import tatamize
+from typing import Union, Sequence, Optional
 
 from . import cpphelpers as lib
 from .utils import _factorize
@@ -8,14 +9,53 @@ from .InternalMarkers import InternalMarkers
 
 
 def get_classic_markers(
-    ref,
-    labels,
-    features,
-    assay_type = "logcounts",
-    check_missing = True,
-    num_de = None,
-    num_threads = 1,
+    ref : Union[Any, list[Any]],
+    labels: Union[Sequence, list[Sequence]],
+    features: Union[Sequence, list[Sequence]],
+    assay_type: Union[str, int] = "logcounts",
+    check_missing: bool = True,
+    num_de: Optional[int] = None,
+    num_threads: int = 1,
 ):
+    """Compute markers from a reference using the classic SingleR algorithm.
+    This is typically done for reference datasets derived from replicated bulk transcriptomic experiments.
+
+    Args:
+        ref (Any | list[Any]):
+            A matrix-like object containing the expression values of a reference dataset.
+            Each column is a sample and each row is a feature.
+            Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing a matrix-like object in one of its assays.
+            Alternatively, a list of such matrices or ``SummarizedExperiment`` objects, typically for multiple batches of the same reference;
+            it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.
+
+        labels (Any | list[Any]):
+            A sequence of length equal to the number of columns of ``ref``, 
+            containing a label (usually a string) for each column.
+            Alternatively, a list of such sequences of length equal to that of a list ``ref``;
+            each sequence should have length equal to the number of columns of the corresponding entry of ``ref``.
+
+        features (Any | list[Any]):
+            A sequence of length equal to the number of rows of ``ref``, 
+            containing the feature name (usually a string) for each row.
+            Alternatively, a list of such sequences of length equal to that of a list ``ref``;
+            each sequence should have length equal to the number of rows of the corresponding entry of ``ref``.
+
+        assay_type (str | int):
+            Name or index of the assay containing the assay of interest,
+            if ``ref`` is or contains :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment objects.
+            
+        check_missing (bool):
+            Whether to check for and remove rows with missing (NaN) values in a matrix ``ref`` or entries of a list ``ref``
+            
+        num_de (int, optional):
+            Number of differentially expressed genes to use as markers for each pairwise comparison between labels.
+            If None, an appropriate number of genes is automatically determined.
+
+        num_threads (int):
+            Number of threads to use for the calculations.
+    """
+    
     if not isinstance(ref, list):
         ref = [ref]
         labels = [labels]
