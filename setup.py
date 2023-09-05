@@ -10,7 +10,26 @@ from setuptools import setup
 
 if __name__ == "__main__":
     try:
-        setup(use_scm_version={"version_scheme": "no-guess-dev"})
+        setup(
+            use_scm_version={"version_scheme": "no-guess-dev"},
+            ext_modules=[
+                Extension(
+                    "singler.core",
+                    [
+                        "src/singler/lib/Markers.cpp",
+                        "src/singler/lib/bindings.cpp",
+                    ],
+                    include_dirs=[
+                        assorthead.includes()
+                    ]
+                    + mattress.includes(),
+                    language="c++",
+                    extra_compile_args=[
+                        "-std=c++17",
+                    ],
+                )
+            ],
+        )
     except:  # noqa
         print(
             "\n\nAn error occurred while building the project, "
