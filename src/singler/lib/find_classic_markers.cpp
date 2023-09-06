@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <cstdint>
-#include <iostream>
 
 //[[export]]
 void* find_classic_markers(int32_t nref, const uintptr_t* labels /** void_p */, const uintptr_t* ref /** void_p */, int32_t de_n, int32_t nthreads) {

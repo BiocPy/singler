@@ -1,5 +1,6 @@
 from . import cpphelpers as lib
-from numpy import ndarray, int32
+from numpy import ndarray, int32, array
+from typing import Sequence
 
 
 class InternalMarkers:
@@ -25,13 +26,42 @@ class InternalMarkers:
         lib.get_markers_for_pair(self._ptr, first, second, output)
         return output
 
-    def set(self, first: int, second: int, markers: ndarray):
+    def set(self, first: int, second: int, markers: Sequence):
         self._check(first)
         self._check(second)
-        out = markers.astype(int32, copy=False)
+        out = array(markers, dtype=int32, copy=False)
         lib.set_markers_for_pair(self._ptr, first, second, len(out), out)
 
+    def to_dict(self, labels: Sequence, features: Sequence):
+        if len(labels) != self._num_labels:
+            raise ValueError("length of 'labels' should be equal to the number of labels")
 
-def create_new_markers(num_labels: int) -> InternalMarkers:
-    out = lib.create_new_markers(num_labels)
-    return InternalMarkers(out)
+        markers = {}
+        for i, x in enumerate(labels):
+            current = {}
+            for j, y in enumerate(labels):
+                current[y] = [features[k] for k in self.get(i, j)]
+            markers[x] = current
+
+        return markers
+
+    @classmethod
+    def from_dict(cls, markers: dict[Any, dict[Any, Sequence]], labels: Sequence, features: Sequence):
+        fmapping = {}
+        for i, x in enumerate(features):
+            fmapping[x] = i
+
+        instance = cls(lib.create_new_markers(len(labels)))
+
+        for outer_i, outer_k in enumerate(labels):
+            for inner_i, inner_k in enumerate(labels):
+                current = markers[outer_k][inner_k]
+
+                mapped = []
+                for x in current:
+                    if x in fmapping: # just skipping features that aren't present.
+                        mapped.append(fmapping[x])
+
+                instance.set(outer_i, inner_i, mapped)
+
+        return instance

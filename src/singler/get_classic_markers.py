@@ -170,11 +170,4 @@ def get_classic_markers(
         )
     )
 
-    markers = {}
-    for i, x in enumerate(common_labels):
-        current = {}
-        for j, y in enumerate(common_labels):
-            current[y] = [common_features[k] for k in raw_markers.get(i, j)]
-        markers[x] = current
-
-    return markers
+    return raw_markers.to_dict(common_labels, common_features)
