@@ -1,6 +1,6 @@
 from . import cpphelpers as lib
 from numpy import ndarray, int32, array
-from typing import Sequence
+from typing import Sequence, Any
 
 
 class InternalMarkers:
@@ -32,7 +32,7 @@ class InternalMarkers:
         out = array(markers, dtype=int32, copy=False)
         lib.set_markers_for_pair(self._ptr, first, second, len(out), out)
 
-    def to_dict(self, labels: Sequence, features: Sequence):
+    def to_dict(self, labels: Sequence, features: Sequence) -> dict[Any, dict[Any, Sequence]]:
         if len(labels) != self._num_labels:
             raise ValueError(
                 "length of 'labels' should be equal to the number of labels"
