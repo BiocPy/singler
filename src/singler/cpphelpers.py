@@ -91,17 +91,6 @@ lib.py_get_nmarkers_for_pair.argtypes = [
     ct.POINTER(ct.c_char_p)
 ]
 
-lib.py_grouped_medians.restype = None
-lib.py_grouped_medians.argtypes = [
-    ct.c_void_p,
-    ct.c_void_p,
-    ct.c_int32,
-    ct.c_void_p,
-    ct.c_int32,
-    ct.POINTER(ct.c_int32),
-    ct.POINTER(ct.c_char_p)
-]
-
 lib.py_set_markers_for_pair.restype = None
 lib.py_set_markers_for_pair.argtypes = [
     ct.c_void_p,
@@ -130,9 +119,6 @@ def get_nlabels_from_markers(ptr):
 
 def get_nmarkers_for_pair(ptr, label1, label2):
     return catch_errors(lib.py_get_nmarkers_for_pair)(ptr, label1, label2)
-
-def grouped_medians(mat, labels, num_labels, output, nthreads):
-    return catch_errors(lib.py_grouped_medians)(mat, np2ct(labels, np.int32), num_labels, np2ct(output, np.float64), nthreads)
 
 def set_markers_for_pair(ptr, label1, label2, n, values):
     return catch_errors(lib.py_set_markers_for_pair)(ptr, label1, label2, n, np2ct(values, np.int32))

@@ -21,7 +21,6 @@ if __name__ == "__main__":
                         "src/singler/lib/Markers.cpp",
                         "src/singler/lib/bindings.cpp",
                         "src/singler/lib/find_classic_markers.cpp",
-                        "src/singler/lib/grouped_medians.cpp",
                     ],
                     include_dirs=[
                         assorthead.includes()

@@ -111,8 +111,9 @@ def get_classic_markers(
 
     # Creating medians.
     ref2 = []
-    tmp_labels = []
     ref2_ptrs = ndarray((nrefs,), dtype=uintp)
+    tmp_labels = []
+
     for i, x in enumerate(ref):
         survivors = []
         remap = [None] * len(common_features)
@@ -122,13 +123,10 @@ def get_classic_markers(
                 remap[common_features_map[f]] = len(survivors) - 1
 
         ptr = tatamize(x[survivors,:])
+        med, lev = ptr.row_medians_by_group(labels[i], num_threads = num_threads)
+        tmp_labels.append(lev)
 
-        flevels, findices = _factorize(labels[i])
-        output = ndarray((len(survivors), len(flevels)), dtype=float64)
-        lib.grouped_medians(ptr.ptr, findices, len(flevels), output, num_threads)
-        tmp_labels.append(flevels)
-
-        finalptr = tatamize(output[remap, :])
+        finalptr = tatamize(med[remap, :])
         ref2.append(finalptr)
         ref2_ptrs[i] = finalptr.ptr
 

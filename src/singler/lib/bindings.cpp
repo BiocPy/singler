@@ -29,8 +29,6 @@ int32_t get_nlabels_from_markers(void*);
 
 int32_t get_nmarkers_for_pair(void*, int32_t, int32_t);
 
-void grouped_medians(const void*, const int32_t*, int32_t, double*, int32_t);
-
 void set_markers_for_pair(void*, int32_t, int32_t, int32_t, const int32_t*);
 
 extern "C" {
@@ -117,18 +115,6 @@ PYAPI int32_t py_get_nmarkers_for_pair(void* ptr, int32_t label1, int32_t label2
         *errmsg = copy_error_message("unknown C++ exception");
     }
     return output;
-}
-
-PYAPI void py_grouped_medians(const void* mat, const int32_t* labels, int32_t num_labels, double* output, int32_t nthreads, int32_t* errcode, char** errmsg) {
-    try {
-        grouped_medians(mat, labels, num_labels, output, nthreads);
-    } catch(std::exception& e) {
-        *errcode = 1;
-        *errmsg = copy_error_message(e.what());
-    } catch(...) {
-        *errcode = 1;
-        *errmsg = copy_error_message("unknown C++ exception");
-    }
 }
 
 PYAPI void py_set_markers_for_pair(void* ptr, int32_t label1, int32_t label2, int32_t n, const int32_t* values, int32_t* errcode, char** errmsg) {

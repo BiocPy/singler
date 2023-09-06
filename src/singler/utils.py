@@ -18,15 +18,16 @@ def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
     return levels, indices
 
 
-def _clean_matrix(x, features, assay_type, check_missing):
+def _clean_matrix(x, features, assay_type, check_missing, num_threads):
     if isinstance(x, SummarizedExperiment):
         x = x.assay(assay_type)
 
-#    ptr = tatamize(x)
-#    retain = ndarray(ptr.nrow(), dtype=uint8)
-#    if lib.prune_missing(ptr.ptr, retain):
-#        retain = retain.astype(bool_)
-#        x = x[retain,:]
-#        features = features[retain]
+    ptr = tatamize(x)
+    retain = ptr.row_nan_counts(num_threads = num_threads) == 0
+    if retain.all():
+        return x, features
 
-    return x, features
+    new_features = []
+    for i, k in enumerate(retain):
+        new_features.append(features[i])
+    return x[retain,:], new_features
