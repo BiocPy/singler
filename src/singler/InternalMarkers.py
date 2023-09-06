@@ -32,7 +32,9 @@ class InternalMarkers:
         out = array(markers, dtype=int32, copy=False)
         lib.set_markers_for_pair(self._ptr, first, second, len(out), out)
 
-    def to_dict(self, labels: Sequence, features: Sequence) -> dict[Any, dict[Any, Sequence]]:
+    def to_dict(
+        self, labels: Sequence, features: Sequence
+    ) -> dict[Any, dict[Any, Sequence]]:
         if len(labels) != self._num_labels:
             raise ValueError(
                 "length of 'labels' should be equal to the number of labels"
