@@ -1,7 +1,6 @@
 from numpy import zeros, int32, ndarray
 from typing import Sequence, Tuple
 from summarizedexperiment import SummarizedExperiment
-from . import cpphelpers as lib
 
 
 def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
@@ -23,11 +22,11 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
         x = x.assay(assay_type)
 
     ptr = tatamize(x)
-    retain = ptr.row_nan_counts(num_threads = num_threads) == 0
+    retain = ptr.row_nan_counts(num_threads=num_threads) == 0
     if retain.all():
         return x, features
 
     new_features = []
     for i, k in enumerate(retain):
         new_features.append(features[i])
-    return x[retain,:], new_features
+    return x[retain, :], new_features
