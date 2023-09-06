@@ -25,7 +25,8 @@ def get_classic_markers(
             Each column is a sample and each row is a feature.
             Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing a matrix-like object in one of its assays.
-            Alternatively, a list of such matrices or ``SummarizedExperiment`` objects, typically for multiple batches of the same reference;
+            Alternatively, a list of such matrices or ``SummarizedExperiment`` objects, 
+            typically for multiple batches of the same reference;
             it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.
 
         labels (Any | list[Any]):
@@ -42,10 +43,12 @@ def get_classic_markers(
 
         assay_type (str | int):
             Name or index of the assay containing the assay of interest,
-            if ``ref`` is or contains :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment objects.
+            if ``ref`` is or contains 
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment` objects.
 
         check_missing (bool):
-            Whether to check for and remove rows with missing (NaN) values in a matrix ``ref`` or entries of a list ``ref``
+            Whether to check for and remove rows with missing (NaN) values in the reference matrices.
+            This can be set to False if it is known that no NaN values exist.
 
         num_de (int, optional):
             Number of differentially expressed genes to use as markers for each pairwise comparison between labels.
@@ -143,8 +146,8 @@ def get_classic_markers(
 
     # Defining the union of labels.
     ulabels = set()
-    for l in labels:
-        ulabels |= set(l)
+    for labs in labels:
+        ulabels |= set(labs)
 
     common_labels = list(ulabels)
     common_labels_map = {}
