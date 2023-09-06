@@ -1,6 +1,7 @@
 from numpy import zeros, int32, ndarray
 from typing import Sequence, Tuple
 from summarizedexperiment import SummarizedExperiment
+from mattress import tatamize
 
 
 def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
