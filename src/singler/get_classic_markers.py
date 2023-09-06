@@ -84,11 +84,11 @@ def get_classic_markers(
             )
 
         r, f = _clean_matrix(
-            curref, 
-            features[i], 
-            assay_type = assay_type, 
-            check_missing = check_missing, 
-            num_threads = num_threads
+            curref,
+            features[i],
+            assay_type=assay_type,
+            check_missing=check_missing,
+            num_threads=num_threads,
         )
         tmp_ref.append(r)
         tmp_features.append(f)
