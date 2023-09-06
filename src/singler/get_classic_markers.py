@@ -25,7 +25,7 @@ def get_classic_markers(
             Each column is a sample and each row is a feature.
             Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing a matrix-like object in one of its assays.
-            Alternatively, a list of such matrices or ``SummarizedExperiment`` objects, 
+            Alternatively, a list of such matrices or ``SummarizedExperiment`` objects,
             typically for multiple batches of the same reference;
             it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.
 
@@ -43,7 +43,7 @@ def get_classic_markers(
 
         assay_type (str | int):
             Name or index of the assay containing the assay of interest,
-            if ``ref`` is or contains 
+            if ``ref`` is or contains
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment` objects.
 
         check_missing (bool):
