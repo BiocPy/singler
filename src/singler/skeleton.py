@@ -41,7 +41,7 @@ _logger = logging.getLogger(__name__)
 
 
 def fib(n):
-    """Fibonacci example function
+    """Fibonacci example function.
 
     Args:
       n (int): integer
@@ -63,7 +63,7 @@ def fib(n):
 
 
 def parse_args(args):
-    """Parse command line parameters
+    """Parse command line parameters.
 
     Args:
       args (List[str]): command line parameters as list of strings
@@ -99,7 +99,7 @@ def parse_args(args):
 
 
 def setup_logging(loglevel):
-    """Setup basic logging
+    """Setup basic logging.
 
     Args:
       loglevel (int): minimum loglevel for emitting messages
@@ -111,7 +111,7 @@ def setup_logging(loglevel):
 
 
 def main(args):
-    """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion
+    """Wrapper allowing :func:`fib` to be called with string arguments in a CLI fashion.
 
     Instead of returning the value from :func:`fib`, it prints the result to the
     ``stdout`` in a nicely formatted message.

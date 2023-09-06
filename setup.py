@@ -1,12 +1,12 @@
-"""
-    Setup file for singler.
-    Use setup.cfg to configure your project.
+"""Setup file for singler. Use setup.cfg to configure your project.
 
-    This file was generated with PyScaffold 4.5.
-    PyScaffold helps you to put up the scaffold of your new Python project.
-    Learn more under: https://pyscaffold.org/
+This file was generated with PyScaffold 4.5.
+PyScaffold helps you to put up the scaffold of your new Python project.
+Learn more under: https://pyscaffold.org/
 """
-from setuptools import setup
+from setuptools import setup, Extension
+import assorthead
+import mattress
 
 if __name__ == "__main__":
     try:
@@ -18,11 +18,9 @@ if __name__ == "__main__":
                     [
                         "src/singler/lib/Markers.cpp",
                         "src/singler/lib/bindings.cpp",
+                        "src/singler/lib/find_classic_markers.cpp",
                     ],
-                    include_dirs=[
-                        assorthead.includes()
-                    ]
-                    + mattress.includes(),
+                    include_dirs=[assorthead.includes()] + mattress.includes(),
                     language="c++",
                     extra_compile_args=[
                         "-std=c++17",

@@ -8,7 +8,7 @@ __license__ = "MIT"
 
 
 def test_fib():
-    """API Tests"""
+    """API Tests."""
     assert fib(1) == 1
     assert fib(2) == 1
     assert fib(7) == 13
@@ -17,7 +17,7 @@ def test_fib():
 
 
 def test_main(capsys):
-    """CLI Tests"""
+    """CLI Tests."""
     # capsys is a pytest fixture that allows asserts against stdout/stderr
     # https://docs.pytest.org/en/stable/capture.html
     main(["7"])
