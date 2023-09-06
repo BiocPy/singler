@@ -34,7 +34,9 @@ class InternalMarkers:
 
     def to_dict(self, labels: Sequence, features: Sequence):
         if len(labels) != self._num_labels:
-            raise ValueError("length of 'labels' should be equal to the number of labels")
+            raise ValueError(
+                "length of 'labels' should be equal to the number of labels"
+            )
 
         markers = {}
         for i, x in enumerate(labels):
@@ -46,7 +48,12 @@ class InternalMarkers:
         return markers
 
     @classmethod
-    def from_dict(cls, markers: dict[Any, dict[Any, Sequence]], labels: Sequence, features: Sequence):
+    def from_dict(
+        cls,
+        markers: dict[Any, dict[Any, Sequence]],
+        labels: Sequence,
+        features: Sequence,
+    ):
         fmapping = {}
         for i, x in enumerate(features):
             fmapping[x] = i
@@ -59,7 +66,7 @@ class InternalMarkers:
 
                 mapped = []
                 for x in current:
-                    if x in fmapping: # just skipping features that aren't present.
+                    if x in fmapping:  # just skipping features that aren't present.
                         mapped.append(fmapping[x])
 
                 instance.set(outer_i, inner_i, mapped)
