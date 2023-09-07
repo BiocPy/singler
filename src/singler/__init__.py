@@ -17,3 +17,5 @@ finally:
 
 
 from .get_classic_markers import get_classic_markers
+from .build_single_reference import build_single_reference
+from .classify_single_reference import classify_single_reference

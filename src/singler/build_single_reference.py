@@ -1,8 +1,10 @@
+from mattress import tatamize
+from numpy import int32, ndarray
+from typing import Sequence, Union, Any
+
 from .InternalMarkers import InternalMarkers
 from . import cpphelpers as lib
 from .utils import _factorize
-from mattress import tatamize
-from numpy import int32, ndarray
 
 
 class SinglePrebuiltReference:
@@ -31,7 +33,8 @@ class SinglePrebuiltReference:
     def num_markers(self) -> int:
         """
         Returns:
-            int: Number of markers to be used for classification.
+            int: Number of markers to be used for classification. This is the
+            same as the size of the array from :py:meth:`~marker_subset`.
         """
         return lib.get_nsubset_from_single_reference(self._ptr)
 
@@ -59,7 +62,7 @@ class SinglePrebuiltReference:
         """
         return self._labels
 
-    def markers(self, indices_only: bool = False) -> Union[ndarray, list]:
+    def marker_subset(self, indices_only: bool = False) -> Union[ndarray, list]:
         """
         Args:
             indices_only (bool): Whether to return the markers as indices
@@ -68,10 +71,10 @@ class SinglePrebuiltReference:
         Returns:
             list: List of feature identifiers for the markers, if ``indices_only = False``.
 
-            ndarray: Integer indices of features in ``features`` chosen as markers,
-            if ``indices_only = True``.
+            ndarray: Integer indices of features in ``features`` that were
+            chosen as markers, if ``indices_only = True``.
         """
-        nmarkers = self.num_features()
+        nmarkers = self.num_markers()
         buffer = ndarray(nmarkers, dtype=int32)
         lib.get_subset_from_single_reference(self._ptr, buffer);
         if indices_only:
@@ -87,7 +90,7 @@ def build_single_reference(
     markers: dict[Any, dict[Any, Sequence]],
     approximate: bool = True,
     num_threads: int = 1,
-):
+) -> SinglePrebuiltReference:
     """Build a single reference dataset in preparation for classification.
 
     Args:
@@ -115,6 +118,10 @@ def build_single_reference(
 
         num_threads (int):
             Number of threads to use for reference building.
+
+    Returns:
+        SinglePrebuiltReference: The pre-built reference, ready for use in downstream
+        methods like :py:meth:`~singler.classify_single_reference.classify_single_reference`.
     """
 
     lablev, labind = _factorize(labels)
@@ -125,9 +132,9 @@ def build_single_reference(
         lib.build_single_reference(
             mat_ptr.ptr,
             labels = labind,
-            markers = mrk.ptr,
+            markers = mrk._ptr,
             approximate = approximate,
-            num_threads = num_threads
+            nthreads = num_threads,
         ),
         labels = lablev,
         features = features,

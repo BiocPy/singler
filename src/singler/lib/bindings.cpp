@@ -17,7 +17,9 @@ static char* copy_error_message(const char* original) {
     return copy;
 }
 
-void classify_single_reference(void*, const int32_t*, void*, double, uint8_t, double, int32_t, double*, int32_t*, double*);
+void* build_single_reference(void*, const int32_t*, void*, uint8_t, int32_t);
+
+void classify_single_reference(void*, const int32_t*, void*, double, uint8_t, double, int32_t, const uintptr_t*, int32_t*, double*);
 
 void* create_markers(int32_t);
 
@@ -41,15 +43,27 @@ void get_subset_from_single_reference(void*, int32_t*);
 
 void set_markers_for_pair(void*, int32_t, int32_t, int32_t, const int32_t*);
 
-void* train_single_reference(void*, const int32_t*, void*, uint8_t, int32_t);
-
 extern "C" {
 
 PYAPI void free_error_message(char** msg) {
     delete [] *msg;
 }
 
-PYAPI void py_classify_single_reference(void* mat, const int32_t* subset, void* prebuilt, double quantile, uint8_t use_fine_tune, double fine_tune_threshold, int32_t nthreads, double* scores, int32_t* best, double* delta, int32_t* errcode, char** errmsg) {
+PYAPI void* py_build_single_reference(void* ref, const int32_t* labels, void* markers, uint8_t approximate, int32_t nthreads, int32_t* errcode, char** errmsg) {
+    void* output = NULL;
+    try {
+        output = build_single_reference(ref, labels, markers, approximate, nthreads);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
+}
+
+PYAPI void py_classify_single_reference(void* mat, const int32_t* subset, void* prebuilt, double quantile, uint8_t use_fine_tune, double fine_tune_threshold, int32_t nthreads, const uintptr_t* scores, int32_t* best, double* delta, int32_t* errcode, char** errmsg) {
     try {
         classify_single_reference(mat, subset, prebuilt, quantile, use_fine_tune, fine_tune_threshold, nthreads, scores, best, delta);
     } catch(std::exception& e) {
@@ -203,20 +217,6 @@ PYAPI void py_set_markers_for_pair(void* ptr, int32_t label1, int32_t label2, in
         *errcode = 1;
         *errmsg = copy_error_message("unknown C++ exception");
     }
-}
-
-PYAPI void* py_train_single_reference(void* ref, const int32_t* labels, void* markers, uint8_t approximate, int32_t nthreads, int32_t* errcode, char** errmsg) {
-    void* output = NULL;
-    try {
-        output = train_single_reference(ref, labels, markers, approximate, nthreads);
-    } catch(std::exception& e) {
-        *errcode = 1;
-        *errmsg = copy_error_message(e.what());
-    } catch(...) {
-        *errcode = 1;
-        *errmsg = copy_error_message("unknown C++ exception");
-    }
-    return output;
 }
 
 }

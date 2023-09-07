@@ -1,9 +1,11 @@
 from mattress import tatamize
 from numpy import ndarray, int32, float64, uintp
 from biocframe import BiocFrame
+from typing import Sequence
 
 from .build_single_reference import SinglePrebuiltReference
 from . import cpphelpers as lib
+from .utils import _factorize
 
 
 def classify_single_reference(
@@ -14,7 +16,7 @@ def classify_single_reference(
     use_fine_tune: bool = True,
     fine_tune_threshold: float = 0.05,
     num_threads: int = 1,
-):
+) -> BiocFrame:
     """
     Classify a test dataset against a reference by assigning labels
     from the latter to each column of the former using the SingleR algorithm.
@@ -47,6 +49,11 @@ def classify_single_reference(
 
         num_threads (int):
             Number of threads to use during classification.
+
+    Returns:
+        BiocFrame: A data frame containing the ``best`` label, the ``scores``
+        for each label (as a nested BiocFrame), and the ``delta`` from the best
+        to the second-best label.  Each row corresponds to a column of ``test``.
     """
 
     nl = ref.num_labels()
@@ -68,7 +75,7 @@ def classify_single_reference(
     for i, x in enumerate(features):
         mapping[x] = i
 
-    ref_subset = ref.markers(indices_only = True)
+    ref_subset = ref.marker_subset(indices_only = True)
     ref_features = ref.features
     subset = ndarray((len(ref_subset),), dtype = int32)
     for i, y in enumerate(ref_subset):
@@ -85,10 +92,14 @@ def classify_single_reference(
         use_fine_tune = use_fine_tune,
         fine_tune_threshold = fine_tune_threshold,
         nthreads = num_threads,
-        scores.ctypes.data,
-        best,
-        delta
+        scores = scores.ctypes.data,
+        best = best,
+        delta = delta
     )
 
     scores_df = BiocFrame(scores, number_of_rows = nc)
-    return BiocFrame(best = best, scores = scores_df, delta = delta)
+    return BiocFrame(
+        best = [all_labels[b] for b in best], 
+        scores = scores_df, 
+        delta = delta
+    )
