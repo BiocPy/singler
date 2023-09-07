@@ -10,18 +10,18 @@ class SinglePrebuiltReference:
         self._ptr = ptr
 
     def __del__(self):
-        lib.free_prebuilt(self._ptr)
+        lib.free_single_reference(self._ptr)
 
     def num_features(self):
-        return lib.get_nsubset_from_prebuilt(self._ptr)
+        return lib.get_nsubset_from_single_reference(self._ptr)
 
     def num_labels(self):
-        return lib.get_nlabels_from_prebuilt(self._ptr)
+        return lib.get_nlabels_from_single_reference(self._ptr)
 
     def subset(self, features: Sequence):
         nmarkers = self.num_features()
         buffer = ndarray(nmarkers, dtype=int32)
-        lib.get_subset_from_prebuilt(self._ptr, buffer);
+        lib.get_subset_from_single_reference(self._ptr, buffer);
         return [features[i] for i in buffer]
 
 
@@ -38,7 +38,7 @@ def train_single_reference(
     mat_ptr = tatamize(ref)
 
     return SinglePrebuiltReference(
-        lib.prebuild_reference(
+        lib.train_single_reference(
             mat_ptr.ptr, 
             labels = labind, 
             markers = mrk.ptr, 
