@@ -1,6 +1,7 @@
 from numpy import ndarray, int32, uintp
 from mattress import tatamize
 from typing import Union, Sequence, Optional, Any
+import delayedarray
 
 from . import cpphelpers as lib
 from .utils import _clean_matrix
@@ -134,7 +135,8 @@ def get_classic_markers(
                 survivors.append(j)
                 remap[common_features_map[f]] = len(survivors) - 1
 
-        ptr = tatamize(x[survivors, :])
+        da = delayedarray.DelayedArray(x)[survivors, :]
+        ptr = tatamize(da)
         med, lev = ptr.row_medians_by_group(labels[i], num_threads=num_threads)
         tmp_labels.append(lev)
 
