@@ -19,7 +19,7 @@ if __name__ == "__main__":
                         "src/singler/lib/Markers.cpp",
                         "src/singler/lib/bindings.cpp",
                         "src/singler/lib/find_classic_markers.cpp",
-                        "src/singler/lib/train_single_reference.cpp",
+                        "src/singler/lib/build_single_reference.cpp",
                         "src/singler/lib/classify_single_reference.cpp",
                     ],
                     include_dirs=[assorthead.includes()] + mattress.includes(),
