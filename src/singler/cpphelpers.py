@@ -48,6 +48,33 @@ def np2ct(x, expected, contiguous=True):
     return x.ctypes.data
 
 
+lib.py_build_single_reference.restype = ct.c_void_p
+lib.py_build_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_uint8,
+    ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
+lib.py_classify_single_reference.restype = None
+lib.py_classify_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_double,
+    ct.c_uint8,
+    ct.c_double,
+    ct.c_int32,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
 lib.py_create_markers.restype = ct.c_void_p
 lib.py_create_markers.argtypes = [
     ct.c_int32,
@@ -73,6 +100,13 @@ lib.py_free_markers.argtypes = [
     ct.POINTER(ct.c_char_p),
 ]
 
+lib.py_free_single_reference.restype = None
+lib.py_free_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
 lib.py_get_markers_for_pair.restype = None
 lib.py_get_markers_for_pair.argtypes = [
     ct.c_void_p,
@@ -90,11 +124,33 @@ lib.py_get_nlabels_from_markers.argtypes = [
     ct.POINTER(ct.c_char_p),
 ]
 
+lib.py_get_nlabels_from_single_reference.restype = ct.c_int32
+lib.py_get_nlabels_from_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
 lib.py_get_nmarkers_for_pair.restype = ct.c_int32
 lib.py_get_nmarkers_for_pair.argtypes = [
     ct.c_void_p,
     ct.c_int32,
     ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
+lib.py_get_nsubset_from_single_reference.restype = ct.c_int32
+lib.py_get_nsubset_from_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p),
+]
+
+lib.py_get_subset_from_single_reference.restype = None
+lib.py_get_subset_from_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.c_void_p,
     ct.POINTER(ct.c_int32),
     ct.POINTER(ct.c_char_p),
 ]
@@ -111,6 +167,38 @@ lib.py_set_markers_for_pair.argtypes = [
 ]
 
 
+def build_single_reference(ref, labels, markers, approximate, nthreads):
+    return catch_errors(lib.py_build_single_reference)(
+        ref, np2ct(labels, np.int32), markers, approximate, nthreads
+    )
+
+
+def classify_single_reference(
+    mat,
+    subset,
+    prebuilt,
+    quantile,
+    use_fine_tune,
+    fine_tune_threshold,
+    nthreads,
+    scores,
+    best,
+    delta,
+):
+    return catch_errors(lib.py_classify_single_reference)(
+        mat,
+        np2ct(subset, np.int32),
+        prebuilt,
+        quantile,
+        use_fine_tune,
+        fine_tune_threshold,
+        nthreads,
+        scores,
+        np2ct(best, np.int32),
+        np2ct(delta, np.float64),
+    )
+
+
 def create_markers(nlabels):
     return catch_errors(lib.py_create_markers)(nlabels)
 
@@ -123,6 +211,10 @@ def free_markers(ptr):
     return catch_errors(lib.py_free_markers)(ptr)
 
 
+def free_single_reference(ptr):
+    return catch_errors(lib.py_free_single_reference)(ptr)
+
+
 def get_markers_for_pair(ptr, label1, label2, buffer):
     return catch_errors(lib.py_get_markers_for_pair)(
         ptr, label1, label2, np2ct(buffer, np.int32)
@@ -133,8 +225,22 @@ def get_nlabels_from_markers(ptr):
     return catch_errors(lib.py_get_nlabels_from_markers)(ptr)
 
 
+def get_nlabels_from_single_reference(ptr):
+    return catch_errors(lib.py_get_nlabels_from_single_reference)(ptr)
+
+
 def get_nmarkers_for_pair(ptr, label1, label2):
     return catch_errors(lib.py_get_nmarkers_for_pair)(ptr, label1, label2)
+
+
+def get_nsubset_from_single_reference(ptr):
+    return catch_errors(lib.py_get_nsubset_from_single_reference)(ptr)
+
+
+def get_subset_from_single_reference(ptr, buffer):
+    return catch_errors(lib.py_get_subset_from_single_reference)(
+        ptr, np2ct(buffer, np.int32)
+    )
 
 
 def set_markers_for_pair(ptr, label1, label2, n, values):

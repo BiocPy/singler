@@ -60,7 +60,7 @@ class InternalMarkers:
         for i, x in enumerate(features):
             fmapping[x] = i
 
-        instance = cls(lib.create_new_markers(len(labels)))
+        instance = cls(lib.create_markers(len(labels)))
 
         for outer_i, outer_k in enumerate(labels):
             for inner_i, inner_k in enumerate(labels):
