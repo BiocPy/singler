@@ -135,7 +135,7 @@ def get_classic_markers(
                 survivors.append(j)
                 remap[common_features_map[f]] = len(survivors) - 1
 
-        da = delayedarray.DelayedArray(x)[survivors,:]
+        da = delayedarray.DelayedArray(x)[survivors, :]
         ptr = tatamize(da)
         med, lev = ptr.row_medians_by_group(labels[i], num_threads=num_threads)
         tmp_labels.append(lev)
