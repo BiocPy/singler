@@ -6,12 +6,12 @@
 
 //[[export]]
 void classify_single_reference(
-    void* mat, 
-    const int32_t* subset /** numpy */, 
-    void* prebuilt, 
-    double quantile, 
-    uint8_t use_fine_tune, 
-    double fine_tune_threshold, 
+    void* mat,
+    const int32_t* subset /** numpy */,
+    void* prebuilt,
+    double quantile,
+    uint8_t use_fine_tune,
+    double fine_tune_threshold,
     int32_t nthreads,
     const uintptr_t* scores /** void_p */,
     int32_t* best /** numpy */,
@@ -39,8 +39,8 @@ void classify_single_reference(
     }
 
     runner.run(
-        mptr->ptr.get(), 
-        *bptr, 
+        mptr->ptr.get(),
+        *bptr,
         subset_copy.data(),
         best_copy.data(),
         score_ptrs,

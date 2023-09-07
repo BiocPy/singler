@@ -5,7 +5,6 @@ from typing import Sequence
 
 from .build_single_reference import SinglePrebuiltReference
 from . import cpphelpers as lib
-from .utils import _factorize
 
 
 def classify_single_reference(
@@ -17,9 +16,8 @@ def classify_single_reference(
     fine_tune_threshold: float = 0.05,
     num_threads: int = 1,
 ) -> BiocFrame:
-    """
-    Classify a test dataset against a reference by assigning labels
-    from the latter to each column of the former using the SingleR algorithm.
+    """Classify a test dataset against a reference by assigning labels from the latter to each column of the former
+    using the SingleR algorithm.
 
     Args:
         test: A matrix-like object where each row is a feature and each column
@@ -60,14 +58,14 @@ def classify_single_reference(
     mat_ptr = tatamize(test)
     nc = mat_ptr.ncol()
 
-    best = ndarray((nc,), dtype = int32)
-    delta = ndarray((nc,), dtype = float64)
+    best = ndarray((nc,), dtype=int32)
+    delta = ndarray((nc,), dtype=float64)
 
     scores = {}
     all_labels = ref.labels
     score_ptrs = ndarray((nl,), dtype=uintp)
     for i in range(nl):
-        current = ndarray((nc,), dtype = float64)
+        current = ndarray((nc,), dtype=float64)
         scores[all_labels[i]] = current
         score_ptrs[i] = current.ctypes.data
 
@@ -75,9 +73,9 @@ def classify_single_reference(
     for i, x in enumerate(features):
         mapping[x] = i
 
-    ref_subset = ref.marker_subset(indices_only = True)
+    ref_subset = ref.marker_subset(indices_only=True)
     ref_features = ref.features
-    subset = ndarray((len(ref_subset),), dtype = int32)
+    subset = ndarray((len(ref_subset),), dtype=int32)
     for i, y in enumerate(ref_subset):
         x = ref_features[y]
         if x not in mapping:
@@ -88,18 +86,16 @@ def classify_single_reference(
         mat_ptr.ptr,
         subset,
         ref._ptr,
-        quantile = quantile,
-        use_fine_tune = use_fine_tune,
-        fine_tune_threshold = fine_tune_threshold,
-        nthreads = num_threads,
-        scores = score_ptrs.ctypes.data,
-        best = best,
-        delta = delta
+        quantile=quantile,
+        use_fine_tune=use_fine_tune,
+        fine_tune_threshold=fine_tune_threshold,
+        nthreads=num_threads,
+        scores=score_ptrs.ctypes.data,
+        best=best,
+        delta=delta,
     )
 
-    scores_df = BiocFrame(scores, number_of_rows = nc)
-    return BiocFrame({
-        "best": [all_labels[b] for b in best], 
-        "scores": scores_df, 
-        "delta": delta
-    })
+    scores_df = BiocFrame(scores, number_of_rows=nc)
+    return BiocFrame(
+        {"best": [all_labels[b] for b in best], "scores": scores_df, "delta": delta}
+    )

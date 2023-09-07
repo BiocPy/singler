@@ -12,7 +12,7 @@ def test_build_single_reference():
     assert built.num_labels() == 5
     assert built.num_markers() < len(features)
     assert built.features == features
-    assert built.labels == [ "A", "B", "C", "D", "E" ]
+    assert built.labels == ["A", "B", "C", "D", "E"]
 
     all_markers = built.marker_subset()
     assert len(all_markers) == built.num_markers()
@@ -21,5 +21,7 @@ def test_build_single_reference():
         assert m in feat_set
 
     # Same results when run in parallel.
-    pbuilt = singler.build_single_reference(ref, labels, features, markers, num_threads = 2)
+    pbuilt = singler.build_single_reference(
+        ref, labels, features, markers, num_threads=2
+    )
     assert all_markers == pbuilt.marker_subset()

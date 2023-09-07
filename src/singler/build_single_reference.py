@@ -9,8 +9,8 @@ from .utils import _factorize
 
 class SinglePrebuiltReference:
     """A prebuilt reference object, typically created by
-    :py:meth:`~singler.build_single_reference.build_single_reference`.
-    This is intended for advanced users only and should not be serialized.
+    :py:meth:`~singler.build_single_reference.build_single_reference`. This is intended for advanced users only and
+    should not be serialized.
 
     Attributes:
         labels (Sequence):
@@ -76,7 +76,7 @@ class SinglePrebuiltReference:
         """
         nmarkers = self.num_markers()
         buffer = ndarray(nmarkers, dtype=int32)
-        lib.get_subset_from_single_reference(self._ptr, buffer);
+        lib.get_subset_from_single_reference(self._ptr, buffer)
         if indices_only:
             return buffer
         else:
@@ -131,11 +131,11 @@ def build_single_reference(
     return SinglePrebuiltReference(
         lib.build_single_reference(
             mat_ptr.ptr,
-            labels = labind,
-            markers = mrk._ptr,
-            approximate = approximate,
-            nthreads = num_threads,
+            labels=labind,
+            markers=mrk._ptr,
+            approximate=approximate,
+            nthreads=num_threads,
         ),
-        labels = lablev,
-        features = features,
+        labels=lablev,
+        features=features,
     )
