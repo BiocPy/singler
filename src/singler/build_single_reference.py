@@ -45,7 +45,7 @@ class SinglePrebuiltReference:
     @property
     def features(self) -> Sequence:
         """
-        Returns: 
+        Returns:
             Sequence: The universe of features known to this reference,
             usually as strings.
         """
@@ -54,7 +54,7 @@ class SinglePrebuiltReference:
     @property
     def labels(self) -> Sequence:
         """
-        Returns: 
+        Returns:
             Sequence: Unique labels in this reference.
         """
         return self._labels
@@ -64,7 +64,7 @@ class SinglePrebuiltReference:
         Args:
             indices_only (bool): Whether to return the markers as indices
                 into :py:attr:`~features`, or as a list of feature identifiers.
-                
+
         Returns:
             list: List of feature identifiers for the markers, if ``indices_only = False``.
 
@@ -91,7 +91,7 @@ def build_single_reference(
     """Build a single reference dataset in preparation for classification.
 
     Args:
-        ref: A matrix-like object where rows are features and columns are 
+        ref: A matrix-like object where rows are features and columns are
             reference profiles. This should contain expression values;
             normalized and transformed values are also acceptable as only
             the ranking is used within this function.
@@ -123,10 +123,10 @@ def build_single_reference(
 
     return SinglePrebuiltReference(
         lib.build_single_reference(
-            mat_ptr.ptr, 
-            labels = labind, 
-            markers = mrk.ptr, 
-            approximate = approximate, 
+            mat_ptr.ptr,
+            labels = labind,
+            markers = mrk.ptr,
+            approximate = approximate,
             num_threads = num_threads
         ),
         labels = lablev,

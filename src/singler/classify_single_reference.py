@@ -16,7 +16,7 @@ def classify_single_reference(
     num_threads: int = 1,
 ):
     """
-    Classify a test dataset against a reference by assigning labels 
+    Classify a test dataset against a reference by assigning labels
     from the latter to each column of the former using the SingleR algorithm.
 
     Args:
@@ -34,7 +34,7 @@ def classify_single_reference(
 
         quantile (float):
             Quantile of the correlation distribution for computing the score for each label.
-            Larger values increase sensitivity of matches at the expense of 
+            Larger values increase sensitivity of matches at the expense of
             similarity to the average behavior of each label.
 
         use_fine_tune (bool):
@@ -42,7 +42,7 @@ def classify_single_reference(
             between similar labels but requires more computational work.
 
         fine_tune_threshold (float):
-            Maximum difference from the maximum correlation to use in fine-tuning.            
+            Maximum difference from the maximum correlation to use in fine-tuning.
             All labels above this threshold are used for another round of fine-tuning.
 
         num_threads (int):
@@ -78,7 +78,7 @@ def classify_single_reference(
         subset[i] = mapping[x]
 
     lib.classify_single_reference(
-        mat_ptr.ptr, 
+        mat_ptr.ptr,
         subset,
         ref.ptr,
         quantile = quantile,
