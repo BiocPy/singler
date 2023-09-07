@@ -69,7 +69,7 @@ def classify_single_reference(
     for i in range(nl):
         current = ndarray((nc,), dtype = float64)
         scores[all_labels[i]] = current
-        score_ptrs[i] = current.ctypes.ptr
+        score_ptrs[i] = current.ctypes.data
 
     mapping = {}
     for i, x in enumerate(features):
@@ -87,19 +87,19 @@ def classify_single_reference(
     lib.classify_single_reference(
         mat_ptr.ptr,
         subset,
-        ref.ptr,
+        ref._ptr,
         quantile = quantile,
         use_fine_tune = use_fine_tune,
         fine_tune_threshold = fine_tune_threshold,
         nthreads = num_threads,
-        scores = scores.ctypes.data,
+        scores = score_ptrs.ctypes.data,
         best = best,
         delta = delta
     )
 
     scores_df = BiocFrame(scores, number_of_rows = nc)
-    return BiocFrame(
-        best = [all_labels[b] for b in best], 
-        scores = scores_df, 
-        delta = delta
-    )
+    return BiocFrame({
+        "best": [all_labels[b] for b in best], 
+        "scores": scores_df, 
+        "delta": delta
+    })
