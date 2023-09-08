@@ -5,7 +5,7 @@ import numpy
 
 
 def test_fetch_github_reference():
-    out = singler.fetch_github_reference("ImmGen", cache_dir = "_cache")
+    out = singler.fetch_github_reference("ImmGen", cache_dir="_cache")
     assert isinstance(out, summarizedexperiment.SummarizedExperiment)
 
     # Checking the genes.
@@ -18,7 +18,7 @@ def test_fetch_github_reference():
     assert isinstance(out.col_data.column("main")[0], str)
     assert isinstance(out.col_data.column("ont")[0], str)
 
-    # Checking the assay. 
+    # Checking the assay.
     ass = out.assays["ranks"]
     assert ass.shape[0] > ass.shape[1]
     assert (ass.min(0) == numpy.ones(ass.shape[1])).all()

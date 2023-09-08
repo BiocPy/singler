@@ -11,18 +11,21 @@ from typing import Literal
 
 session_dir = None
 
-KnownReference = Literal[ 
-    "BlueprintEncode", 
-    "DatabaseImmuneCellExpression", 
-    "HumanPrimaryCellAtlas", 
-    "MonacoImmune", 
-    "NovershternHematopoietic", 
-    "ImmGen", 
-    "MouseRNAseq"
+KnownReference = Literal[
+    "BlueprintEncode",
+    "DatabaseImmuneCellExpression",
+    "HumanPrimaryCellAtlas",
+    "MonacoImmune",
+    "NovershternHematopoietic",
+    "ImmGen",
+    "MouseRNAseq",
 ]
 
-def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summarizedexperiment.SummarizedExperiment:
-    """Fetch a reference dataset from the 
+
+def fetch_github_reference(
+    name: KnownReference, cache_dir: str = None
+) -> summarizedexperiment.SummarizedExperiment:
+    """Fetch a reference dataset from the
     `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
     for use in annotation with other **singler** functions.
 
@@ -43,8 +46,8 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
         (make sure to use the same label type for ``labels`` and ``markers``).
     """
 
-    all_files = { "matrix": name + "_matrix.csv.gz" }
-    gene_types = [ "ensembl", "entrez", "symbol" ]
+    all_files = {"matrix": name + "_matrix.csv.gz"}
+    gene_types = ["ensembl", "entrez", "symbol"]
     for g in gene_types:
         suff = "genes_" + g
         all_files[suff] = name + "_" + suff + ".csv.gz"
@@ -58,7 +61,9 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
         suff = "markers_" + lab
         all_files[suff] = name + "_" + suff + ".gmt.gz"
 
-    base_url = "https://github.com/kanaverse/singlepp-references/releases/download/2023-04-28"
+    base_url = (
+        "https://github.com/kanaverse/singlepp-references/releases/download/2023-04-28"
+    )
 
     if cache_dir is None:
         # This should already lie inside the OS's temporary directory, based on
@@ -71,7 +76,7 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
 
     all_paths = {}
     for k, v in all_files.items():
-        url = base_url + "/" + v 
+        url = base_url + "/" + v
         path = os.path.join(cache_dir, urllib.parse.quote(url, safe=""))
         if not os.path.exists(path):
             req.urlretrieve(url=url, filename=path)
@@ -112,7 +117,7 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
         markers[lab] = current_markers
 
     # Reading in genes.
-    gene_ids = {} 
+    gene_ids = {}
     for g in gene_types:
         with gzip.open(all_paths["genes_" + g], "rt") as handle:
             current_genes = []
@@ -124,19 +129,18 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
     col_data = biocframe.BiocFrame(labels)
 
     # Reading in the matrix first.
-    mat = numpy.ndarray((row_data.shape[0], col_data.shape[0]), dtype=numpy.int32, order="F")
+    mat = numpy.ndarray(
+        (row_data.shape[0], col_data.shape[0]), dtype=numpy.int32, order="F"
+    )
     with gzip.open(all_paths["matrix"], "rt") as handle:
         sample = 0
         for line in handle:
             contents = line.strip().split(",")
             for i, x in enumerate(contents):
                 contents[i] = int(x)
-            mat[:,sample] = contents
+            mat[:, sample] = contents
             sample += 1
 
     return summarizedexperiment.SummarizedExperiment(
-        { "ranks": mat }, 
-        row_data = row_data, 
-        col_data = col_data, 
-        metadata = markers
+        {"ranks": mat}, row_data=row_data, col_data=col_data, metadata=markers
     )
