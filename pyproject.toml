@@ -11,7 +11,7 @@ version_scheme = "no-guess-dev"
 [tool.ruff]
 line-length = 120
 src = ["src"]
-exclude = ["tests"]
+exclude = ["tests", "*cpp*"]
 extend-ignore = ["F821"]
 
 [tool.ruff.pydocstyle]
@@ -21,4 +21,4 @@ convention = "google"
 "__init__.py" = ["E402", "F401"]
 
 [tool.black]
-force-exclude = "__init__.py"
+force-exclude = "__init__.py|cpphelpers|cpp"
