@@ -66,6 +66,7 @@ def fetch_github_reference(
     )
 
     if cache_dir is None:
+        global SESSION_DIR
         # This should already lie inside the OS's temporary directory, based on
         # documentation for tempfile.gettempdir(); no need to clean it up afterwards.
         if SESSION_DIR is None:
