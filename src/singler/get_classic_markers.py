@@ -9,13 +9,7 @@ from .InternalMarkers import InternalMarkers
 
 
 def _get_classic_markers_raw(
-    ref,
-    labels,
-    features,
-    assay_type,
-    check_missing,
-    num_de,
-    num_threads
+    ref, labels, features, assay_type, check_missing, num_de, num_threads
 ):
     if not isinstance(ref, list):
         ref = [ref]
@@ -129,7 +123,7 @@ def _get_classic_markers_raw(
     elif num_de <= 0:
         raise ValueError("'num_de' should be positive")
 
-    raw_markers= InternalMarkers(
+    raw_markers = InternalMarkers(
         lib.find_classic_markers(
             nref=nrefs,
             labels=labels2_ptrs.ctypes.data,
@@ -198,12 +192,12 @@ def get_classic_markers(
         ``a`` over label ``b``.
     """
     raw_markers, common_labels, common_features = _get_classic_markers_raw(
-        ref = ref,
-        labels = labels,
-        features = features,
-        assay_type = assay_type,
-        check_missing = check_missing,
-        num_de = num_de,
-        num_threads = num_threads
+        ref=ref,
+        labels=labels,
+        features=features,
+        assay_type=assay_type,
+        check_missing=check_missing,
+        num_de=num_de,
+        num_threads=num_threads,
     )
     return raw_markers.to_dict(common_labels, common_features)

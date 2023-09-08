@@ -1,11 +1,9 @@
-from mattress import tatamize
 from numpy import int32, ndarray
 from typing import Sequence, Union, Any, Optional
 
 from .InternalMarkers import InternalMarkers
 from . import cpphelpers as lib
 from .utils import _factorize, _match
-from .get_classic_markers import get_classic_markers
 
 
 class SinglePrebuiltReference:
@@ -27,12 +25,12 @@ class SinglePrebuiltReference:
     """
 
     def __init__(
-            self, 
-            ptr, 
-            labels: Sequence, 
-            features: Sequence, 
-            markers: dict[Any, dict[Any, Sequence]]
-        ):
+        self,
+        ptr,
+        labels: Sequence,
+        features: Sequence,
+        markers: dict[Any, dict[Any, Sequence]],
+    ):
         self._ptr = ptr
         self._features = features
         self._labels = labels
@@ -72,12 +70,12 @@ class SinglePrebuiltReference:
             Sequence: Unique labels in this reference.
         """
         return self._labels
-    
+
     @property
     def markers(self) -> dict[Any, dict[Any, Sequence]]:
         """
         Returns:
-            dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison 
+            dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison
             between labels.
         """
         return self._markers
@@ -152,22 +150,22 @@ def build_single_reference(
     """
 
     ref, features = _clean_matrix(
-        ref, 
-        features, 
-        assay_type = assay_type, 
-        check_missing = check_missing, 
-        num_threads = num_threads,
+        ref,
+        features,
+        assay_type=assay_type,
+        check_missing=check_missing,
+        num_threads=num_threads,
     )
 
     if markers is None:
         if marker_method == "classic":
             mrk, lablev, common_features = _get_classic_markers_raw(
-                ref, 
-                labels, 
-                features, 
-                check_missing = False,
-                num_de = num_de, 
-                num_threads = num_threads
+                ref,
+                labels,
+                features,
+                check_missing=False,
+                num_de=num_de,
+                num_threads=num_threads,
             )
             markers = mrk.to_dict(lablev, common_features)
             labind = _match(labels, lablev)
