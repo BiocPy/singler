@@ -6,21 +6,42 @@ import os
 import gzip
 import biocframe
 import numpy
+from typing import Literal
 
 
 session_dir = None
 
-def fetch_reference(name: str, cache_dir: str = None):
-    name_choices = set([ 
-        "BlueprintEncode", 
-        "DatabaseImmuneCellExpression", 
-        "HumanPrimaryCellAtlas", 
-        "MonacoImmune", 
-        "NovershternHematopoietic", 
-        "ImmGen", 
-        "MouseRNAseq"
-    ])
+KnownReference = Literal[ 
+    "BlueprintEncode", 
+    "DatabaseImmuneCellExpression", 
+    "HumanPrimaryCellAtlas", 
+    "MonacoImmune", 
+    "NovershternHematopoietic", 
+    "ImmGen", 
+    "MouseRNAseq"
+]
 
+def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summarizedexperiment.SummarizedExperiment:
+    """Fetch a reference dataset from the 
+    `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
+    for use in annotation with other **singler** functions.
+
+    Args:
+        name (KnownReference): Name of the reference dataset.
+
+        cache_dir (str, optional): Path to a cache directory in which to store
+            the files downloaded from the remote. If the files are already
+            present, the download is skipped.
+
+    Returns:
+        SummarizedExperiment: The reference dataset as a SummarizedExperiment,
+        parts of which can be passed to :py:meth:`~singler.build_single_reference.build_single_reference`.
+        Specifically, the ``ranks`` assay can be used as ``ref``;
+        one of the labels in the column data can be used as ``labels``;
+        one of the gene types in the row data can be used as ``features``;
+        and one of the marker lists in the metadata can be used as ``markers``
+        (make sure to use the same label type for ``labels`` and ``markers``).
+    """
     if name not in name_choices:
         raise ValueError("'" + name + "' is not a recognized reference dataset")
 
