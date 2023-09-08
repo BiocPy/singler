@@ -124,7 +124,7 @@ def build_single_reference(
             If `markers` is not provided, expression should be normalized
             and log-transformed in preparation for marker prioritization via
             differential expression analyses. Otherwise, any expression values
-            are acceptable as only the ranking within each column is used. 
+            are acceptable as only the ranking within each column is used.
 
         labels (Sequence): Sequence of labels for each reference profile,
             i.e., column in ``ref``.
