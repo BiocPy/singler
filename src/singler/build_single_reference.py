@@ -1,5 +1,5 @@
 from numpy import int32, ndarray
-from typing import Sequence, Union, Any, Optional
+from typing import Sequence, Union, Any, Optional, Literal
 
 from .InternalMarkers import InternalMarkers
 from . import cpphelpers as lib
