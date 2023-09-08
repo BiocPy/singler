@@ -119,10 +119,12 @@ def build_single_reference(
     """Build a single reference dataset in preparation for classification.
 
     Args:
-        ref: A matrix-like object where rows are features and columns are
-            reference profiles. This should contain expression values;
-            normalized and transformed values are also acceptable as only
-            the ranking is used within this function.
+        ref: A matrix-like object where rows are features, columns are
+            reference profiles, and each entry is the expression value.
+            If `markers` is not provided, expression should be normalized
+            and log-transformed in preparation for marker prioritization via
+            differential expression analyses. Otherwise, any expression values
+            are acceptable as only the ranking within each column is used. 
 
         labels (Sequence): Sequence of labels for each reference profile,
             i.e., column in ``ref``.
