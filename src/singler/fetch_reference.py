@@ -42,8 +42,6 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
         and one of the marker lists in the metadata can be used as ``markers``
         (make sure to use the same label type for ``labels`` and ``markers``).
     """
-    if name not in name_choices:
-        raise ValueError("'" + name + "' is not a recognized reference dataset")
 
     all_files = { "matrix": name + "_matrix.csv.gz" }
     gene_types = [ "ensembl", "entrez", "symbol" ]
@@ -98,17 +96,18 @@ def fetch_github_reference(name: KnownReference, cache_dir: str = None) -> summa
         labels[lab] = all_labels
 
         current_markers = {}
+        for x in all_label_names:
+            current_inner = {}
+            for x2 in all_label_names:
+                current_inner[x2] = []
+            current_markers[x] = current_inner
+
         with gzip.open(all_paths["markers_" + lab], "rt") as handle:
             for line in handle:
                 fields = line.strip().split("\t")
-
                 first = all_label_names[int(fields[0])]
-                if first not in current_markers:
-                    current_markers[first] = {}
-                inner = current_markers[first]
-
                 second = all_label_names[int(fields[1])]
-                inner[second] = [int(j) for j in fields[2:]]
+                current_markers[first][second] = [int(j) for j in fields[2:]]
 
         markers[lab] = current_markers
 
