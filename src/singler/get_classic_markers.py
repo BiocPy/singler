@@ -4,7 +4,7 @@ from typing import Union, Sequence, Optional, Any
 import delayedarray
 
 from . import _cpphelpers as lib
-from ._utils import _clean_matrix
+from ._utils import _clean_matrix, _stable_intersect, _stable_union
 from ._Markers import _Markers
 
 
@@ -23,23 +23,12 @@ def _get_classic_markers_raw(
             )
 
     # Defining the intersection of features.
-    last = set()
-    if len(ref_features):
-        last = set(ref_features[0])
-        survivors = None
-        for i in range(1, len(ref_features)):
-            survivors = set()
-            for f in ref_features[i]:
-                if f in last:
-                    survivors.add(f)
-            last = survivors
-
-    if len(last) == 0:
+    common_features = _stable_intersect(*ref_features)
+    if len(common_features) == 0:
         for feat in ref_features:
             if len(feat):
                 raise ValueError("no common feature names across 'features'")
 
-    common_features = sorted(list(last))
     common_features_map = {}
     for i, x in enumerate(common_features):
         common_features_map[x] = i
@@ -69,11 +58,7 @@ def _get_classic_markers_raw(
     ref_labels = tmp_labels
 
     # Defining the union of labels.
-    ulabels = set()
-    for labs in ref_labels:
-        ulabels |= set(labs)
-
-    common_labels = sorted(list(ulabels))
+    common_labels = _stable_union(*ref_labels)
     common_labels_map = {}
     for i, x in enumerate(common_labels):
         common_labels_map[x] = i

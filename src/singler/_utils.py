@@ -21,14 +21,60 @@ def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
 
 def _match(x: Sequence, target: Sequence) -> ndarray:
     mapping = {}
-    for i, lev in enumerate(target):
-        mapping[lev] = i
+    for lev in target:
+        if lev not in mapping: # if 'target' contains duplicates, favor the first occurrence.
+            count = len(mapping)
+            mapping[lev] = count 
 
     indices = zeros((len(x),), dtype=int32)
     for i, y in enumerate(x):
         indices[i] = mapping[y]
 
     return indices
+
+
+def _stable_intersect(*args) -> list:
+    nargs = len(args)
+    if nargs == 0:
+        return []
+
+    occurrences = {}
+    for f in args[0]:
+        if f not in occurrences:
+            occurrences[f] = [1, 0]
+
+    for i in range(1, len(args)):
+        for f in args[i]:
+            if f in occurrences:
+                state = occurrences[f]
+                if state[1] < i:
+                    state[0] += 1
+                    state[1] = i
+
+    output = []
+    for f in args[0]:
+        if f in occurrences:
+            state = occurrences[f]
+            if state[0] == nargs and state[1] >= 0:
+                output.append(f)
+                state[1] = -1 # avoid duplicates
+
+    return output
+
+
+def _stable_union(*args) -> list:
+    if len(args) == 0:
+        return []
+
+    output = []
+    present = set()
+    for a in args:
+        for f in a:
+            if f not in present:
+                output.append(f)
+                present.add(f)
+
+    return output
 
 
 def _clean_matrix(x, features, assay_type, check_missing, num_threads):
@@ -57,7 +103,8 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
 
     new_features = []
     for i, k in enumerate(retain):
-        new_features.append(features[i])
+        if k:
+            new_features.append(features[i])
 
     sub = DelayedArray(ptr)[retain, :]  # avoid re-tatamizing 'x'.
     return tatamize(sub), new_features
