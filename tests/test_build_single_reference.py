@@ -11,7 +11,7 @@ def test_build_single_reference():
     built = singler.build_single_reference(ref, labels, features, markers)
     assert built.num_labels() == 5
     assert built.num_markers() < len(features)
-    #assert built.features == features
+    # assert built.features == features
     assert built.labels == ["A", "B", "C", "D", "E"]
 
     all_markers = built.marker_subset()

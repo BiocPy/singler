@@ -8,11 +8,13 @@ from ._utils import _clean_matrix
 from ._Markers import _Markers
 
 
-def _get_classic_markers_raw(ref_ptrs, ref_labels, ref_features, num_de = None, num_threads = 1):
+def _get_classic_markers_raw(
+    ref_ptrs, ref_labels, ref_features, num_de=None, num_threads=1
+):
     nrefs = len(ref_ptrs)
 
     # We assume that ref_ptrs and ref_features contains the outputs of
-    # _clean_matrix, so there's no need to re-check their consistency. 
+    # _clean_matrix, so there's no need to re-check their consistency.
     for i, x in enumerate(ref_ptrs):
         nc = x.ncol()
         if nc != len(ref_labels[i]):

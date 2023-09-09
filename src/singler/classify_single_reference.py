@@ -25,7 +25,7 @@ def classify_single_reference(
             Normalized and transformed expression values are also acceptable as only
             the ranking is used within this function.
 
-            Alternatively, a 
+            Alternatively, a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing such a matrix in one of its assays.
 

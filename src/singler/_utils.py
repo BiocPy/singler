@@ -43,7 +43,9 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
     if len(curshape) != 2:
         raise ValueError("each entry of 'ref' should be a 2-dimensional array")
     if curshape[0] != len(features):
-        raise ValueError("number of rows of 'x' should be equal to the length of 'features'")
+        raise ValueError(
+            "number of rows of 'x' should be equal to the length of 'features'"
+        )
 
     ptr = tatamize(x)
     if not check_missing:
@@ -57,5 +59,5 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
     for i, k in enumerate(retain):
         new_features.append(features[i])
 
-    sub = DelayedArray(ptr)[retain, :] # avoid re-tatamizing 'x'.
+    sub = DelayedArray(ptr)[retain, :]  # avoid re-tatamizing 'x'.
     return tatamize(sub), new_features

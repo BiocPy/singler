@@ -113,7 +113,7 @@ def build_single_reference(
     check_missing: bool = True,
     markers: Optional[dict[Any, dict[Any, Sequence]]] = None,
     marker_method: MARKER_DETECTION_METHODS = "classic",
-    marker_args = {},
+    marker_args={},
     approximate: bool = True,
     num_threads: int = 1,
 ) -> SinglePrebuiltReference:
@@ -127,7 +127,7 @@ def build_single_reference(
             differential expression analyses. Otherwise, any expression values
             are acceptable as only the ranking within each column is used.
 
-            Alternatively, a 
+            Alternatively, a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing such a matrix in one of its assays.
 
@@ -138,11 +138,11 @@ def build_single_reference(
             i.e., row in ``ref``.
 
         assay_type(str | int): Assay containing the expression matrix,
-            if `ref_data` is a 
+            if `ref_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
         check_missing (bool):
-            Whether to check for and remove rows with missing (NaN) values 
+            Whether to check for and remove rows with missing (NaN) values
             from ``ref_data``.
 
         markers (dict[Any, dict[Any, Sequence]], optional):
@@ -185,9 +185,9 @@ def build_single_reference(
     if markers is None:
         if marker_method == "classic":
             mrk, lablev, ref_features = _get_classic_markers_raw(
-                ref_ptrs = [ref_ptr],
-                ref_labels = [ref_labels],
-                ref_features = [ref_features],
+                ref_ptrs=[ref_ptr],
+                ref_labels=[ref_labels],
+                ref_features=[ref_features],
                 num_threads=num_threads,
                 **marker_args,
             )
