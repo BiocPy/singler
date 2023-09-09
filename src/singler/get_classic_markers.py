@@ -4,68 +4,36 @@ from typing import Union, Sequence, Optional, Any
 import delayedarray
 
 from . import cpphelpers as lib
-from .utils import _clean_matrix
-from .InternalMarkers import InternalMarkers
+from ._utils import _clean_matrix
+from ._Markers import _Markers
 
 
-def _get_classic_markers_raw(
-    ref, labels, features, assay_type, check_missing, num_de, num_threads
-):
-    if not isinstance(ref, list):
-        ref = [ref]
-        labels = [labels]
-        features = [features]
+def _get_classic_markers_raw(ref_ptrs, ref_labels, ref_features, num_de = None, num_threads = 1):
+    nrefs = len(ref_ptrs)
 
-    # Validating everyone's lengths.
-    nrefs = len(ref)
-    if nrefs != len(labels):
-        raise ValueError("length of 'ref' and 'labels' should be the same")
-    if nrefs != len(features):
-        raise ValueError("length of 'ref' and 'features' should be the same")
-
-    tmp_ref = []
-    tmp_features = []
-    for i in range(nrefs):
-        curref = ref[i]
-        curshape = curref.shape
-        if len(curshape) != 2:
-            raise ValueError("each entry of 'ref' should be a 2-dimensional array")
-        if curshape[0] != len(features[i]):
-            raise ValueError(
-                "number of rows of 'ref' should be equal to the length of the corresponding 'features'"
-            )
-        if curshape[1] != len(labels[i]):
+    # We assume that ref_ptrs and ref_features contains the outputs of
+    # _clean_matrix, so there's no need to re-check their consistency. 
+    for i, x in enumerate(ref_ptrs):
+        nc = x.ncol()
+        if nc != len(ref_labels[i]):
             raise ValueError(
                 "number of columns of 'ref' should be equal to the length of the corresponding 'labels'"
             )
 
-        r, f = _clean_matrix(
-            curref,
-            features[i],
-            assay_type=assay_type,
-            check_missing=check_missing,
-            num_threads=num_threads,
-        )
-        tmp_ref.append(r)
-        tmp_features.append(f)
-
-    ref = tmp_ref
-    features = tmp_features
-
     # Defining the intersection of features.
     last = set()
-    if len(features):
-        last = set(features[0])
+    if len(ref_features):
+        last = set(ref_features[0])
         survivors = None
-        for i in range(1, len(features)):
+        for i in range(1, len(ref_features)):
             survivors = set()
-            for f in features[i]:
+            for f in ref_features[i]:
                 if f in last:
                     survivors.add(f)
             last = survivors
 
     if len(last) == 0:
-        for feat in features:
+        for feat in ref_features:
             if len(feat):
                 raise ValueError("no common feature names across 'features'")
 
@@ -79,28 +47,28 @@ def _get_classic_markers_raw(
     ref2_ptrs = ndarray((nrefs,), dtype=uintp)
     tmp_labels = []
 
-    for i, x in enumerate(ref):
+    for i, x in enumerate(ref_ptrs):
         survivors = []
         remap = [None] * len(common_features)
-        for j, f in enumerate(features[i]):
+        for j, f in enumerate(ref_features[i]):
             if f in common_features_map:
                 survivors.append(j)
                 remap[common_features_map[f]] = len(survivors) - 1
 
         da = delayedarray.DelayedArray(x)[survivors, :]
         ptr = tatamize(da)
-        med, lev = ptr.row_medians_by_group(labels[i], num_threads=num_threads)
+        med, lev = ptr.row_medians_by_group(ref_labels[i], num_threads=num_threads)
         tmp_labels.append(lev)
 
         finalptr = tatamize(med[remap, :])
         ref2.append(finalptr)
         ref2_ptrs[i] = finalptr.ptr
 
-    labels = tmp_labels
+    ref_labels = tmp_labels
 
     # Defining the union of labels.
     ulabels = set()
-    for labs in labels:
+    for labs in ref_labels:
         ulabels |= set(labs)
 
     common_labels = sorted(list(ulabels))
@@ -110,7 +78,7 @@ def _get_classic_markers_raw(
 
     labels2 = []
     labels2_ptrs = ndarray((nrefs,), dtype=uintp)
-    for i, lab in enumerate(labels):
+    for i, lab in enumerate(ref_labels):
         converted = ndarray(len(lab), dtype=int32)
         for j, x in enumerate(lab):
             converted[j] = common_labels_map[x]
@@ -123,7 +91,7 @@ def _get_classic_markers_raw(
     elif num_de <= 0:
         raise ValueError("'num_de' should be positive")
 
-    raw_markers = InternalMarkers(
+    raw_markers = _Markers(
         lib.find_classic_markers(
             nref=nrefs,
             labels=labels2_ptrs.ctypes.data,
@@ -137,9 +105,9 @@ def _get_classic_markers_raw(
 
 
 def get_classic_markers(
-    ref: Union[Any, list[Any]],
-    labels: Union[Sequence, list[Sequence]],
-    features: Union[Sequence, list[Sequence]],
+    ref_data: Union[Any, list[Any]],
+    ref_labels: Union[Sequence, list[Sequence]],
+    ref_features: Union[Sequence, list[Sequence]],
     assay_type: Union[str, int] = "logcounts",
     check_missing: bool = True,
     num_de: Optional[int] = None,
@@ -149,8 +117,8 @@ def get_classic_markers(
     datasets derived from replicated bulk transcriptomic experiments.
 
     Args:
-        ref (Any | list[Any]):
-            A matrix-like object containing the expression values of a reference dataset.
+        ref_data(Any | list[Any]):
+            A matrix-like object containing the log-normalized expression values of a reference dataset.
             Each column is a sample and each row is a feature.
             Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing a matrix-like object in one of its assays.
@@ -158,13 +126,13 @@ def get_classic_markers(
             typically for multiple batches of the same reference;
             it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.
 
-        labels (Any | list[Any]):
+        ref_labels (Any | list[Any]):
             A sequence of length equal to the number of columns of ``ref``,
             containing a label (usually a string) for each column.
             Alternatively, a list of such sequences of length equal to that of a list ``ref``;
             each sequence should have length equal to the number of columns of the corresponding entry of ``ref``.
 
-        features (Any | list[Any]):
+        ref_features (Any | list[Any]):
             A sequence of length equal to the number of rows of ``ref``,
             containing the feature name (usually a string) for each row.
             Alternatively, a list of such sequences of length equal to that of a list ``ref``;
@@ -192,13 +160,38 @@ def get_classic_markers(
         i.e., ``markers[a][b]`` contains the upregulated markers for label
         ``a`` over label ``b``.
     """
+    if not isinstance(ref_data, list):
+        ref_data = [ref_data]
+        ref_labels = [ref_labels]
+        ref_features = [ref_features]
+
+    nrefs = len(ref_data)
+    if nrefs != len(ref_labels):
+        raise ValueError("length of 'ref' and 'labels' should be the same")
+    if nrefs != len(ref_features):
+        raise ValueError("length of 'ref' and 'features' should be the same")
+
+    ref_ptrs = []
+    tmp_features = []
+    for i in range(nrefs):
+        r, f = _clean_matrix(
+            ref_data[i],
+            ref_features[i],
+            assay_type=assay_type,
+            check_missing=check_missing,
+            num_threads=num_threads,
+        )
+        ref_ptrs.append(r)
+        tmp_features.append(f)
+
+    ref_features = tmp_features
+
     raw_markers, common_labels, common_features = _get_classic_markers_raw(
-        ref=ref,
-        labels=labels,
-        features=features,
-        assay_type=assay_type,
-        check_missing=check_missing,
+        ref_ptrs=ref_ptrs,
+        ref_labels=ref_labels,
+        ref_features=ref_features,
         num_de=num_de,
         num_threads=num_threads,
     )
+
     return raw_markers.to_dict(common_labels, common_features)
