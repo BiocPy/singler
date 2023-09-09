@@ -4,13 +4,13 @@ from biocframe import BiocFrame
 from typing import Sequence
 
 from .build_single_reference import SinglePrebuiltReference
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 
 
 def classify_single_reference(
-    test,
-    features: Sequence,
-    ref: SinglePrebuiltReference,
+    test_data,
+    test_features: Sequence,
+    ref_prebuilt: SinglePrebuiltReference,
     quantile: float = 0.8,
     use_fine_tune: bool = True,
     fine_tune_threshold: float = 0.05,
@@ -20,15 +20,19 @@ def classify_single_reference(
     using the SingleR algorithm.
 
     Args:
-        test: A matrix-like object where each row is a feature and each column
+        test_data: A matrix-like object where each row is a feature and each column
             is a test sample (usually a single cell), containing expression values.
             Normalized and transformed expression values are also acceptable as only
             the ranking is used within this function.
 
-        features (Sequence): Sequence of identifiers for each feature in the test
-            dataset, i.e., row in ``test``.
+            Alternatively, a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing such a matrix in one of its assays.
 
-        ref (SinglePrebuiltReference):
+        test_features (Sequence): Sequence of identifiers for each feature in the test
+            dataset, i.e., row in ``test_data``.
+
+        ref_prebuilt (SinglePrebuiltReference):
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
@@ -54,15 +58,15 @@ def classify_single_reference(
         to the second-best label.  Each row corresponds to a column of ``test``.
     """
 
-    nl = ref.num_labels()
-    mat_ptr = tatamize(test)
+    nl = ref_prebuilt.num_labels()
+    mat_ptr = tatamize(test_data)
     nc = mat_ptr.ncol()
 
     best = ndarray((nc,), dtype=int32)
     delta = ndarray((nc,), dtype=float64)
 
     scores = {}
-    all_labels = ref.labels
+    all_labels = ref_prebuilt.labels
     score_ptrs = ndarray((nl,), dtype=uintp)
     for i in range(nl):
         current = ndarray((nc,), dtype=float64)
@@ -70,11 +74,11 @@ def classify_single_reference(
         score_ptrs[i] = current.ctypes.data
 
     mapping = {}
-    for i, x in enumerate(features):
+    for i, x in enumerate(test_features):
         mapping[x] = i
 
-    ref_subset = ref.marker_subset(indices_only=True)
-    ref_features = ref.features
+    ref_subset = ref_prebuilt.marker_subset(indices_only=True)
+    ref_features = ref_prebuilt.features
     subset = ndarray((len(ref_subset),), dtype=int32)
     for i, y in enumerate(ref_subset):
         x = ref_features[y]
@@ -85,7 +89,7 @@ def classify_single_reference(
     lib.classify_single_reference(
         mat_ptr.ptr,
         subset,
-        ref._ptr,
+        ref_prebuilt._ptr,
         quantile=quantile,
         use_fine_tune=use_fine_tune,
         fine_tune_threshold=fine_tune_threshold,
