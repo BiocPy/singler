@@ -22,9 +22,11 @@ def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
 def _match(x: Sequence, target: Sequence) -> ndarray:
     mapping = {}
     for lev in target:
-        if lev not in mapping: # if 'target' contains duplicates, favor the first occurrence.
+        if (
+            lev not in mapping
+        ):  # if 'target' contains duplicates, favor the first occurrence.
             count = len(mapping)
-            mapping[lev] = count 
+            mapping[lev] = count
 
     indices = zeros((len(x),), dtype=int32)
     for i, y in enumerate(x):
@@ -57,7 +59,7 @@ def _stable_intersect(*args) -> list:
             state = occurrences[f]
             if state[0] == nargs and state[1] >= 0:
                 output.append(f)
-                state[1] = -1 # avoid duplicates
+                state[1] = -1  # avoid duplicates
 
     return output
 
