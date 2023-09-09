@@ -3,7 +3,8 @@ from typing import Sequence, Union, Any, Optional, Literal
 
 from .InternalMarkers import InternalMarkers
 from . import cpphelpers as lib
-from .utils import _factorize, _match
+from .utils import _factorize, _match, _clean_matrix
+from .get_classic_markers import _get_classic_markers_raw
 
 
 class SinglePrebuiltReference:
@@ -166,6 +167,7 @@ def build_single_reference(
                 labels,
                 features,
                 check_missing=False,
+                assay_type=assay_type,
                 num_de=num_de,
                 num_threads=num_threads,
             )
@@ -179,7 +181,7 @@ def build_single_reference(
 
     return SinglePrebuiltReference(
         lib.build_single_reference(
-            mat_ptr.ptr,
+            ref.ptr,
             labels=labind,
             markers=mrk._ptr,
             approximate=approximate,

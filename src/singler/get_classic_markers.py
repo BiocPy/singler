@@ -69,7 +69,7 @@ def _get_classic_markers_raw(
             if len(feat):
                 raise ValueError("no common feature names across 'features'")
 
-    common_features = list(last)
+    common_features = sorted(list(last))
     common_features_map = {}
     for i, x in enumerate(common_features):
         common_features_map[x] = i
@@ -103,7 +103,7 @@ def _get_classic_markers_raw(
     for labs in labels:
         ulabels |= set(labs)
 
-    common_labels = list(ulabels)
+    common_labels = sorted(list(ulabels))
     common_labels_map = {}
     for i, x in enumerate(common_labels):
         common_labels_map[x] = i
@@ -132,7 +132,8 @@ def _get_classic_markers_raw(
             nthreads=num_threads,
         )
     )
-    return raw_markers, common_features, common_labels
+
+    return raw_markers, common_labels, common_features
 
 
 def get_classic_markers(
