@@ -1,4 +1,4 @@
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 from numpy import ndarray, int32, array
 from typing import Sequence, Any
 

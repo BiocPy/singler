@@ -2,7 +2,7 @@ from numpy import int32, ndarray
 from typing import Sequence, Union, Any, Optional, Literal
 
 from ._Markers import _Markers
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 from ._utils import _factorize, _match, _clean_matrix
 from .get_classic_markers import _get_classic_markers_raw
 

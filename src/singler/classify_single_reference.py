@@ -4,7 +4,7 @@ from biocframe import BiocFrame
 from typing import Sequence
 
 from .build_single_reference import SinglePrebuiltReference
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 
 
 def classify_single_reference(

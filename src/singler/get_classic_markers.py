@@ -3,7 +3,7 @@ from mattress import tatamize
 from typing import Union, Sequence, Optional, Any
 import delayedarray
 
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 from ._utils import _clean_matrix
 from ._Markers import _Markers
 
