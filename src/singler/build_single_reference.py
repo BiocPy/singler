@@ -1,10 +1,10 @@
-from mattress import tatamize
 from numpy import int32, ndarray
-from typing import Sequence, Union, Any
+from typing import Sequence, Union, Any, Optional, Literal
 
 from .InternalMarkers import InternalMarkers
 from . import cpphelpers as lib
-from .utils import _factorize
+from .utils import _factorize, _match, _clean_matrix
+from .get_classic_markers import _get_classic_markers_raw
 
 
 class SinglePrebuiltReference:
@@ -20,12 +20,22 @@ class SinglePrebuiltReference:
             Sequence of feature identifiers, usually strings.
             This contains the universe of all features known to the reference,
             not just the markers that are ultimately used for classification.
+
+        markers (dict[Any, dict[Any, Sequence]]):
+            Upregulated markers for each pairwise comparison between labels.
     """
 
-    def __init__(self, ptr, labels: Sequence, features: Sequence):
+    def __init__(
+        self,
+        ptr,
+        labels: Sequence,
+        features: Sequence,
+        markers: dict[Any, dict[Any, Sequence]],
+    ):
         self._ptr = ptr
         self._features = features
         self._labels = labels
+        self._markers = markers
 
     def __del__(self):
         lib.free_single_reference(self._ptr)
@@ -62,6 +72,15 @@ class SinglePrebuiltReference:
         """
         return self._labels
 
+    @property
+    def markers(self) -> dict[Any, dict[Any, Sequence]]:
+        """
+        Returns:
+            dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison
+            between labels.
+        """
+        return self._markers
+
     def marker_subset(self, indices_only: bool = False) -> Union[ndarray, list]:
         """
         Args:
@@ -83,21 +102,30 @@ class SinglePrebuiltReference:
             return [self._features[i] for i in buffer]
 
 
+MarkerDetectionMethods = Literal["classic"]
+
+
 def build_single_reference(
     ref,
     labels: Sequence,
     features: Sequence,
-    markers: dict[Any, dict[Any, Sequence]],
+    assay_type: Union[str, int] = "logcounts",
+    check_missing: bool = True,
+    markers: Optional[dict[Any, dict[Any, Sequence]]] = None,
+    marker_method: MarkerDetectionMethods = "classic",
+    num_de: Optional[int] = None,
     approximate: bool = True,
     num_threads: int = 1,
 ) -> SinglePrebuiltReference:
     """Build a single reference dataset in preparation for classification.
 
     Args:
-        ref: A matrix-like object where rows are features and columns are
-            reference profiles. This should contain expression values;
-            normalized and transformed values are also acceptable as only
-            the ranking is used within this function.
+        ref: A matrix-like object where rows are features, columns are
+            reference profiles, and each entry is the expression value.
+            If `markers` is not provided, expression should be normalized
+            and log-transformed in preparation for marker prioritization via
+            differential expression analyses. Otherwise, any expression values
+            are acceptable as only the ranking within each column is used.
 
         labels (Sequence): Sequence of labels for each reference profile,
             i.e., column in ``ref``.
@@ -124,13 +152,36 @@ def build_single_reference(
         methods like :py:meth:`~singler.classify_single_reference.classify_single_reference`.
     """
 
-    lablev, labind = _factorize(labels)
-    mrk = InternalMarkers.from_dict(markers, lablev, features)
-    mat_ptr = tatamize(ref)
+    ref, features = _clean_matrix(
+        ref,
+        features,
+        assay_type=assay_type,
+        check_missing=check_missing,
+        num_threads=num_threads,
+    )
+
+    if markers is None:
+        if marker_method == "classic":
+            mrk, lablev, common_features = _get_classic_markers_raw(
+                ref,
+                labels,
+                features,
+                check_missing=False,
+                assay_type=assay_type,
+                num_de=num_de,
+                num_threads=num_threads,
+            )
+            markers = mrk.to_dict(lablev, common_features)
+            labind = _match(labels, lablev)
+        else:
+            raise NotImplementedError("other marker methods are not implemented, sorry")
+    else:
+        lablev, labind = _factorize(labels)
+        mrk = InternalMarkers.from_dict(markers, lablev, features)
 
     return SinglePrebuiltReference(
         lib.build_single_reference(
-            mat_ptr.ptr,
+            ref.ptr,
             labels=labind,
             markers=mrk._ptr,
             approximate=approximate,
@@ -138,4 +189,5 @@ def build_single_reference(
         ),
         labels=lablev,
         features=features,
+        markers=markers,
     )

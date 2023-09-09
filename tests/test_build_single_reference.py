@@ -25,3 +25,14 @@ def test_build_single_reference():
         ref, labels, features, markers, num_threads=2
     )
     assert all_markers == pbuilt.marker_subset()
+
+
+def test_build_single_reference_markers():
+    ref = numpy.random.rand(10000, 10)
+    labels = ["A", "B", "C", "D", "E", "E", "D", "C", "B", "A"]
+    features = [str(i) for i in range(ref.shape[0])]
+    built = singler.build_single_reference(ref, labels, features)
+
+    markers = singler.get_classic_markers(ref, labels, features)
+    mbuilt = singler.build_single_reference(ref, labels, features, markers)
+    assert built.markers == mbuilt.markers
