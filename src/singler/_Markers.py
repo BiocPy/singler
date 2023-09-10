@@ -1,9 +1,9 @@
-from . import cpphelpers as lib
+from . import _cpphelpers as lib
 from numpy import ndarray, int32, array
 from typing import Sequence, Any
 
 
-class InternalMarkers:
+class _Markers:
     def __init__(self, ptr):
         self._ptr = ptr
         self._num_labels = lib.get_nlabels_from_markers(self._ptr)

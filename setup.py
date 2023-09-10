@@ -14,7 +14,7 @@ if __name__ == "__main__":
             use_scm_version={"version_scheme": "no-guess-dev"},
             ext_modules=[
                 Extension(
-                    "singler.core",
+                    "singler._core",
                     [
                         "src/singler/lib/Markers.cpp",
                         "src/singler/lib/bindings.cpp",

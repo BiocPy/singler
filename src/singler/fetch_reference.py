@@ -9,9 +9,9 @@ import numpy
 from typing import Literal
 
 
-session_dir = None
+SESSION_DIR = None
 
-KnownReference = Literal[
+KNOWN_REFERENCE = Literal[
     "BlueprintEncode",
     "DatabaseImmuneCellExpression",
     "HumanPrimaryCellAtlas",
@@ -23,14 +23,14 @@ KnownReference = Literal[
 
 
 def fetch_github_reference(
-    name: KnownReference, cache_dir: str = None
+    name: KNOWN_REFERENCE, cache_dir: str = None
 ) -> summarizedexperiment.SummarizedExperiment:
     """Fetch a reference dataset from the
     `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
     for use in annotation with other **singler** functions.
 
     Args:
-        name (KnownReference): Name of the reference dataset.
+        name (KNOWN_REFERENCE): Name of the reference dataset.
 
         cache_dir (str, optional): Path to a cache directory in which to store
             the files downloaded from the remote. If the files are already
@@ -66,11 +66,12 @@ def fetch_github_reference(
     )
 
     if cache_dir is None:
+        global SESSION_DIR
         # This should already lie inside the OS's temporary directory, based on
         # documentation for tempfile.gettempdir(); no need to clean it up afterwards.
-        if session_dir is None:
-            session_dir = tempfile.mkdtemp()
-        cache_dir = session_dir
+        if SESSION_DIR is None:
+            SESSION_DIR = tempfile.mkdtemp()
+        cache_dir = SESSION_DIR
     elif not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
 
