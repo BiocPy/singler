@@ -4,7 +4,7 @@ from typing import Union, Sequence, Optional, Any
 import delayedarray
 
 from . import _cpphelpers as lib
-from ._utils import _clean_matrix, _stable_intersect, _stable_union
+from ._utils import _clean_matrix, _stable_intersect, _stable_union, _create_map
 from ._Markers import _Markers
 
 

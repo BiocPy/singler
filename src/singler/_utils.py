@@ -34,7 +34,7 @@ def _match(x: Sequence, levels: Sequence) -> ndarray:
         if y is None or y not in mapping:
             indices.append(None)
         else:
-            indices[i] = mapping[y]
+            indices.append(mapping[y])
 
     return indices
 
@@ -69,7 +69,7 @@ def _stable_intersect(*args) -> list:
 
     output = []
     for f in args[0]:
-        if f is not None and in occurrences:
+        if f is not None and f in occurrences:
             state = occurrences[f]
             if state[0] == nargs and state[1] >= 0:
                 output.append(f)
