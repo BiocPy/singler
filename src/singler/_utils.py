@@ -21,7 +21,7 @@ def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
 
 def _match(x: Sequence, levels: Sequence) -> ndarray:
     mapping = {}
-    for i, lev in levels:
+    for i, lev in enumerate(levels):
         # favor the first occurrence of a duplicate level.
         if lev not in mapping:  
             mapping[lev] = i
