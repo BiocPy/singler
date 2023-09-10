@@ -23,7 +23,7 @@ def _match(x: Sequence, levels: Sequence) -> ndarray:
     mapping = {}
     for i, lev in enumerate(levels):
         # favor the first occurrence of a duplicate level.
-        if lev not in mapping:  
+        if lev not in mapping:
             mapping[lev] = i
 
     indices = zeros((len(x),), dtype=int32)
