@@ -38,8 +38,8 @@ def test_realize_github_markers():
     out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"])
     assert out["A"]["B"] == [ "B", "D", "F", "H" ]
 
-    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"], number=2)
+    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"], num_markers=2)
     assert out["A"]["B"] == [ "B", "D" ]
 
-    out = singler.realize_github_markers(markers, ["A", "B", "C", None, "E", "F", "G", "H"], number=2)
+    out = singler.realize_github_markers(markers, ["A", "B", "C", None, "E", "F", "G", "H"], num_markers=2)
     assert out["A"]["B"] == [ "B", "F" ]
