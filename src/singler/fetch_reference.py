@@ -7,6 +7,7 @@ import gzip
 import biocframe
 import numpy
 from typing import Literal
+from .get_classic_markers import number_of_markers
 
 
 SESSION_DIR = None
@@ -39,11 +40,20 @@ def fetch_github_reference(
     Returns:
         SummarizedExperiment: The reference dataset as a SummarizedExperiment,
         parts of which can be passed to :py:meth:`~singler.build_single_reference.build_single_reference`.
-        Specifically, the ``ranks`` assay can be used as ``ref``;
-        one of the labels in the column data can be used as ``labels``;
-        one of the gene types in the row data can be used as ``features``;
-        and one of the marker lists in the metadata can be used as ``markers``
-        (make sure to use the same label type for ``labels`` and ``markers``).
+
+    Specifically, the ``ranks`` assay of the output can be used as ``ref`` in 
+    :py:meth:`~singler.build_single_reference.build_single_reference`;
+    one of the labels in the column data can be used as ``labels``;
+    and one of the gene types in the row data can be used as ``features``.
+
+    As the ranks are not log-normalized values, users should also use
+    the relevant pre-computed marker list in the metadata. The selected
+    marker list should match up with the chosen set of ``labels``. In
+    addition, the markers are stored as row indices and need to be converted 
+    to feature identifiers; this is achieved by passing the marker list to
+    :py:meth:`~singler.fetch_reference.realize_github_markers` with the same
+    gene types that were used in ``features``. The output can then be passed
+    as ``markers`` in the `build_reference()` call.
     """
 
     all_files = {"matrix": name + "_matrix.csv.gz"}
@@ -123,7 +133,10 @@ def fetch_github_reference(
         with gzip.open(all_paths["genes_" + g], "rt") as handle:
             current_genes = []
             for line in handle:
-                current_genes.append(line.strip())
+                y = line.strip()
+                if y == "":
+                    y = None
+                current_genes.append(y)
             gene_ids[g] = current_genes
 
     row_data = biocframe.BiocFrame(gene_ids)
@@ -145,3 +158,52 @@ def fetch_github_reference(
     return summarizedexperiment.SummarizedExperiment(
         {"ranks": mat}, row_data=row_data, col_data=col_data, metadata=markers
     )
+
+
+def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Sequence, num_de: Optional[int] = None):
+    """Convert marker indices from a GitHub reference dataset into feature
+    identifiers.  This allows the markers to be used in
+    :py:meth:`~singler.build_single_reference.build_single_reference`.
+
+    Args:
+        markers (dict[Any, dict[Any, Sequence]]):
+            Upregulated markers for each pairwise comparison between labels.
+            Specifically, ``markers[a][b]`` should be a sequence of features
+            that are upregulated in ``a`` compared to ``b``. Features are
+            represented as indices into ``features``.
+
+        features (Sequence):
+            Sequence of identifiers for each feature. Features with no valid
+            identifier for a particular gene type (e.g., no known symbol)
+            should be represented by None.
+
+        num_de (int, optional):
+            Number of markers to retain. If None, we default to 
+            :py:meth:`~singler.get_classic_markers.number_of_classic_markers`.
+
+    Returns:
+        dict[Any, dict[Any, Sequence]]: A dictionary with the same structure
+        as ``markers``, where each inner sequence contains the corresponding
+        feature identifiers in ``features``. Feature identifiers are guaranteed
+        to be non-None and should have length ``num_de`` (or less, if not
+        enough non-None identifiers are available).
+    """
+    if num_de is None:
+        num_de = number_of_markers()
+
+    output = {}
+    for k, v in markers.items():
+        current = {}
+        for k2, v2 in v.items():
+            n = min(len(v2), num_de)
+            renamed = []
+            for i in v2:
+                if len(renamed) == n:
+                    break
+                feat = features[i]
+                if feat is not None:
+                    renamed.append(feat)
+            current[k2] = renamed
+        output[k] = current
+
+    return output

@@ -21,3 +21,8 @@ void* find_classic_markers(int32_t nref, const uintptr_t* labels /** void_p */, 
     auto store = mrk.run(ref_ptrs, lab_ptrs);
     return new singlepp::Markers(std::move(store));
 }
+
+//[[export]]
+int32_t number_of_classic_markers(int32_t num_labels):
+    return singlepp::ChooseClassicMarkers::number_of_markers(num_labels);
+}

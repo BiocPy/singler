@@ -147,6 +147,13 @@ lib.py_get_subset_from_single_reference.argtypes = [
     ct.POINTER(ct.c_char_p)
 ]
 
+lib.py_number_of_classic_markers.restype = ct.c_int32
+lib.py_number_of_classic_markers.argtypes = [
+    ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
 lib.py_set_markers_for_pair.restype = None
 lib.py_set_markers_for_pair.argtypes = [
     ct.c_void_p,
@@ -193,6 +200,9 @@ def get_nsubset_from_single_reference(ptr):
 
 def get_subset_from_single_reference(ptr, buffer):
     return _catch_errors(lib.py_get_subset_from_single_reference)(ptr, _np2ct(buffer, np.int32))
+
+def number_of_classic_markers(num_labels):
+    return _catch_errors(lib.py_number_of_classic_markers)(num_labels)
 
 def set_markers_for_pair(ptr, label1, label2, n, values):
     return _catch_errors(lib.py_set_markers_for_pair)(ptr, label1, label2, n, _np2ct(values, np.int32))
