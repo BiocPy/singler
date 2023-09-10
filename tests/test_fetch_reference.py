@@ -49,7 +49,9 @@ def test_fetch_github_reference():
 
 
 def test_fetch_github_reference_multiple():
-    out = singler.fetch_github_reference("ImmGen", cache_dir="_cache", multiple_ids = True)
+    out = singler.fetch_github_reference(
+        "ImmGen", cache_dir="_cache", multiple_ids=True
+    )
 
     ens = out.row_data.column("ensembl")
     all_lengths = set()

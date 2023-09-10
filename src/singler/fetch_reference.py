@@ -38,7 +38,7 @@ def fetch_github_reference(
 
         multiple_ids (bool): Whether to report multiple feature IDs.
             If True, each feature is represented by a list with zero,
-            one or more feature identifiers (e.g., for ambiguous mappings). 
+            one or more feature identifiers (e.g., for ambiguous mappings).
             If False, each feature is represented by a string or None.
 
     Returns:
