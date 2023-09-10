@@ -23,7 +23,7 @@ KNOWN_REFERENCE = Literal[
 
 
 def fetch_github_reference(
-    name: KNOWN_REFERENCE, cache_dir: str = None, multiple_ids: bool = True
+    name: KNOWN_REFERENCE, cache_dir: str = None, multiple_ids: bool = False
 ) -> summarizedexperiment.SummarizedExperiment:
     """Fetch a reference dataset from the
     `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
@@ -152,6 +152,10 @@ def fetch_github_reference(
                 else:
                     if y == "":
                         y = None
+                    else:
+                        tx = y.find("\t")
+                        if tx != -1:
+                            y = y[:tx]
                 current_genes.append(y)
             gene_ids[g] = current_genes
 

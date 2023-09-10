@@ -21,6 +21,13 @@ def test_fetch_github_reference():
             break
     assert has_none
 
+    has_tab = False
+    for x in ens:
+        if x is not None and x.find("\t") != -1:
+            has_tab = True
+            break
+    assert not has_tab
+
     # Checking the labels.
     assert isinstance(out.col_data.column("fine")[0], str)
     assert isinstance(out.col_data.column("main")[0], str)
