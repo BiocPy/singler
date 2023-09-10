@@ -23,6 +23,6 @@ void* find_classic_markers(int32_t nref, const uintptr_t* labels /** void_p */, 
 }
 
 //[[export]]
-int32_t number_of_classic_markers(int32_t num_labels):
+int32_t number_of_classic_markers(int32_t num_labels) {
     return singlepp::ChooseClassicMarkers::number_of_markers(num_labels);
 }

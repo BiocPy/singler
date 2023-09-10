@@ -6,8 +6,8 @@ import os
 import gzip
 import biocframe
 import numpy
-from typing import Literal
-from .get_classic_markers import number_of_markers
+from typing import Literal, Any, Sequence, Optional
+from .get_classic_markers import number_of_classic_markers
 
 
 SESSION_DIR = None
@@ -160,7 +160,7 @@ def fetch_github_reference(
     )
 
 
-def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Sequence, num_de: Optional[int] = None):
+def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Sequence, number: Optional[int] = None):
     """Convert marker indices from a GitHub reference dataset into feature
     identifiers.  This allows the markers to be used in
     :py:meth:`~singler.build_single_reference.build_single_reference`.
@@ -177,7 +177,7 @@ def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Se
             identifier for a particular gene type (e.g., no known symbol)
             should be represented by None.
 
-        num_de (int, optional):
+        number (int, optional):
             Number of markers to retain. If None, we default to 
             :py:meth:`~singler.get_classic_markers.number_of_classic_markers`.
 
@@ -185,17 +185,17 @@ def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Se
         dict[Any, dict[Any, Sequence]]: A dictionary with the same structure
         as ``markers``, where each inner sequence contains the corresponding
         feature identifiers in ``features``. Feature identifiers are guaranteed
-        to be non-None and should have length ``num_de`` (or less, if not
+        to be non-None and should have length ``number`` (or less, if not
         enough non-None identifiers are available).
     """
-    if num_de is None:
-        num_de = number_of_markers()
+    if number is None:
+        number = number_of_classic_markers(len(markers))
 
     output = {}
     for k, v in markers.items():
         current = {}
         for k2, v2 in v.items():
-            n = min(len(v2), num_de)
+            n = min(len(v2), number)
             renamed = []
             for i in v2:
                 if len(renamed) == n:

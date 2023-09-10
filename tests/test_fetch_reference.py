@@ -31,3 +31,15 @@ def test_fetch_github_reference():
     assert sorted(markers[all_labels[0]].keys()) == all_labels
     assert len(markers[all_labels[0]][all_labels[0]]) == 0
     assert len(markers[all_labels[0]][all_labels[1]]) > 0
+
+
+def test_realize_github_markers():
+    markers = { "A": { "B": [ 1, 3, 5, 7 ] }}
+    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"])
+    assert out["A"]["B"] == [ "B", "D", "F", "H" ]
+
+    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"], number=2)
+    assert out["A"]["B"] == [ "B", "D" ]
+
+    out = singler.realize_github_markers(markers, ["A", "B", "C", None, "E", "F", "G", "H"], number=2)
+    assert out["A"]["B"] == [ "B", "F" ]
