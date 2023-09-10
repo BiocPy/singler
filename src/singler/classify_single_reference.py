@@ -5,6 +5,7 @@ from typing import Sequence
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
+from ._utils import _create_map
 
 
 def classify_single_reference(
@@ -73,9 +74,7 @@ def classify_single_reference(
         scores[all_labels[i]] = current
         score_ptrs[i] = current.ctypes.data
 
-    mapping = {}
-    for i, x in enumerate(test_features):
-        mapping[x] = i
+    mapping = _create_map(test_features)
 
     ref_subset = ref_prebuilt.marker_subset(indices_only=True)
     ref_features = ref_prebuilt.features

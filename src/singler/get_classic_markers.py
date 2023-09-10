@@ -29,9 +29,7 @@ def _get_classic_markers_raw(
             if len(feat):
                 raise ValueError("no common feature names across 'features'")
 
-    common_features_map = {}
-    for i, x in enumerate(common_features):
-        common_features_map[x] = i
+    common_features_map = _create_map(common_features)
 
     # Creating medians.
     ref2 = []
@@ -42,7 +40,7 @@ def _get_classic_markers_raw(
         survivors = []
         remap = [None] * len(common_features)
         for j, f in enumerate(ref_features[i]):
-            if f in common_features_map:
+            if f is not None and f in common_features_map:
                 survivors.append(j)
                 remap[common_features_map[f]] = len(survivors) - 1
 
@@ -59,9 +57,7 @@ def _get_classic_markers_raw(
 
     # Defining the union of labels.
     common_labels = _stable_union(*ref_labels)
-    common_labels_map = {}
-    for i, x in enumerate(common_labels):
-        common_labels_map[x] = i
+    common_labels_map = _create_map(common_labels)
 
     labels2 = []
     labels2_ptrs = ndarray((nrefs,), dtype=uintp)

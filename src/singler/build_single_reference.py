@@ -1,4 +1,4 @@
-from numpy import int32, ndarray
+from numpy import int32, array, ndarray
 from typing import Sequence, Union, Any, Optional, Literal
 
 from ._Markers import _Markers
@@ -192,11 +192,12 @@ def build_single_reference(
                 **marker_args,
             )
             markers = mrk.to_dict(lablev, ref_features)
-            labind = _match(ref_labels, lablev)
+            labind = array(_match(ref_labels, lablev), dtype=int32)
         else:
             raise NotImplementedError("other marker methods are not implemented, sorry")
     else:
         lablev, labind = _factorize(ref_labels)
+        labind = array(labind, dtype=int32)
         mrk = _Markers.from_dict(markers, lablev, ref_features)
 
     return SinglePrebuiltReference(

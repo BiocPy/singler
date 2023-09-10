@@ -8,13 +8,16 @@ from delayedarray import DelayedArray
 def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
     levels = []
     mapping = {}
-    indices = zeros((len(x),), dtype=int32)
+    indices = []
 
     for i, lev in enumerate(x):
-        if lev not in mapping:
-            mapping[lev] = len(levels)
-            levels.append(lev)
-        indices[i] = mapping[lev]
+        if lev is None:
+            indices.append(None)
+        else:
+            if lev not in mapping:
+                mapping[lev] = len(levels)
+                levels.append(lev)
+            indices.append(mapping[lev])
 
     return levels, indices
 
@@ -26,11 +29,24 @@ def _match(x: Sequence, levels: Sequence) -> ndarray:
         if lev not in mapping:
             mapping[lev] = i
 
-    indices = zeros((len(x),), dtype=int32)
+    indices = []
     for i, y in enumerate(x):
-        indices[i] = mapping[y]
+        if y is None or y not in mapping:
+            indices.append(None)
+        else:
+            indices[i] = mapping[y]
 
     return indices
+
+
+def _create_map(x: Sequence) -> dict:
+    mapping = {}
+    for i, val in enumerate(x):
+        if val is not None:
+            # Again, favor the first occurrence.
+            if val not in mapping:
+                mapping[val] = i
+    return mapping
 
 
 def _stable_intersect(*args) -> list:
@@ -40,12 +56,12 @@ def _stable_intersect(*args) -> list:
 
     occurrences = {}
     for f in args[0]:
-        if f not in occurrences:
+        if f is not None and f not in occurrences:
             occurrences[f] = [1, 0]
 
     for i in range(1, len(args)):
         for f in args[i]:
-            if f in occurrences:
+            if f is not None and f in occurrences:
                 state = occurrences[f]
                 if state[1] < i:
                     state[0] += 1
@@ -53,7 +69,7 @@ def _stable_intersect(*args) -> list:
 
     output = []
     for f in args[0]:
-        if f in occurrences:
+        if f is not None and in occurrences:
             state = occurrences[f]
             if state[0] == nargs and state[1] >= 0:
                 output.append(f)
@@ -70,7 +86,7 @@ def _stable_union(*args) -> list:
     present = set()
     for a in args:
         for f in a:
-            if f not in present:
+            if f is not None and f not in present:
                 output.append(f)
                 present.add(f)
 
