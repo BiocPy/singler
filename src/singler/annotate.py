@@ -85,7 +85,7 @@ def annotate(
         if "marker_args" in build_args:
             marker_args = build_args["marker_args"]
             if "num_de" in marker_args:
-                num_de = markerg_args["num_de"]
+                num_de = marker_args["num_de"]
 
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
