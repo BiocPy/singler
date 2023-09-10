@@ -79,19 +79,24 @@ def annotate(
 
     if isinstance(ref, str):
         ref = fetch_github_reference(ref, cache_dir = cache_dir)
+        ref_features = ref.row_data.column(ref_features),
 
         num_de = None
-        if "num_de" in build_args:
-            num_de = build_args["num_de"]
+        if "marker_args" in build_args:
+            marker_args = build_args["marker_args"]
+            if "num_de" in marker_args:
+                num_de = markerg_args["num_de"]
+
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
+            ref_features,
             number = num_de
         )
 
         built = build_single_reference(
             ref = ref.assay("rank"), 
             labels = ref.col_data.column(ref_labels), 
-            features = ref.row_data.column(ref_features),
+            features = ref_features,
             markers = markers,
             num_threads = num_threads,
             **build_args,
