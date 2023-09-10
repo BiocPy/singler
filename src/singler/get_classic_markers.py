@@ -185,8 +185,8 @@ def get_classic_markers(
 
 
 def number_of_classic_markers(num_labels: int) -> int:
-    """Compute the number of markers to detect for a given number of labels,
-    using the classic SingleR marker detection algorithm.
+    """Compute the number of markers to detect for a given number of labels, using the classic SingleR marker detection
+    algorithm.
 
     Args:
         num_labels (int): Number of labels.

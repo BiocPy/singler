@@ -40,7 +40,7 @@ def fetch_github_reference(
         SummarizedExperiment: The reference dataset as a SummarizedExperiment,
         parts of which can be passed to :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-    Specifically, the ``ranks`` assay of the output can be used as ``ref`` in 
+    Specifically, the ``ranks`` assay of the output can be used as ``ref`` in
     :py:meth:`~singler.build_single_reference.build_single_reference`;
     one of the labels in the column data can be used as ``labels``;
     and one of the gene types in the row data can be used as ``features``.
@@ -48,7 +48,7 @@ def fetch_github_reference(
     As the ranks are not log-normalized values, users should also use
     the relevant pre-computed marker list in the metadata. The selected
     marker list should match up with the chosen set of ``labels``. In
-    addition, the markers are stored as row indices and need to be converted 
+    addition, the markers are stored as row indices and need to be converted
     to feature identifiers; this is achieved by passing the marker list to
     :py:meth:`~singler.fetch_reference.realize_github_markers` with the same
     gene types that were used in ``features``. The output can then be passed
@@ -159,10 +159,13 @@ def fetch_github_reference(
     )
 
 
-def realize_github_markers(markers: dict[Any, dict[Any, Sequence]], features: Sequence, num_markers: Optional[int] = None):
-    """Convert marker indices from a GitHub reference dataset into feature
-    identifiers.  This allows the markers to be used in
-    :py:meth:`~singler.build_single_reference.build_single_reference`.
+def realize_github_markers(
+    markers: dict[Any, dict[Any, Sequence]],
+    features: Sequence,
+    num_markers: Optional[int] = None,
+):
+    """Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be
+    used in :py:meth:`~singler.build_single_reference.build_single_reference`.
 
     Args:
         markers (dict[Any, dict[Any, Sequence]]):

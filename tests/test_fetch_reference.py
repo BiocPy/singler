@@ -34,12 +34,18 @@ def test_fetch_github_reference():
 
 
 def test_realize_github_markers():
-    markers = { "A": { "B": [ 1, 3, 5, 7 ] }}
-    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"])
-    assert out["A"]["B"] == [ "B", "D", "F", "H" ]
+    markers = {"A": {"B": [1, 3, 5, 7]}}
+    out = singler.realize_github_markers(
+        markers, ["A", "B", "C", "D", "E", "F", "G", "H"]
+    )
+    assert out["A"]["B"] == ["B", "D", "F", "H"]
 
-    out = singler.realize_github_markers(markers, ["A", "B", "C", "D", "E", "F", "G", "H"], num_markers=2)
-    assert out["A"]["B"] == [ "B", "D" ]
+    out = singler.realize_github_markers(
+        markers, ["A", "B", "C", "D", "E", "F", "G", "H"], num_markers=2
+    )
+    assert out["A"]["B"] == ["B", "D"]
 
-    out = singler.realize_github_markers(markers, ["A", "B", "C", None, "E", "F", "G", "H"], num_markers=2)
-    assert out["A"]["B"] == [ "B", "F" ]
+    out = singler.realize_github_markers(
+        markers, ["A", "B", "C", None, "E", "F", "G", "H"], num_markers=2
+    )
+    assert out["A"]["B"] == ["B", "F"]
