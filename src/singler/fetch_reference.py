@@ -23,7 +23,7 @@ KNOWN_REFERENCE = Literal[
 
 
 def fetch_github_reference(
-    name: KNOWN_REFERENCE, cache_dir: str = None
+    name: KNOWN_REFERENCE, cache_dir: str = None, multiple_ids: bool = False
 ) -> summarizedexperiment.SummarizedExperiment:
     """Fetch a reference dataset from the
     `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
@@ -35,6 +35,11 @@ def fetch_github_reference(
         cache_dir (str, optional): Path to a cache directory in which to store
             the files downloaded from the remote. If the files are already
             present, the download is skipped.
+
+        multiple_ids (bool): Whether to report multiple feature IDs.
+            If True, each feature is represented by a list with zero,
+            one or more feature identifiers (e.g., for ambiguous mappings).
+            If False, each feature is represented by a string or None.
 
     Returns:
         SummarizedExperiment: The reference dataset as a SummarizedExperiment,
@@ -53,6 +58,12 @@ def fetch_github_reference(
     :py:meth:`~singler.fetch_reference.realize_github_markers` with the same
     gene types that were used in ``features``. The output can then be passed
     as ``markers`` in the `build_reference()` call.
+
+    If ``multiple_ids = True``, each ``row_data`` column will be a list of
+    lists of possible identifiers for each feature. Callers are responsible for
+    resolving this list of lists into a list of single identifiers for each
+    feature, before passing it onto other functions like
+    :py:meth:`~singler.build_single_reference.build_single_reference`.
     """
 
     all_files = {"matrix": name + "_matrix.csv.gz"}
@@ -133,8 +144,18 @@ def fetch_github_reference(
             current_genes = []
             for line in handle:
                 y = line.strip()
-                if y == "":
-                    y = None
+                if multiple_ids:
+                    if y == "":
+                        y = []
+                    else:
+                        y = y.split("\t")
+                else:
+                    if y == "":
+                        y = None
+                    else:
+                        tx = y.find("\t")
+                        if tx != -1:
+                            y = y[:tx]
                 current_genes.append(y)
             gene_ids[g] = current_genes
 
