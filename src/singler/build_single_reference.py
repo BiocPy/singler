@@ -3,7 +3,7 @@ from typing import Sequence, Union, Any, Optional, Literal
 
 from ._Markers import _Markers
 from . import _cpphelpers as lib
-from ._utils import _factorize, _match, _clean_matrix, _create_map
+from ._utils import _factorize, _match, _clean_matrix
 from .get_classic_markers import _get_classic_markers_raw
 
 
