@@ -15,6 +15,7 @@ def test_get_classic_markers_simple():
 
     current = markers["A"]["B"]
     assert len(current) < 10000
+    assert singler.number_of_classic_markers(5) == len(current)
 
     val = int(current[0])
     assert val >= 0 and val < 10000

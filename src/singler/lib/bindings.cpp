@@ -41,6 +41,8 @@ int32_t get_nsubset_from_single_reference(void*);
 
 void get_subset_from_single_reference(void*, int32_t*);
 
+int32_t number_of_classic_markers(int32_t);
+
 void set_markers_for_pair(void*, int32_t, int32_t, int32_t, const int32_t*);
 
 extern "C" {
@@ -205,6 +207,20 @@ PYAPI void py_get_subset_from_single_reference(void* ptr, int32_t* buffer, int32
         *errcode = 1;
         *errmsg = copy_error_message("unknown C++ exception");
     }
+}
+
+PYAPI int32_t py_number_of_classic_markers(int32_t num_labels, int32_t* errcode, char** errmsg) {
+    int32_t output = 0;
+    try {
+        output = number_of_classic_markers(num_labels);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
 }
 
 PYAPI void py_set_markers_for_pair(void* ptr, int32_t label1, int32_t label2, int32_t n, const int32_t* values, int32_t* errcode, char** errmsg) {
