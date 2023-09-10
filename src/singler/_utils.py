@@ -19,14 +19,12 @@ def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
     return levels, indices
 
 
-def _match(x: Sequence, target: Sequence) -> ndarray:
+def _match(x: Sequence, levels: Sequence) -> ndarray:
     mapping = {}
-    for lev in target:
-        if (
-            lev not in mapping
-        ):  # if 'target' contains duplicates, favor the first occurrence.
-            count = len(mapping)
-            mapping[lev] = count
+    for i, lev in enumerate(levels):
+        # favor the first occurrence of a duplicate level.
+        if lev not in mapping:
+            mapping[lev] = i
 
     indices = zeros((len(x),), dtype=int32)
     for i, y in enumerate(x):
