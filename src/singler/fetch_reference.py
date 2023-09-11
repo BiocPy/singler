@@ -110,7 +110,11 @@ def fetch_github_reference(
         all_labels = []
         with gzip.open(all_paths["labels_" + lab], "rt") as handle:
             for line in handle:
-                all_labels.append(int(line.strip()))
+                line = line.strip()
+                if line == "NA": # I dunno man, I dunno.
+                    all_labels.append(None)
+                else:
+                    all_labels.append(int(line))
 
         all_label_names = []
         with gzip.open(all_paths["label_names_" + lab], "rt") as handle:
@@ -118,7 +122,8 @@ def fetch_github_reference(
                 all_label_names.append(line.strip())
 
         for i, x in enumerate(all_labels):
-            all_labels[i] = all_label_names[x]
+            if x is not None:
+                all_labels[i] = all_label_names[x]
         labels[lab] = all_labels
 
         current_markers = {}
