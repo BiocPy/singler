@@ -20,11 +20,11 @@ def test_annotate_sanity():
 
     all_features = [str(i) for i in range(10000)]
     output = singler.annotate(
-        test, 
-        test_features = all_features, 
-        ref_data = ref, 
-        ref_features = all_features, 
-        ref_labels = labels
+        test,
+        test_features=all_features,
+        ref_data=ref,
+        ref_features=all_features,
+        ref_labels=labels,
     )
 
     assert output.shape[0] == 5
@@ -36,30 +36,32 @@ def test_annotate_intersect():
     ref_features = [str(i) for i in range(10000)]
     ref_labels = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E"]
     test = numpy.random.rand(10000, 50)
-    test_features = [str(i+2000) for i in range(10000)]
+    test_features = [str(i + 2000) for i in range(10000)]
 
     output = singler.annotate(
-        test, 
-        test_features = test_features, 
-        ref_data = ref, 
-        ref_features = ref_features,
-        ref_labels = ref_labels
+        test,
+        test_features=test_features,
+        ref_data=ref,
+        ref_features=ref_features,
+        ref_labels=ref_labels,
     )
 
     built = singler.build_single_reference(
-        ref[2000:,:], 
-        ref_labels=ref_labels, 
-        ref_features=ref_features[2000:]
+        ref[2000:, :], ref_labels=ref_labels, ref_features=ref_features[2000:]
     )
-    expected = singler.classify_single_reference(test[:8000,:], test_features[:8000], built)
+    expected = singler.classify_single_reference(
+        test[:8000, :], test_features[:8000], built
+    )
 
     assert output.column("best") == expected.column("best")
     assert (output.column("delta") == expected.column("delta")).all()
-    assert (output.column("scores").column("B") == expected.column("scores").column("B")).all()
+    assert (
+        output.column("scores").column("B") == expected.column("scores").column("B")
+    ).all()
 
 
 def test_annotate_github():
-    se = singler.fetch_github_reference("ImmGen", cache_dir="_cache") 
+    se = singler.fetch_github_reference("ImmGen", cache_dir="_cache")
 
     keep = range(5, se.shape[0], 2)
     test = numpy.random.rand(len(keep), 50)
@@ -67,11 +69,11 @@ def test_annotate_github():
     test_features = [ref_features[i] for i in keep]
 
     output = singler.annotate(
-        test, 
-        test_features = test_features, 
-        ref_data = "ImmGen", 
-        ref_features = "symbol",
-        ref_labels = "main",
+        test,
+        test_features=test_features,
+        ref_data="ImmGen",
+        ref_features="symbol",
+        ref_labels="main",
         cache_dir="_cache",
     )
     assert output.shape[0] == 50
@@ -79,18 +81,18 @@ def test_annotate_github():
     expected_markers = singler.realize_github_markers(
         se.metadata["main"],
         se.row_data.column("symbol"),
-        restrict_to = set(test_features)
+        restrict_to=set(test_features),
     )
     assert output.metadata["markers"] == expected_markers
 
     # Checking that we handle the number of markers correctly.
     more_output = singler.annotate(
-        test, 
-        test_features = test_features, 
-        ref_data = "ImmGen", 
-        ref_features = "symbol",
-        ref_labels = "main",
-        build_args = { "marker_args": { "num_de": 10 } },
+        test,
+        test_features=test_features,
+        ref_data="ImmGen",
+        ref_features="symbol",
+        ref_labels="main",
+        build_args={"marker_args": {"num_de": 10}},
         cache_dir="_cache",
     )
 
