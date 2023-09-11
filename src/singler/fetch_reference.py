@@ -6,7 +6,7 @@ import os
 import gzip
 import biocframe
 import numpy
-from typing import Literal, Any, Sequence, Optional
+from typing import Literal, Any, Sequence, Optional, Union
 
 
 SESSION_DIR = None
@@ -184,6 +184,7 @@ def realize_github_markers(
     markers: dict[Any, dict[Any, Sequence]],
     features: Sequence,
     num_markers: Optional[int] = None,
+    restrict_to: Optional[Union[set, dict]] = None,
 ):
     """Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be
     used in :py:meth:`~singler.build_single_reference.build_single_reference`.
@@ -203,24 +204,34 @@ def realize_github_markers(
         num_markers (int, optional):
             Number of markers to retain. If None, all markers are retained.
 
+        restrict_to (Union[set, dict], optional):
+            Subset of available features to restrict the marker selection.
+            Only features in ``restrict_to`` will be reported in the output.
+            If None, no restriction is performed.
+
     Returns:
         dict[Any, dict[Any, Sequence]]: A dictionary with the same structure
         as ``markers``, where each inner sequence contains the corresponding
         feature identifiers in ``features``. Feature identifiers are guaranteed
-        to be non-None and should have length ``num_markers`` (or less, if not
-        enough non-None identifiers are available).
+        to be non-None and to be in ``restrict_to`` (if specified). Each
+        inner sequence should have length ``num_markers`` (or less, if not
+        enough non-None/restricted identifiers are available). 
     """
     output = {}
     for k, v in markers.items():
         current = {}
+
         for k2, v2 in v.items():
             renamed = []
+
             for i in v2:
                 if num_markers is not None and len(renamed) == num_markers:
                     break
                 feat = features[i]
                 if feat is not None:
-                    renamed.append(feat)
+                    if restrict_to is None or feat in restrict_to:
+                        renamed.append(feat)
+
             current[k2] = renamed
         output[k] = current
 

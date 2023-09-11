@@ -1,5 +1,7 @@
 from numpy import int32, array, ndarray
 from typing import Sequence, Union, Any, Optional, Literal
+from delayedarray import DelayedArray
+from mattress import tatamize
 
 from ._Markers import _Markers
 from . import _cpphelpers as lib
@@ -111,6 +113,7 @@ def build_single_reference(
     ref_features: Sequence,
     assay_type: Union[str, int] = "logcounts",
     check_missing: bool = True,
+    restrict_to: Optional[Union[set, dict]] = None,
     markers: Optional[dict[Any, dict[Any, Sequence]]] = None,
     marker_method: MARKER_DETECTION_METHODS = "classic",
     marker_args={},
@@ -144,6 +147,11 @@ def build_single_reference(
         check_missing (bool):
             Whether to check for and remove rows with missing (NaN) values
             from ``ref_data``.
+
+        restrict_to (Union[set, dict], optional):
+            Subset of available features to restrict to. Only features in
+            ``restrict_to`` will be used in the reference building. If None,
+            no restriction is performed.
 
         markers (dict[Any, dict[Any, Sequence]], optional):
             Upregulated markers for each pairwise comparison between labels.
@@ -181,6 +189,16 @@ def build_single_reference(
         check_missing=check_missing,
         num_threads=num_threads,
     )
+
+    if restrict_to is not None:
+        keep = []
+        new_features = []
+        for i, x in enumerate(ref_features):
+            if x in restrict_to:
+                keep.append(i)
+                new_features.append(x)
+        ref_features = new_features
+        ref_ptr = tatamize(DelayedArray(ref_ptr)[keep,:])
 
     if markers is None:
         if marker_method == "classic":

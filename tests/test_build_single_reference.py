@@ -36,3 +36,35 @@ def test_build_single_reference_markers():
     markers = singler.get_classic_markers(ref, labels, features)
     mbuilt = singler.build_single_reference(ref, labels, features, markers)
     assert built.markers == mbuilt.markers
+
+
+def test_build_single_reference_restricted():
+    ref = numpy.random.rand(10000, 10)
+    labels = ["A", "B", "C", "D", "E", "E", "D", "C", "B", "A"]
+    features = [str(i) for i in range(ref.shape[0])]
+
+    keep = range(1, ref.shape[0], 3)
+    restricted = [str(i) for i in keep]
+    built = singler.build_single_reference(
+        ref, 
+        labels, 
+        features, 
+        restrict_to = set(restricted)
+    )
+
+    expected = singler.build_single_reference(
+        ref[keep,:], 
+        labels, 
+        restricted
+    )
+
+    assert built.markers == expected.markers
+    assert built.marker_subset() == expected.marker_subset()
+    assert built.features == expected.features
+
+    # Check that the actual C++ content is the same.
+    test = numpy.random.rand(10000, 50)
+    output = singler.classify_single_reference(test, features, built)
+    expected_output = singler.classify_single_reference(test, features, expected)
+    assert (output.column("delta") == expected_output.column("delta")).all() 
+    assert output.column("best") == expected_output.column("best")
