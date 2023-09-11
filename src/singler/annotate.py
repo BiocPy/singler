@@ -1,12 +1,9 @@
 from typing import Union, Sequence, Optional
 from biocframe import BiocFrame
-from summarizedexperiment import SummarizedExperiment
-from delayedarray import DelayedArray
 
 from .fetch_reference import fetch_github_reference
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference 
-from ._utils import _stable_intersect, _match
 
 
 def annotate(
@@ -90,13 +87,11 @@ def annotate(
             if "num_de" in marker_args:
                 num_de = marker_args["num_de"]
 
-        common_features = _stable_intersect(test_features, ref_features)
-
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
             ref_features,
             number = num_de,
-            restrict_to = set(common_features),
+            restrict_to = set(test_features),
         )
 
         built = build_single_reference(
@@ -109,19 +104,11 @@ def annotate(
         )
 
     else:
-        common_features = _stable_intersect(test_features, ref_features)
-        keep = _match(common_features, ref_features)
-
-        if isinstance(ref_data, SummarizedExperiment):
-            assay_type = "logcounts"
-            if "assay_type" in build_args:
-                assay_type = build_args["assay_type"]
-            ref_data = ref_data.assay(assay_type)
-
         built = build_single_reference(
-            ref_data = DelayedArray(ref_data)[keep,:],
+            ref_data = ref_data,
             ref_labels = ref_labels, 
-            ref_features = common_features,
+            ref_features = ref_features,
+            restrict_to = set(test_features),
             num_threads = num_threads,
             **build_args,
         )

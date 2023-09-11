@@ -56,3 +56,42 @@ def test_annotate_intersect():
     assert output.column("best") == expected.column("best")
     assert (output.column("delta") == expected.column("delta")).all()
     assert (output.column("scores").column("B") == expected.column("scores").column("B")).all()
+
+
+def test_annotate_github():
+    se = singler.fetch_github_reference(
+        "ImmGen", cache_dir="_cache", multiple_ids=True
+    )
+
+    keep = range(5, se.shape[0], 2)
+    test = numpy.random.rand(len(keep), 50)
+    ref_features = se.row_data.column("symbol")
+    test_features = [ref_features[i] for i in keep]
+
+    output = singler.annotate(
+        test, 
+        test_features = test_features, 
+        ref_data = "ImmGen", 
+        ref_features = "symbol",
+        ref_labels = "main" 
+    )
+    assert output.shape[0] == 50
+
+    expected_markers = singler.realize_github_markers(
+        out.metadata["main"],
+        out.row_data.column("symbol"),
+        restrict_to = set(test_features)
+    )
+    assert output.metadata["markers"] == expected_markers
+
+    more_output = singler.annotate(
+        test, 
+        test_features = test_features, 
+        ref_data = "ImmGen", 
+        ref_features = "symbol",
+        ref_labels = "main",
+        build_args = { "marker_args": { "num_de": 10 } }
+    )
+
+    ref_labels = se.col_data.column("main")
+    assert len(output.metadata[ref_labels[0]][ref_labels[1]]) == 10
