@@ -111,7 +111,7 @@ def fetch_github_reference(
         with gzip.open(all_paths["labels_" + lab], "rt") as handle:
             for line in handle:
                 line = line.strip()
-                if line == "NA": # I dunno man, I dunno.
+                if line == "NA":  # I dunno man, I dunno.
                     all_labels.append(None)
                 else:
                     all_labels.append(int(line))
