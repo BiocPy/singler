@@ -130,5 +130,5 @@ def _restrict_features(ptr, features, restrict_to):
                 keep.append(i)
                 new_features.append(x)
         features = new_features
-        ptr = tatamize(DelayedArray(ptr)[keep,:])
+        ptr = tatamize(DelayedArray(ptr)[keep, :])
     return ptr, features

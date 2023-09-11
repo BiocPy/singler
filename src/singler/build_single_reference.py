@@ -1,7 +1,5 @@
 from numpy import int32, array, ndarray
 from typing import Sequence, Union, Any, Optional, Literal
-from delayedarray import DelayedArray
-from mattress import tatamize
 
 from ._Markers import _Markers
 from . import _cpphelpers as lib

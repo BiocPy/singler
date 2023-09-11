@@ -215,7 +215,7 @@ def realize_github_markers(
         feature identifiers in ``features``. Feature identifiers are guaranteed
         to be non-None and to be in ``restrict_to`` (if specified). Each
         inner sequence should have length ``num_markers`` (or less, if not
-        enough non-None/restricted identifiers are available). 
+        enough non-None/restricted identifiers are available).
     """
     output = {}
     for k, v in markers.items():

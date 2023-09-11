@@ -106,5 +106,5 @@ def test_get_classic_markers_restricted():
     restricted = [str(i) for i in keep]
     markers = singler.get_classic_markers(ref, labels, features, restrict_to=restricted)
 
-    expected = singler.get_classic_markers(ref[keep,:], labels, restricted)
+    expected = singler.get_classic_markers(ref[keep, :], labels, restricted)
     assert markers == expected

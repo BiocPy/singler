@@ -82,7 +82,8 @@ def test_realize_github_markers():
 
     # Behaves with the restrict_to set.
     out = singler.realize_github_markers(
-        markers, ["A", "B", "C", "D", "E", "F", "G", "H"], 
-        restrict_to = set([ "E", "F", "G", "H" ])
+        markers,
+        ["A", "B", "C", "D", "E", "F", "G", "H"],
+        restrict_to=set(["E", "F", "G", "H"]),
     )
     assert out["A"]["B"] == ["F", "H"]
