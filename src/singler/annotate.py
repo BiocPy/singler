@@ -1,9 +1,12 @@
 from typing import Union, Sequence, Optional
 from biocframe import BiocFrame
+from summarizedexperiment import SummarizedExperiment
+from delayedarray import DelayedArray
 
 from .fetch_reference import fetch_github_reference
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference 
+from ._utils import _stable_intersect, _match
 
 
 def annotate(
@@ -77,9 +80,9 @@ def annotate(
         between labels; and a list of ``unique_markers`` across all labels.
     """
 
-    if isinstance(ref, str):
+    if isinstance(ref_data, str):
         ref = fetch_github_reference(ref, cache_dir = cache_dir)
-        ref_features = ref.row_data.column(ref_features),
+        ref_features = ref.row_data.column(ref_features)
 
         num_de = None
         if "marker_args" in build_args:
@@ -87,38 +90,60 @@ def annotate(
             if "num_de" in marker_args:
                 num_de = marker_args["num_de"]
 
+        common_features = stable_intersect(test_features, ref_features)
+        is_common = set(common_features)
+        tmp_ref_features = []
+        for x in ref_features:
+            if x in is_common:
+                tmp_ref_features.append(x)
+            else:
+                # Setting non-common genes to None so that they
+                # get filtered out during marker realization.
+                tmp_ref_features.append(None) 
+
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
-            ref_features,
+            tmp_ref_features,
             number = num_de
         )
 
         built = build_single_reference(
-            ref = ref.assay("rank"), 
-            labels = ref.col_data.column(ref_labels), 
-            features = ref_features,
+            ref_data = ref.assay("rank"), 
+            ref_labels = ref.col_data.column(ref_labels), 
+            ref_features = ref_features,
             markers = markers,
             num_threads = num_threads,
             **build_args,
         )
 
     else:
+        common_features = _stable_intersect(test_features, ref_features)
+        keep = _match(common_features, ref_features)
+
+        if isinstance(ref_data, SummarizedExperiment):
+            assay_type = "logcounts"
+            if "assay_type" in build_args:
+                assay_type = build_args["assay_type"]
+            ref_data = ref_data.assay(assay_type)
+
         built = build_single_reference(
-            ref = ref, 
-            labels = ref_labels, 
-            features = ref_features,
+            ref_data = DelayedArray(ref_data)[keep,:],
+            ref_labels = ref_labels, 
+            ref_features = common_features,
             num_threads = num_threads,
             **build_args,
         )
 
     output = classify_single_reference(
         test_data,
-        features = test_features,
-        ref = built,
+        test_features = test_features,
+        ref_prebuilt = built,
         **classify_args,
         num_threads = num_threads,
     )
 
-    output.metadata["markers"] = built.markers
-    output.metadata["unique_markers"] = built.marker_subset()
+    output.metadata = {
+        "markers": built.markers,
+        "unique_markers": built.marker_subset()
+    }
     return output
