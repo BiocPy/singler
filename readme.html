@@ -204,12 +204,12 @@
 [![Built Status](https://api.cirrus-ci.com/github/<USER>/singler.svg?branch=main)](https://cirrus-ci.com/github/<USER>/singler)
 [![ReadTheDocs](https://readthedocs.org/projects/singler/badge/?version=latest)](https://singler.readthedocs.io/en/stable/)
 [![Coveralls](https://img.shields.io/coveralls/github/<USER>/singler/main.svg)](https://coveralls.io/r/<USER>/singler)
-[![PyPI-Server](https://img.shields.io/pypi/v/singler.svg)](https://pypi.org/project/singler/)
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/singler.svg)](https://anaconda.org/conda-forge/singler)
-[![Monthly Downloads](https://pepy.tech/badge/singler/month)](https://pepy.tech/project/singler)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/singler)
 -->
 <p><a class="reference external" href="https://pyscaffold.org/"><img alt="Project generated with PyScaffold" src="https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold" /></a>
+<a class="reference external" href="https://pypi.org/project/singler/"><img alt="PyPI-Server" src="https://img.shields.io/pypi/v/singler.svg" /></a>
+<a class="reference external" href="https://pepy.tech/project/singler"><img alt="Monthly Downloads" src="https://static.pepy.tech/badge/singler/month" /></a>
 <img alt="Unit tests" src="https://github.com/BiocPy/singler/actions/workflows/pypi-test.yml/badge.svg" /></p>
 <section class="tex2jax_ignore mathjax_ignore" id="tinder-for-single-cell-data">
 <h1>Tinder for single-cell data<a class="headerlink" href="#tinder-for-single-cell-data" title="Link to this heading">#</a></h1>
@@ -236,27 +236,27 @@ So kind of like Tinder, but for cells.</p>
 </pre></div>
 </div>
 <p>Now we use the Blueprint/ENCODE reference to annotate each cell in <code class="docutils literal notranslate"><span class="pre">mat</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singler</span> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singler</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">singler</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-    <span class="n">mat</span><span class="p">,</span> 
-    <span class="n">features</span><span class="p">,</span> 
-    <span class="n">ref_data</span> <span class="o">=</span> <span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span> 
+    <span class="n">mat</span><span class="p">,</span>
+    <span class="n">features</span><span class="p">,</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span>
     <span class="n">ref_features</span> <span class="o">=</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
-    <span class="n">ref_labels</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span> 
+    <span class="n">ref_labels</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
     <span class="n">cache_dir</span> <span class="o">=</span> <span class="s2">&quot;_cache&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">results</span></code> data frame contains all of the assignments and the scores for each label:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
-<span class="c1">## [&#39;Monocytes&#39;, </span>
-<span class="c1">##  &#39;Monocytes&#39;, </span>
-<span class="c1">##  &#39;Monocytes&#39;, </span>
-<span class="c1">##  &#39;CD8+ T-cells&#39;, </span>
-<span class="c1">##  &#39;CD4+ T-cells&#39;, </span>
-<span class="c1">##  &#39;CD8+ T-cells&#39;, </span>
-<span class="c1">##  &#39;Monocytes&#39;, </span>
-<span class="c1">##  &#39;Monocytes&#39;, </span>
+<span class="c1">## [&#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;CD8+ T-cells&#39;,</span>
+<span class="c1">##  &#39;CD4+ T-cells&#39;,</span>
+<span class="c1">##  &#39;CD8+ T-cells&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
 <span class="c1">##  &#39;B-cells&#39;,</span>
 <span class="c1">##  ...</span>
 <span class="c1">## ]</span>
@@ -309,7 +309,19 @@ This can be repeated with different datasets that have the same features or a su
 </section>
 <section id="developer-notes">
 <h2>Developer notes<a class="headerlink" href="#developer-notes" title="Link to this heading">#</a></h2>
-<p>To rebuild the <strong>ctypes</strong> bindings <a class="reference external" href="https://github.com/BiocPy/ctypes-wrapper"><strong>cpptypes</strong></a>:</p>
+<p>Build the shared object file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>--inplace
+</pre></div>
+</div>
+<p>For quick testing:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+<p>For more complex testing:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>--inplace<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tox
+</pre></div>
+</div>
+<p>To rebuild the <strong>ctypes</strong> bindings with <a class="reference external" href="https://github.com/BiocPy/ctypes-wrapper"><strong>cpptypes</strong></a>:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cpptypes<span class="w"> </span>src/singler/lib<span class="w"> </span>--py<span class="w"> </span>src/singler/_cpphelpers.py<span class="w"> </span>--cpp<span class="w"> </span>src/singler/lib/bindings.cpp<span class="w"> </span>--dll<span class="w"> </span>_core
 </pre></div>
 </div>

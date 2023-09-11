@@ -44,14 +44,6 @@ singler.get\_classic\_markers module
    :undoc-members:
    :show-inheritance:
 
-singler.skeleton module
------------------------
-
-.. automodule:: singler.skeleton
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
