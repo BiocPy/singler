@@ -90,21 +90,13 @@ def annotate(
             if "num_de" in marker_args:
                 num_de = marker_args["num_de"]
 
-        common_features = stable_intersect(test_features, ref_features)
-        is_common = set(common_features)
-        tmp_ref_features = []
-        for x in ref_features:
-            if x in is_common:
-                tmp_ref_features.append(x)
-            else:
-                # Setting non-common genes to None so that they
-                # get filtered out during marker realization.
-                tmp_ref_features.append(None) 
+        common_features = _stable_intersect(test_features, ref_features)
 
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
-            tmp_ref_features,
-            number = num_de
+            ref_features,
+            number = num_de,
+            restrict_to = set(common_features),
         )
 
         built = build_single_reference(
