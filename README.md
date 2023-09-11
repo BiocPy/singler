@@ -4,13 +4,13 @@
 [![Built Status](https://api.cirrus-ci.com/github/<USER>/singler.svg?branch=main)](https://cirrus-ci.com/github/<USER>/singler)
 [![ReadTheDocs](https://readthedocs.org/projects/singler/badge/?version=latest)](https://singler.readthedocs.io/en/stable/)
 [![Coveralls](https://img.shields.io/coveralls/github/<USER>/singler/main.svg)](https://coveralls.io/r/<USER>/singler)
-[![PyPI-Server](https://img.shields.io/pypi/v/singler.svg)](https://pypi.org/project/singler/)
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/singler.svg)](https://anaconda.org/conda-forge/singler)
-[![Monthly Downloads](https://pepy.tech/badge/singler/month)](https://pepy.tech/project/singler)
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/singler)
 -->
 
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
+[![PyPI-Server](https://img.shields.io/pypi/v/singler.svg)](https://pypi.org/project/singler/)
+[![Monthly Downloads](https://static.pepy.tech/badge/singler/month)](https://pepy.tech/project/singler)
 ![Unit tests](https://github.com/BiocPy/singler/actions/workflows/pypi-test.yml/badge.svg)
 
 # Tinder for single-cell data
@@ -124,7 +124,25 @@ output = singler.classify_single_reference(
 
 ## Developer notes
 
-To rebuild the **ctypes** bindings [**cpptypes**](https://github.com/BiocPy/ctypes-wrapper):
+Build the shared object file:
+
+```shell
+python setup.py build_ext --inplace
+```
+
+For quick testing:
+
+```shell
+pytest
+```
+
+For more complex testing:
+
+```shell
+python setup.py build_ext --inplace && tox
+```
+
+To rebuild the **ctypes** bindings with [**cpptypes**](https://github.com/BiocPy/ctypes-wrapper):
 
 ```shell
 cpptypes src/singler/lib --py src/singler/_cpphelpers.py --cpp src/singler/lib/bindings.cpp --dll _core
