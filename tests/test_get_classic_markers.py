@@ -95,3 +95,16 @@ def test_get_classic_markers_intersected_features():
         assert sorted(alpha.keys()) == sorted(bravo.keys())
         for k2 in alpha.keys():
             assert alpha[k2] == bravo[k2]
+
+
+def test_get_classic_markers_restricted():
+    ref = numpy.random.rand(10000, 10)
+    labels = ["A", "B", "C", "D", "E", "E", "D", "C", "B", "A"]
+    features = [str(i) for i in range(ref.shape[0])]
+
+    keep = range(2000, 8000, 5)
+    restricted = [str(i) for i in keep]
+    markers = singler.get_classic_markers(ref, labels, features, restrict_to=restricted)
+
+    expected = singler.get_classic_markers(ref[keep,:], labels, restricted)
+    assert markers == expected

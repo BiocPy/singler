@@ -5,7 +5,7 @@ from mattress import tatamize
 
 from ._Markers import _Markers
 from . import _cpphelpers as lib
-from ._utils import _factorize, _match, _clean_matrix
+from ._utils import _factorize, _match, _clean_matrix, _restrict_features
 from .get_classic_markers import _get_classic_markers_raw
 
 
@@ -190,15 +190,7 @@ def build_single_reference(
         num_threads=num_threads,
     )
 
-    if restrict_to is not None:
-        keep = []
-        new_features = []
-        for i, x in enumerate(ref_features):
-            if x in restrict_to:
-                keep.append(i)
-                new_features.append(x)
-        ref_features = new_features
-        ref_ptr = tatamize(DelayedArray(ref_ptr)[keep,:])
+    ref_ptr, ref_features = _restrict_features(ref_ptr, ref_features, restrict_to)
 
     if markers is None:
         if marker_method == "classic":
