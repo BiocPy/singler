@@ -13,12 +13,17 @@ from summarizedexperiment import SummarizedExperiment
 def test_factorize():
     lev, ind = _factorize([1, 3, 5, 5, 3, 1])
     assert lev == [1, 3, 5]
-    assert list(ind) == [0, 1, 2, 2, 1, 0]
+    assert ind == [0, 1, 2, 2, 1, 0]
 
     # Preserves the order.
     lev, ind = _factorize(["C", "D", "A", "B", "C", "A"])
     assert lev == ["C", "D", "A", "B"]
-    assert list(ind) == [0, 1, 2, 3, 0, 2]
+    assert ind == [0, 1, 2, 3, 0, 2]
+
+    # Handles None-ness.
+    lev, ind = _factorize([1, None, 5, None, 3, None])
+    assert lev == [1, 5, 3]
+    assert ind == [0, None, 1, None, 2, None]
 
 
 def test_match():
@@ -27,8 +32,15 @@ def test_match():
 
     # Handles duplicate targets.
     x = [5, 1, 2, 3, 5, 6, 7, 7, 2, 1]
-    mm = _match(x, [1, 2, 3, 3, 5, 6, 7, 6])
-    assert list(mm) == [3, 0, 1, 2, 3, 4, 5, 5, 1, 0]
+    mm = _match(x, [1, 2, 3, 3, 5, 6, 1, 7, 6])
+    assert mm == [4, 0, 1, 2, 4, 5, 7, 7, 1, 0]
+
+    # Handles None-ness.
+    mm = _match(["A", None, "B", "D", None, "A", "C", None, "B"], ["D", "C", "B", "A"])
+    assert list(mm) == [3, None, 2, 0, None, 3, 1, None, 2]
+
+    mm = _match(["A", "B", "D", "A", "C", "B"], ["D", None, "C", "B", None, "A"])
+    assert list(mm) == [5, 3, 0, 5, 2, 3]
 
 
 def test_intersect():
@@ -45,6 +57,15 @@ def test_intersect():
         ["B", "B", "C", "A", "D", "D", "E"], ["A", "A", "C", "E", "F", "F"]
     )
     assert out == ["C", "A", "E"]
+
+    # Handles None-ness.
+    out = _stable_intersect(
+        ["B", None, "C", "A", None, "D", "E"], ["A", None, "C", "E", None, "F"]
+    )
+    assert out == ["C", "A", "E"]
+
+    # Empty list.
+    assert _stable_intersect() == []
 
 
 def test_union():
@@ -68,6 +89,15 @@ def test_union():
         ["B", "B", "C", "A", "D", "D", "E"], ["F", "A", "A", "C", "E", "F"]
     )
     assert out == ["B", "C", "A", "D", "E", "F"]
+
+    # Handles None-ness.
+    out = _stable_union(
+        ["B", None, "C", "A", None, "D", "E"], ["A", None, "C", "E", None, "F"]
+    )
+    assert out == ["B", "C", "A", "D", "E", "F"]
+
+    # Empty list.
+    assert _stable_union() == []
 
 
 def test_clean_matrix():

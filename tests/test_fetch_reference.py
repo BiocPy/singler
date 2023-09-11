@@ -13,6 +13,21 @@ def test_fetch_github_reference():
     assert re.match("^[0-9]+", out.row_data.column("entrez")[0]) is not None
     assert re.match("^[A-Z][a-z]+[0-9]*", out.row_data.column("symbol")[0]) is not None
 
+    ens = out.row_data.column("ensembl")
+    has_none = False
+    for x in ens:
+        if x is None:
+            has_none = True
+            break
+    assert has_none
+
+    has_tab = False
+    for x in ens:
+        if x is not None and x.find("\t") != -1:
+            has_tab = True
+            break
+    assert not has_tab
+
     # Checking the labels.
     assert isinstance(out.col_data.column("fine")[0], str)
     assert isinstance(out.col_data.column("main")[0], str)
@@ -31,6 +46,20 @@ def test_fetch_github_reference():
     assert sorted(markers[all_labels[0]].keys()) == all_labels
     assert len(markers[all_labels[0]][all_labels[0]]) == 0
     assert len(markers[all_labels[0]][all_labels[1]]) > 0
+
+
+def test_fetch_github_reference_multiple():
+    out = singler.fetch_github_reference(
+        "ImmGen", cache_dir="_cache", multiple_ids=True
+    )
+
+    ens = out.row_data.column("ensembl")
+    all_lengths = set()
+    for x in ens:
+        all_lengths.add(len(x))
+    assert 0 in all_lengths
+    assert 1 in all_lengths
+    assert 2 in all_lengths
 
 
 def test_realize_github_markers():
