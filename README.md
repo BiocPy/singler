@@ -42,13 +42,13 @@ features = [x.decode("ascii") for x in fhandle["matrix"]["features"]["name"]]
 Now we use the Blueprint/ENCODE reference to annotate each cell in `mat`:
 
 ```python
-import singler 
+import singler
 results = singler.annotate(
-    mat, 
-    features, 
-    ref_data = "BlueprintEncode", 
+    mat,
+    features,
+    ref_data = "BlueprintEncode",
     ref_features = "symbol",
-    ref_labels = "main", 
+    ref_labels = "main",
     cache_dir = "_cache"
 )
 ```
@@ -57,14 +57,14 @@ The `results` data frame contains all of the assignments and the scores for each
 
 ```python
 results.column("best")
-## ['Monocytes', 
-##  'Monocytes', 
-##  'Monocytes', 
-##  'CD8+ T-cells', 
-##  'CD4+ T-cells', 
-##  'CD8+ T-cells', 
-##  'Monocytes', 
-##  'Monocytes', 
+## ['Monocytes',
+##  'Monocytes',
+##  'Monocytes',
+##  'CD8+ T-cells',
+##  'CD4+ T-cells',
+##  'CD8+ T-cells',
+##  'Monocytes',
+##  'Monocytes',
 ##  'B-cells',
 ##  ...
 ## ]
