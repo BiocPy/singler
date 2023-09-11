@@ -59,9 +59,7 @@ def test_annotate_intersect():
 
 
 def test_annotate_github():
-    se = singler.fetch_github_reference(
-        "ImmGen", cache_dir="_cache", multiple_ids=True
-    )
+    se = singler.fetch_github_reference("ImmGen", cache_dir="_cache") 
 
     keep = range(5, se.shape[0], 2)
     test = numpy.random.rand(len(keep), 50)
@@ -73,25 +71,28 @@ def test_annotate_github():
         test_features = test_features, 
         ref_data = "ImmGen", 
         ref_features = "symbol",
-        ref_labels = "main" 
+        ref_labels = "main",
+        cache_dir="_cache",
     )
     assert output.shape[0] == 50
 
     expected_markers = singler.realize_github_markers(
-        out.metadata["main"],
-        out.row_data.column("symbol"),
+        se.metadata["main"],
+        se.row_data.column("symbol"),
         restrict_to = set(test_features)
     )
     assert output.metadata["markers"] == expected_markers
 
+    # Checking that we handle the number of markers correctly.
     more_output = singler.annotate(
         test, 
         test_features = test_features, 
         ref_data = "ImmGen", 
         ref_features = "symbol",
         ref_labels = "main",
-        build_args = { "marker_args": { "num_de": 10 } }
+        build_args = { "marker_args": { "num_de": 10 } },
+        cache_dir="_cache",
     )
 
-    ref_labels = se.col_data.column("main")
-    assert len(output.metadata[ref_labels[0]][ref_labels[1]]) == 10
+    ref_labels = list(set(se.col_data.column("main")))
+    assert len(more_output.metadata["markers"][ref_labels[0]][ref_labels[1]]) == 10

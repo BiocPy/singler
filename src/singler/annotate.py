@@ -1,7 +1,7 @@
 from typing import Union, Sequence, Optional
 from biocframe import BiocFrame
 
-from .fetch_reference import fetch_github_reference
+from .fetch_reference import fetch_github_reference, realize_github_markers
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference 
 
@@ -78,7 +78,7 @@ def annotate(
     """
 
     if isinstance(ref_data, str):
-        ref = fetch_github_reference(ref, cache_dir = cache_dir)
+        ref = fetch_github_reference(ref_data, cache_dir = cache_dir)
         ref_features = ref.row_data.column(ref_features)
 
         num_de = None
@@ -90,12 +90,12 @@ def annotate(
         markers = realize_github_markers(
             ref.metadata[ref_labels], 
             ref_features,
-            number = num_de,
+            num_markers = num_de,
             restrict_to = set(test_features),
         )
 
         built = build_single_reference(
-            ref_data = ref.assay("rank"), 
+            ref_data = ref.assay("ranks"),
             ref_labels = ref.col_data.column(ref_labels), 
             ref_features = ref_features,
             markers = markers,
