@@ -27,16 +27,10 @@ So kind of like Tinder, but for cells.
 Firstly, let's load in the famous PBMC 4k dataset from 10X Genomics:
 
 ```python
-# TODO: streamline the loader:
-path = "pbmc4k-tenx.h5"
-import h5py as h5
-fhandle = h5.File(path)
-import scipy.sparse as sp
-mat = sp.csc_matrix(
-    (fhandle["matrix"]["data"], fhandle["matrix"]["indices"], fhandle["matrix"]["indptr"]),
-    fhandle["matrix"]["shape"]
-)
-features = [x.decode("ascii") for x in fhandle["matrix"]["features"]["name"]]
+import singlecellexperiment as sce
+data = sce.read_tenx_h5("pbmc4k-tenx.h5")
+mat = data.assay("counts")
+features = [x.encode("ASCII") for x in data.row_data["name"]]
 ```
 
 Now we use the Blueprint/ENCODE reference to annotate each cell in `mat`:
