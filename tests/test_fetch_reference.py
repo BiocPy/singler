@@ -69,6 +69,7 @@ def test_realize_github_markers():
     )
     assert out["A"]["B"] == ["B", "D", "F", "H"]
 
+    # Behaves with the number of markers set.
     out = singler.realize_github_markers(
         markers, ["A", "B", "C", "D", "E", "F", "G", "H"], num_markers=2
     )
@@ -78,3 +79,11 @@ def test_realize_github_markers():
         markers, ["A", "B", "C", None, "E", "F", "G", "H"], num_markers=2
     )
     assert out["A"]["B"] == ["B", "F"]
+
+    # Behaves with the restrict_to set.
+    out = singler.realize_github_markers(
+        markers,
+        ["A", "B", "C", "D", "E", "F", "G", "H"],
+        restrict_to=set(["E", "F", "G", "H"]),
+    )
+    assert out["A"]["B"] == ["F", "H"]

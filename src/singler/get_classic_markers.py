@@ -4,7 +4,13 @@ from typing import Union, Sequence, Optional, Any
 import delayedarray
 
 from . import _cpphelpers as lib
-from ._utils import _clean_matrix, _stable_intersect, _stable_union, _create_map
+from ._utils import (
+    _clean_matrix,
+    _stable_intersect,
+    _stable_union,
+    _create_map,
+    _restrict_features,
+)
 from ._Markers import _Markers
 
 
@@ -93,6 +99,7 @@ def get_classic_markers(
     ref_features: Union[Sequence, list[Sequence]],
     assay_type: Union[str, int] = "logcounts",
     check_missing: bool = True,
+    restrict_to: Optional[Union[set, dict]] = None,
     num_de: Optional[int] = None,
     num_threads: int = 1,
 ) -> dict[Any, dict[Any, list]]:
@@ -130,6 +137,11 @@ def get_classic_markers(
             Whether to check for and remove rows with missing (NaN) values in the reference matrices.
             This can be set to False if it is known that no NaN values exist.
 
+        restrict_to (Union[set, dict], optional):
+            Subset of available features to restrict to. Only features in
+            ``restrict_to`` will be used in the reference building. If None,
+            no restriction is performed.
+
         num_de (int, optional):
             Number of differentially expressed genes to use as markers for each pairwise comparison between labels.
             If None, an appropriate number of genes is automatically determined.
@@ -164,6 +176,9 @@ def get_classic_markers(
             check_missing=check_missing,
             num_threads=num_threads,
         )
+
+        r, f = _restrict_features(r, f, restrict_to)
+
         ref_ptrs.append(r)
         tmp_features.append(f)
 

@@ -119,3 +119,16 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
 
     sub = DelayedArray(ptr)[retain, :]  # avoid re-tatamizing 'x'.
     return tatamize(sub), new_features
+
+
+def _restrict_features(ptr, features, restrict_to):
+    if restrict_to is not None:
+        keep = []
+        new_features = []
+        for i, x in enumerate(features):
+            if x in restrict_to:
+                keep.append(i)
+                new_features.append(x)
+        features = new_features
+        ptr = tatamize(DelayedArray(ptr)[keep, :])
+    return ptr, features

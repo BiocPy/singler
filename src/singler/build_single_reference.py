@@ -3,7 +3,7 @@ from typing import Sequence, Union, Any, Optional, Literal
 
 from ._Markers import _Markers
 from . import _cpphelpers as lib
-from ._utils import _factorize, _match, _clean_matrix
+from ._utils import _factorize, _match, _clean_matrix, _restrict_features
 from .get_classic_markers import _get_classic_markers_raw
 
 
@@ -111,6 +111,7 @@ def build_single_reference(
     ref_features: Sequence,
     assay_type: Union[str, int] = "logcounts",
     check_missing: bool = True,
+    restrict_to: Optional[Union[set, dict]] = None,
     markers: Optional[dict[Any, dict[Any, Sequence]]] = None,
     marker_method: MARKER_DETECTION_METHODS = "classic",
     marker_args={},
@@ -144,6 +145,11 @@ def build_single_reference(
         check_missing (bool):
             Whether to check for and remove rows with missing (NaN) values
             from ``ref_data``.
+
+        restrict_to (Union[set, dict], optional):
+            Subset of available features to restrict to. Only features in
+            ``restrict_to`` will be used in the reference building. If None,
+            no restriction is performed.
 
         markers (dict[Any, dict[Any, Sequence]], optional):
             Upregulated markers for each pairwise comparison between labels.
@@ -181,6 +187,8 @@ def build_single_reference(
         check_missing=check_missing,
         num_threads=num_threads,
     )
+
+    ref_ptr, ref_features = _restrict_features(ref_ptr, ref_features, restrict_to)
 
     if markers is None:
         if marker_method == "classic":
