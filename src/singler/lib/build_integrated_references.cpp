@@ -24,7 +24,7 @@ void* build_integrated_references(
             ptr.get(),
             reinterpret_cast<const int32_t*>(ref_ids[r]),
             reinterpret_cast<const int32_t*>(labels[r]),
-            *reinterpret_cast<const singlepp::BasicBuilder::Prebuilt*>(labels[r])
+            *reinterpret_cast<const singlepp::BasicBuilder::Prebuilt*>(prebuilt[r])
         );
     }
 

@@ -1,9 +1,10 @@
 from typing import Sequence
-from numpy import array, ndarray, int32
+from numpy import array, ndarray, int32, uintp
+from mattress import tatamize
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
-from ._utils import _stable_union, _factorize
+from ._utils import _stable_union, _factorize, _match
 
 
 class IntegratedReferences:
@@ -14,14 +15,14 @@ class IntegratedReferences:
         self._ptr = ptr
 
     def __del__(self):
-        lib.free_integrated_reference(self._ptr)
+        lib.free_integrated_references(self._ptr)
 
     def num_references(self) -> int:
         """
         Returns:
             int: Number of reference datasets in this object.
         """
-        return lib.get_integrated_reference_num_references(self._ptr)
+        return lib.get_integrated_references_num_references(self._ptr)
 
     def num_labels(self, r: int) -> int:
         """
@@ -32,7 +33,7 @@ class IntegratedReferences:
         Returns:
             int: Number of labels in the specified reference.
         """
-        return lib.get_integrated_reference_num_labels(self._ptr, r)
+        return lib.get_integrated_references_num_labels(self._ptr, r)
 
     def num_profiles(self, r: int) -> int:
         """
@@ -43,7 +44,7 @@ class IntegratedReferences:
         Returns:
             int: Number of profiles in the specified reference.
         """
-        return lib.get_integrated_reference_num_profiles(self._ptr, r)
+        return lib.get_integrated_references_num_profiles(self._ptr, r)
 
 
 def build_integrated_references(
@@ -78,7 +79,7 @@ def build_integrated_references(
         IntegratedReferences: Integrated references for classification with
         :py:meth:`~singler.classify_integrated_references.classify_integrated_references`.
     """
-    universe = _stable_union(test_features, *ref_labels_list)
+    universe = _stable_union(test_features, *ref_features_list)
     test_features = array(_match(test_features, universe), dtype=int32)
 
     nrefs = len(ref_data_list)
@@ -87,7 +88,7 @@ def build_integrated_references(
     for i, x in enumerate(ref_data_list):
         current = tatamize(x)
         converted_ref_data.append(current)
-        ref_data_ptrs[i] = current.ctypes.data
+        ref_data_ptrs[i] = current.ptr
 
     if nrefs != len(ref_labels_list):
         raise ValueError("'ref_labels_list' and 'ref_data_list' should have the same length")
@@ -97,15 +98,16 @@ def build_integrated_references(
     for i, x in enumerate(ref_labels_list):
         lev, ind = _factorize(x)
         converted_label_levels.append(lev)
+        ind = array(ind, dtype=int32)
         converted_label_indices.append(ind)
-        ref_features_ptrs[i] = ind.ctypes.data
+        ref_labels_ptrs[i] = ind.ctypes.data
 
     if nrefs != len(ref_features_list):
         raise ValueError("'ref_features_list' and 'ref_data_list' should have the same length")
     converted_feature_data = []
     ref_features_ptrs = ndarray(nrefs, dtype=uintp)
     for i, x in enumerate(ref_features_list):
-        ind = _match(x, universe)
+        ind = array(_match(x, universe), dtype=int32)
         converted_feature_data.append(ind)
         ref_features_ptrs[i] = ind.ctypes.data
 
