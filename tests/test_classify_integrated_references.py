@@ -44,6 +44,15 @@ def test_classify_integrated_references():
         results = [results1, results2.column("best")],
         integrated_prebuilt = integrated
     )
+
     assert results.shape[0] == 50
-    assert set(results.column("best")) == set([ "first", "second" ])
+    assert set(results.column("best_reference")) == set([ "first", "second" ])
     assert results.column("scores").has_column("first")
+
+    labels1_set = set(labels1)
+    labels2_set = set(labels2)
+    for i, b in enumerate(results.column("best_reference")):
+        if b == "first":
+            assert results1.column("best")[i] in labels1_set
+        else:
+            assert results2.column("best")[i] in labels2_set
