@@ -21,6 +21,8 @@ void* build_integrated_references(int32_t, const int32_t*, int32_t, const uintpt
 
 void* build_single_reference(void*, const int32_t*, void*, uint8_t, int32_t);
 
+void classify_integrated_references(void*, const uintptr_t*, void*, double, uintptr_t*, int32_t*, double*, int32_t);
+
 void classify_single_reference(void*, const int32_t*, void*, double, uint8_t, double, int32_t, const uintptr_t*, int32_t*, double*);
 
 void* create_markers(int32_t);
@@ -32,12 +34,6 @@ void free_integrated_references(void*);
 void free_markers(void*);
 
 void free_single_reference(void*);
-
-int32_t get_integrated_references_num_labels(void*, int32_t);
-
-int32_t get_integrated_references_num_profiles(void*, int32_t);
-
-int32_t get_integrated_references_num_references(void*);
 
 void get_markers_for_pair(void*, int32_t, int32_t, int32_t*);
 
@@ -87,6 +83,18 @@ PYAPI void* py_build_single_reference(void* ref, const int32_t* labels, void* ma
         *errmsg = copy_error_message("unknown C++ exception");
     }
     return output;
+}
+
+PYAPI void py_classify_integrated_references(void* mat, const uintptr_t* assigned, void* prebuilt, double quantile, uintptr_t* scores, int32_t* best, double* delta, int32_t nthreads, int32_t* errcode, char** errmsg) {
+    try {
+        classify_integrated_references(mat, assigned, prebuilt, quantile, scores, best, delta, nthreads);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
 }
 
 PYAPI void py_classify_single_reference(void* mat, const int32_t* subset, void* prebuilt, double quantile, uint8_t use_fine_tune, double fine_tune_threshold, int32_t nthreads, const uintptr_t* scores, int32_t* best, double* delta, int32_t* errcode, char** errmsg) {
@@ -163,48 +171,6 @@ PYAPI void py_free_single_reference(void* ptr, int32_t* errcode, char** errmsg) 
         *errcode = 1;
         *errmsg = copy_error_message("unknown C++ exception");
     }
-}
-
-PYAPI int32_t py_get_integrated_references_num_labels(void* ptr, int32_t r, int32_t* errcode, char** errmsg) {
-    int32_t output = 0;
-    try {
-        output = get_integrated_references_num_labels(ptr, r);
-    } catch(std::exception& e) {
-        *errcode = 1;
-        *errmsg = copy_error_message(e.what());
-    } catch(...) {
-        *errcode = 1;
-        *errmsg = copy_error_message("unknown C++ exception");
-    }
-    return output;
-}
-
-PYAPI int32_t py_get_integrated_references_num_profiles(void* ptr, int32_t r, int32_t* errcode, char** errmsg) {
-    int32_t output = 0;
-    try {
-        output = get_integrated_references_num_profiles(ptr, r);
-    } catch(std::exception& e) {
-        *errcode = 1;
-        *errmsg = copy_error_message(e.what());
-    } catch(...) {
-        *errcode = 1;
-        *errmsg = copy_error_message("unknown C++ exception");
-    }
-    return output;
-}
-
-PYAPI int32_t py_get_integrated_references_num_references(void* ptr, int32_t* errcode, char** errmsg) {
-    int32_t output = 0;
-    try {
-        output = get_integrated_references_num_references(ptr);
-    } catch(std::exception& e) {
-        *errcode = 1;
-        *errmsg = copy_error_message(e.what());
-    } catch(...) {
-        *errcode = 1;
-        *errmsg = copy_error_message("unknown C++ exception");
-    }
-    return output;
 }
 
 PYAPI void py_get_markers_for_pair(void* ptr, int32_t label1, int32_t label2, int32_t* buffer, int32_t* errcode, char** errmsg) {

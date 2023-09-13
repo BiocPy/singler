@@ -36,18 +36,3 @@ void* build_integrated_references(
 void free_integrated_references(void* ptr) {
     delete reinterpret_cast<singlepp::IntegratedReferences*>(ptr);
 }
-
-//[[export]]
-int32_t get_integrated_references_num_references(void* ptr) {
-    return reinterpret_cast<singlepp::IntegratedReferences*>(ptr)->num_references();
-}
-
-//[[export]]
-int32_t get_integrated_references_num_labels(void* ptr, int32_t r) {
-    return reinterpret_cast<singlepp::IntegratedReferences*>(ptr)->num_labels(r);
-}
-
-//[[export]]
-int32_t get_integrated_references_num_profiles(void* ptr, int32_t r) {
-    return reinterpret_cast<singlepp::IntegratedReferences*>(ptr)->num_profiles(r);
-}

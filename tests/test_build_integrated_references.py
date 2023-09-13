@@ -24,11 +24,9 @@ def test_build_integrated_references():
         ref_prebuilt_list=[built1, built2],
     )
 
-    assert integrated.num_references() == 2
-    assert integrated.num_labels(0) == 5
-    assert integrated.num_labels(1) == 3
-    assert integrated.num_profiles(0) == 10
-    assert integrated.num_profiles(1) == 6
+    assert integrated.reference_names == [ "reference_1", "reference_2" ]
+    assert integrated.reference_labels == [ [ "A", "B", "C", "D", "E"], [ "z", "y", "x" ]]
+    assert integrated.test_features == test_features
 
     # Works in parallel.
     pintegrated = singler.build_integrated_references(
@@ -37,11 +35,10 @@ def test_build_integrated_references():
         ref_labels_list=[labels1, labels2],
         ref_features_list=[features1, features2],
         ref_prebuilt_list=[built1, built2],
+        ref_names = [ "FOO", "BAR" ],
         num_threads=3,
     )
 
-    assert pintegrated.num_references() == 2
-    assert pintegrated.num_labels(0) == 5
-    assert pintegrated.num_labels(1) == 3
-    assert pintegrated.num_profiles(0) == 10
-    assert pintegrated.num_profiles(1) == 6
+    assert pintegrated.reference_names == [ "FOO", "BAR" ]
+    assert pintegrated.reference_labels == integrated.reference_labels
+    assert pintegrated.test_features == test_features

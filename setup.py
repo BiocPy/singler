@@ -22,6 +22,7 @@ if __name__ == "__main__":
                         "src/singler/lib/build_single_reference.cpp",
                         "src/singler/lib/build_integrated_references.cpp",
                         "src/singler/lib/classify_single_reference.cpp",
+                        "src/singler/lib/classify_integrated_references.cpp",
                     ],
                     include_dirs=[assorthead.includes()] + mattress.includes(),
                     language="c++",
