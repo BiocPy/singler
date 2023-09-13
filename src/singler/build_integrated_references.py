@@ -28,7 +28,9 @@ class IntegratedReferences:
     @property
     def reference_labels(self) -> list:
         """List of lists containing the names of the labels for each reference.
-        Each entry corresponds to a reference in :py:attr:`~names`."""
+
+        Each entry corresponds to a reference in :py:attr:`~names`.
+        """
         return self._labels
 
     @property
@@ -120,9 +122,7 @@ def build_integrated_references(
     if ref_names is None:
         ref_names = ["reference_" + str(i + 1) for i in range(nrefs)]
     elif nrefs != len(ref_names):
-        raise ValueError(
-            "'ref_names' and 'ref_data_list' should have the same length"
-        )
+        raise ValueError("'ref_names' and 'ref_data_list' should have the same length")
 
     output = lib.build_integrated_references(
         len(test_features),
@@ -136,8 +136,5 @@ def build_integrated_references(
     )
 
     return IntegratedReferences(
-        output, 
-        ref_names, 
-        converted_label_levels, 
-        original_test_features
+        output, ref_names, converted_label_levels, original_test_features
     )

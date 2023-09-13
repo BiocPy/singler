@@ -24,8 +24,8 @@ def test_build_integrated_references():
         ref_prebuilt_list=[built1, built2],
     )
 
-    assert integrated.reference_names == [ "reference_1", "reference_2" ]
-    assert integrated.reference_labels == [ [ "A", "B", "C", "D", "E"], [ "z", "y", "x" ]]
+    assert integrated.reference_names == ["reference_1", "reference_2"]
+    assert integrated.reference_labels == [["A", "B", "C", "D", "E"], ["z", "y", "x"]]
     assert integrated.test_features == test_features
 
     # Works in parallel.
@@ -35,10 +35,10 @@ def test_build_integrated_references():
         ref_labels_list=[labels1, labels2],
         ref_features_list=[features1, features2],
         ref_prebuilt_list=[built1, built2],
-        ref_names = [ "FOO", "BAR" ],
+        ref_names=["FOO", "BAR"],
         num_threads=3,
     )
 
-    assert pintegrated.reference_names == [ "FOO", "BAR" ]
+    assert pintegrated.reference_names == ["FOO", "BAR"]
     assert pintegrated.reference_labels == integrated.reference_labels
     assert pintegrated.test_features == test_features
