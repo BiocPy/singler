@@ -17,13 +17,19 @@ static char* copy_error_message(const char* original) {
     return copy;
 }
 
+void* build_integrated_references(int32_t, const int32_t*, int32_t, const uintptr_t*, const uintptr_t*, const uintptr_t*, const uintptr_t*, int32_t);
+
 void* build_single_reference(void*, const int32_t*, void*, uint8_t, int32_t);
+
+void classify_integrated_references(void*, const uintptr_t*, void*, double, uintptr_t*, int32_t*, double*, int32_t);
 
 void classify_single_reference(void*, const int32_t*, void*, double, uint8_t, double, int32_t, const uintptr_t*, int32_t*, double*);
 
 void* create_markers(int32_t);
 
 void* find_classic_markers(int32_t, const uintptr_t*, const uintptr_t*, int32_t, int32_t);
+
+void free_integrated_references(void*);
 
 void free_markers(void*);
 
@@ -51,6 +57,20 @@ PYAPI void free_error_message(char** msg) {
     delete [] *msg;
 }
 
+PYAPI void* py_build_integrated_references(int32_t test_nrow, const int32_t* test_features, int32_t nrefs, const uintptr_t* references, const uintptr_t* labels, const uintptr_t* ref_ids, const uintptr_t* prebuilt, int32_t nthreads, int32_t* errcode, char** errmsg) {
+    void* output = NULL;
+    try {
+        output = build_integrated_references(test_nrow, test_features, nrefs, references, labels, ref_ids, prebuilt, nthreads);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
+}
+
 PYAPI void* py_build_single_reference(void* ref, const int32_t* labels, void* markers, uint8_t approximate, int32_t nthreads, int32_t* errcode, char** errmsg) {
     void* output = NULL;
     try {
@@ -63,6 +83,18 @@ PYAPI void* py_build_single_reference(void* ref, const int32_t* labels, void* ma
         *errmsg = copy_error_message("unknown C++ exception");
     }
     return output;
+}
+
+PYAPI void py_classify_integrated_references(void* mat, const uintptr_t* assigned, void* prebuilt, double quantile, uintptr_t* scores, int32_t* best, double* delta, int32_t nthreads, int32_t* errcode, char** errmsg) {
+    try {
+        classify_integrated_references(mat, assigned, prebuilt, quantile, scores, best, delta, nthreads);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
 }
 
 PYAPI void py_classify_single_reference(void* mat, const int32_t* subset, void* prebuilt, double quantile, uint8_t use_fine_tune, double fine_tune_threshold, int32_t nthreads, const uintptr_t* scores, int32_t* best, double* delta, int32_t* errcode, char** errmsg) {
@@ -103,6 +135,18 @@ PYAPI void* py_find_classic_markers(int32_t nref, const uintptr_t* labels, const
         *errmsg = copy_error_message("unknown C++ exception");
     }
     return output;
+}
+
+PYAPI void py_free_integrated_references(void* ptr, int32_t* errcode, char** errmsg) {
+    try {
+        free_integrated_references(ptr);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
 }
 
 PYAPI void py_free_markers(void* ptr, int32_t* errcode, char** errmsg) {
