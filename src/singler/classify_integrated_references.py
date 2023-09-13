@@ -1,9 +1,9 @@
-from typing import Sequence, Optional
-from numpy import array, ndarray, int32, uintp
+from typing import Sequence, Optional, Union
+from numpy import array, ndarray, int32, float64, uintp
 from mattress import tatamize
 from biocframe import BiocFrame
 
-from .build_single_reference import SinglePrebuiltReference
+from .build_integrated_references import IntegratedReferences
 from . import _cpphelpers as lib
 from ._utils import _stable_union, _factorize, _match
 
@@ -17,12 +17,14 @@ def classify_integrated_references(
 ) -> BiocFrame:
 
     test_ptr = tatamize(test_mat)
+    if test_ptr.nrow() != len(integrated_prebuilt.test_features):
+        raise ValueError("number of rows in 'test_mat' should equal number of features in 'integrated_prebuilt'")
     nc = test_ptr.ncol()
     best = ndarray((nc,), dtype=int32)
     delta = ndarray((nc,), dtype=float64)
 
-    irefs = integrated_prebuilt.references
-    all_refs = list(irefs.keys())
+    all_refs = integrated_prebuilt.reference_names
+    all_labels = integrated_prebuilt.reference_labels
     nref = len(all_refs)
 
     scores = {}
@@ -38,13 +40,13 @@ def classify_integrated_references(
         scores[r] = current
         score_ptrs[i] = current.ctypes.data
 
-        curlabs = results[r]
+        curlabs = results[i]
         if isinstance(curlabs, BiocFrame):
             curlabs = curlabs.column("best")
         if len(curlabs) != nc:
             raise ValueError("each entry of 'results' should have results for all cells in 'test_mat'")
 
-        ind = array(_match(curlabs, irefs[r]), dtype=int32)
+        ind = array(_match(curlabs, all_labels[i]), dtype=int32)
         all_labels.append(ind)
         assign_ptrs[i] = ind.ctypes.data
 
