@@ -17,6 +17,8 @@ static char* copy_error_message(const char* original) {
     return copy;
 }
 
+void* build_integrated_references(int32_t, const int32_t*, int32_t, const uintptr_t*, const uintptr_t*, const uintptr_t*, const uintptr_t*, int32_t);
+
 void* build_single_reference(void*, const int32_t*, void*, uint8_t, int32_t);
 
 void classify_single_reference(void*, const int32_t*, void*, double, uint8_t, double, int32_t, const uintptr_t*, int32_t*, double*);
@@ -25,9 +27,17 @@ void* create_markers(int32_t);
 
 void* find_classic_markers(int32_t, const uintptr_t*, const uintptr_t*, int32_t, int32_t);
 
+void free_integrated_references(void*);
+
 void free_markers(void*);
 
 void free_single_reference(void*);
+
+int32_t get_integrated_references_num_labels(void*, int32_t);
+
+int32_t get_integrated_references_num_profiles(void*, int32_t);
+
+int32_t get_integrated_references_num_references(void*);
 
 void get_markers_for_pair(void*, int32_t, int32_t, int32_t*);
 
@@ -49,6 +59,20 @@ extern "C" {
 
 PYAPI void free_error_message(char** msg) {
     delete [] *msg;
+}
+
+PYAPI void* py_build_integrated_references(int32_t test_nrow, const int32_t* test_features, int32_t nrefs, const uintptr_t* references, const uintptr_t* labels, const uintptr_t* ref_ids, const uintptr_t* prebuilt, int32_t nthreads, int32_t* errcode, char** errmsg) {
+    void* output = NULL;
+    try {
+        output = build_integrated_references(test_nrow, test_features, nrefs, references, labels, ref_ids, prebuilt, nthreads);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
 }
 
 PYAPI void* py_build_single_reference(void* ref, const int32_t* labels, void* markers, uint8_t approximate, int32_t nthreads, int32_t* errcode, char** errmsg) {
@@ -105,6 +129,18 @@ PYAPI void* py_find_classic_markers(int32_t nref, const uintptr_t* labels, const
     return output;
 }
 
+PYAPI void py_free_integrated_references(void* ptr, int32_t* errcode, char** errmsg) {
+    try {
+        free_integrated_references(ptr);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+}
+
 PYAPI void py_free_markers(void* ptr, int32_t* errcode, char** errmsg) {
     try {
         free_markers(ptr);
@@ -127,6 +163,48 @@ PYAPI void py_free_single_reference(void* ptr, int32_t* errcode, char** errmsg) 
         *errcode = 1;
         *errmsg = copy_error_message("unknown C++ exception");
     }
+}
+
+PYAPI int32_t py_get_integrated_references_num_labels(void* ptr, int32_t r, int32_t* errcode, char** errmsg) {
+    int32_t output = 0;
+    try {
+        output = get_integrated_references_num_labels(ptr, r);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
+}
+
+PYAPI int32_t py_get_integrated_references_num_profiles(void* ptr, int32_t r, int32_t* errcode, char** errmsg) {
+    int32_t output = 0;
+    try {
+        output = get_integrated_references_num_profiles(ptr, r);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
+}
+
+PYAPI int32_t py_get_integrated_references_num_references(void* ptr, int32_t* errcode, char** errmsg) {
+    int32_t output = 0;
+    try {
+        output = get_integrated_references_num_references(ptr);
+    } catch(std::exception& e) {
+        *errcode = 1;
+        *errmsg = copy_error_message(e.what());
+    } catch(...) {
+        *errcode = 1;
+        *errmsg = copy_error_message("unknown C++ exception");
+    }
+    return output;
 }
 
 PYAPI void py_get_markers_for_pair(void* ptr, int32_t label1, int32_t label2, int32_t* buffer, int32_t* errcode, char** errmsg) {

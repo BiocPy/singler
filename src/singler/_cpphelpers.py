@@ -40,6 +40,20 @@ def _np2ct(x, expected, contiguous=True):
             raise ValueError('only contiguous NumPy arrays are supported')
     return x.ctypes.data
 
+lib.py_build_integrated_references.restype = ct.c_void_p
+lib.py_build_integrated_references.argtypes = [
+    ct.c_int32,
+    ct.c_void_p,
+    ct.c_int32,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_void_p,
+    ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
 lib.py_build_single_reference.restype = ct.c_void_p
 lib.py_build_single_reference.argtypes = [
     ct.c_void_p,
@@ -85,6 +99,13 @@ lib.py_find_classic_markers.argtypes = [
     ct.POINTER(ct.c_char_p)
 ]
 
+lib.py_free_integrated_references.restype = None
+lib.py_free_integrated_references.argtypes = [
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
 lib.py_free_markers.restype = None
 lib.py_free_markers.argtypes = [
     ct.c_void_p,
@@ -94,6 +115,29 @@ lib.py_free_markers.argtypes = [
 
 lib.py_free_single_reference.restype = None
 lib.py_free_single_reference.argtypes = [
+    ct.c_void_p,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
+lib.py_get_integrated_references_num_labels.restype = ct.c_int32
+lib.py_get_integrated_references_num_labels.argtypes = [
+    ct.c_void_p,
+    ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
+lib.py_get_integrated_references_num_profiles.restype = ct.c_int32
+lib.py_get_integrated_references_num_profiles.argtypes = [
+    ct.c_void_p,
+    ct.c_int32,
+    ct.POINTER(ct.c_int32),
+    ct.POINTER(ct.c_char_p)
+]
+
+lib.py_get_integrated_references_num_references.restype = ct.c_int32
+lib.py_get_integrated_references_num_references.argtypes = [
     ct.c_void_p,
     ct.POINTER(ct.c_int32),
     ct.POINTER(ct.c_char_p)
@@ -165,6 +209,9 @@ lib.py_set_markers_for_pair.argtypes = [
     ct.POINTER(ct.c_char_p)
 ]
 
+def build_integrated_references(test_nrow, test_features, nrefs, references, labels, ref_ids, prebuilt, nthreads):
+    return _catch_errors(lib.py_build_integrated_references)(test_nrow, _np2ct(test_features, np.int32), nrefs, references, labels, ref_ids, prebuilt, nthreads)
+
 def build_single_reference(ref, labels, markers, approximate, nthreads):
     return _catch_errors(lib.py_build_single_reference)(ref, _np2ct(labels, np.int32), markers, approximate, nthreads)
 
@@ -177,11 +224,23 @@ def create_markers(nlabels):
 def find_classic_markers(nref, labels, ref, de_n, nthreads):
     return _catch_errors(lib.py_find_classic_markers)(nref, labels, ref, de_n, nthreads)
 
+def free_integrated_references(ptr):
+    return _catch_errors(lib.py_free_integrated_references)(ptr)
+
 def free_markers(ptr):
     return _catch_errors(lib.py_free_markers)(ptr)
 
 def free_single_reference(ptr):
     return _catch_errors(lib.py_free_single_reference)(ptr)
+
+def get_integrated_references_num_labels(ptr, r):
+    return _catch_errors(lib.py_get_integrated_references_num_labels)(ptr, r)
+
+def get_integrated_references_num_profiles(ptr, r):
+    return _catch_errors(lib.py_get_integrated_references_num_profiles)(ptr, r)
+
+def get_integrated_references_num_references(ptr):
+    return _catch_errors(lib.py_get_integrated_references_num_references)(ptr)
 
 def get_markers_for_pair(ptr, label1, label2, buffer):
     return _catch_errors(lib.py_get_markers_for_pair)(ptr, label1, label2, _np2ct(buffer, np.int32))
