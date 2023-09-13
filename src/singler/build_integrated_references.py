@@ -9,8 +9,8 @@ from ._utils import _stable_union, _factorize, _match
 
 class IntegratedReferences:
     """Object containing integrated references, typically constructed by
-    :py:meth:`~singler.build_integrated_references.build_integrated_references`.
-    """
+    :py:meth:`~singler.build_integrated_references.build_integrated_references`."""
+
     def __init__(self, ptr):
         self._ptr = ptr
 
@@ -53,10 +53,9 @@ def build_integrated_references(
     ref_labels_list: list[Sequence],
     ref_features_list: list[Sequence],
     ref_prebuilt_list: list[SinglePrebuiltReference],
-    num_threads = 1,
+    num_threads=1,
 ) -> IntegratedReferences:
-    """
-    Build a set of integrated references for classification of a test dataset.
+    """Build a set of integrated references for classification of a test dataset.
 
     Arguments:
         test_features (Sequence): Sequence of features for the test dataset.
@@ -91,7 +90,9 @@ def build_integrated_references(
         ref_data_ptrs[i] = current.ptr
 
     if nrefs != len(ref_labels_list):
-        raise ValueError("'ref_labels_list' and 'ref_data_list' should have the same length")
+        raise ValueError(
+            "'ref_labels_list' and 'ref_data_list' should have the same length"
+        )
     converted_label_levels = []
     converted_label_indices = []
     ref_labels_ptrs = ndarray(nrefs, dtype=uintp)
@@ -103,7 +104,9 @@ def build_integrated_references(
         ref_labels_ptrs[i] = ind.ctypes.data
 
     if nrefs != len(ref_features_list):
-        raise ValueError("'ref_features_list' and 'ref_data_list' should have the same length")
+        raise ValueError(
+            "'ref_features_list' and 'ref_data_list' should have the same length"
+        )
     converted_feature_data = []
     ref_features_ptrs = ndarray(nrefs, dtype=uintp)
     for i, x in enumerate(ref_features_list):
@@ -112,7 +115,9 @@ def build_integrated_references(
         ref_features_ptrs[i] = ind.ctypes.data
 
     if nrefs != len(ref_prebuilt_list):
-        raise ValueError("'ref_prebuilt_list' and 'ref_data_list' should have the same length")
+        raise ValueError(
+            "'ref_prebuilt_list' and 'ref_data_list' should have the same length"
+        )
     ref_prebuilt_ptrs = ndarray(nrefs, dtype=uintp)
     for i, x in enumerate(ref_prebuilt_list):
         ref_prebuilt_ptrs[i] = x._ptr
@@ -120,12 +125,12 @@ def build_integrated_references(
     output = lib.build_integrated_references(
         len(test_features),
         test_features,
-        nrefs, 
+        nrefs,
         ref_data_ptrs.ctypes.data,
         ref_labels_ptrs.ctypes.data,
         ref_features_ptrs.ctypes.data,
         ref_prebuilt_ptrs.ctypes.data,
-        num_threads
+        num_threads,
     )
 
     return IntegratedReferences(output)

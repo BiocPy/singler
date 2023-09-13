@@ -18,10 +18,10 @@ def test_build_integrated_references():
     test_features = [all_features[i] for i in range(0, 10000, 2)]
     integrated = singler.build_integrated_references(
         test_features,
-        ref_data_list = [ref1, ref2],
-        ref_labels_list = [labels1, labels2],
-        ref_features_list = [features1, features2],
-        ref_prebuilt_list = [built1, built2]
+        ref_data_list=[ref1, ref2],
+        ref_labels_list=[labels1, labels2],
+        ref_features_list=[features1, features2],
+        ref_prebuilt_list=[built1, built2],
     )
 
     assert integrated.num_references() == 2
@@ -33,11 +33,11 @@ def test_build_integrated_references():
     # Works in parallel.
     pintegrated = singler.build_integrated_references(
         test_features,
-        ref_data_list = [ref1, ref2],
-        ref_labels_list = [labels1, labels2],
-        ref_features_list = [features1, features2],
-        ref_prebuilt_list = [built1, built2],
-        num_threads=3
+        ref_data_list=[ref1, ref2],
+        ref_labels_list=[labels1, labels2],
+        ref_features_list=[features1, features2],
+        ref_prebuilt_list=[built1, built2],
+        num_threads=3,
     )
 
     assert pintegrated.num_references() == 2
