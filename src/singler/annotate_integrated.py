@@ -1,4 +1,4 @@
-from typing import Union, Sequence, Optional
+from typing import Union, Sequence, Optional, Any, Tuple
 from biocframe import BiocFrame
 
 from .fetch_reference import fetch_github_reference, realize_github_markers
@@ -117,12 +117,14 @@ def annotate_integrated(
     all_ref_features = []
     all_built = []
     all_results = []
+    test_features_set = set(test_features)
 
     for r in range(nrefs):
         curref_data, curref_labels, curref_features, curbuilt = _build_reference(
             ref_data=ref_data[r],
             ref_labels=ref_labels[r],
             ref_features=ref_features[r],
+            test_features_set=test_features_set,
             cache_dir=cache_dir,
             build_args=build_single_args,
             num_threads=num_threads,
@@ -131,14 +133,14 @@ def annotate_integrated(
         res = classify_single_reference(
             test_data,
             test_features=test_features,
-            ref_prebuilt=built,
+            ref_prebuilt=curbuilt,
             **classify_single_args,
             num_threads=num_threads,
         )
 
         res.metadata = {
-            "markers": built.markers,
-            "unique_markers": built.marker_subset(),
+            "markers": curbuilt.markers,
+            "unique_markers": curbuilt.marker_subset(),
         }
 
         all_ref_data.append(curref_data)

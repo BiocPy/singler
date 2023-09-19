@@ -6,7 +6,7 @@ from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
 
 
-def _build_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, num_threads):
+def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cache_dir, build_args, num_threads):
     if isinstance(ref_data, str):
         ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
         ref_features = ref.row_data.column(ref_features)
@@ -23,7 +23,7 @@ def _build_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, 
             ref.metadata[ref_labels],
             ref_features,
             num_markers=num_de,
-            restrict_to=set(test_features),
+            restrict_to=test_features_set,
         )
 
         built = build_single_reference(
@@ -40,7 +40,7 @@ def _build_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, 
             ref_data=ref_data,
             ref_labels=ref_labels,
             ref_features=ref_features,
-            restrict_to=set(test_features),
+            restrict_to=test_features_set,
             num_threads=num_threads,
             **build_args,
         )
@@ -122,6 +122,7 @@ def annotate_single(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
+        test_features_set=set(test_features),
         cache_dir=cache_dir,
         build_args=build_args,
         num_threads=num_threads,
