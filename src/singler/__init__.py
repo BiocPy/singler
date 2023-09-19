@@ -23,3 +23,4 @@ from .classify_single_reference import classify_single_reference
 from .classify_integrated_references import classify_integrated_references
 from .fetch_reference import fetch_github_reference, realize_github_markers
 from .annotate_single import annotate_single
+from .annotate_integrated import annotate_integrated

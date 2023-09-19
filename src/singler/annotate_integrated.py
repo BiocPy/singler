@@ -21,7 +21,7 @@ def annotate_integrated(
     build_integrated_args={},
     classify_integrated_args={},
     num_threads=1,
-) -> BiocFrame:
+) -> Tuple[list[BiocFrame], BiocFrame]:
     """Annotate a single-cell expression dataset based on the correlation 
     of each cell to profiles in multiple labelled references, where the
     annotation from each reference is then integrated across references.
@@ -84,21 +84,23 @@ def annotate_integrated(
 
         build_integrated_args (dict):
             Further arguments to pass to
-            :py:meth:`~integratedr.build_integrated_reference.build_integrated_reference`.
+            :py:meth:`~singler.build_integrated_reference.build_integrated_reference`.
 
         classify_integrated_args (dict):
             Further arguments to pass to
-            :py:meth:`~integratedr.classify_integrated_reference.classify_integrated_reference`.
+            :py:meth:`~singler.classify_integrated_reference.classify_integrated_reference`.
 
         num_threads (int):
             Number of threads to use for the various steps.
 
     Returns:
-        BiocFrame: A data frame containing the labelling results, see
-        :py:meth:`~singler.classify_single_reference.classify_single_reference`
-        for details. The metadata also contains a ``markers`` dictionary,
-        specifying the markers that were used for each pairwise comparison
-        between labels; and a list of ``unique_markers`` across all labels.
+        Tuple[list[BiocFrame], BiocFrame]: Tuple where the first element
+        contains per-reference results (i.e. a list of BiocFrame outputs
+        equivalent to running
+        :py:meth:`~singler.annotate_single.annotate_single` on each reference)
+        and the second element contains integrated results across references
+        (i.e., a BiocFrame from
+        :py:meth:`~singler.classify_integrated_references.classify_integrated_references`).
     """
     nrefs = len(ref_data)
     if isinstance(ref_labels, str):
