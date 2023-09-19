@@ -52,3 +52,22 @@ def test_classify_integrated_references():
             assert results1.column("best")[i] in labels1_set
         else:
             assert results2.column("best")[i] in labels2_set
+
+    # Repeating without names.
+    integrated = singler.build_integrated_references(
+        test_features,
+        ref_data_list=[ref1, ref2],
+        ref_labels_list=[labels1, labels2],
+        ref_features_list=[features1, features2],
+        ref_prebuilt_list=[built1, built2],
+    )
+
+    results = singler.classify_integrated_references(
+        test,
+        results=[results1, results2.column("best")],
+        integrated_prebuilt=integrated,
+    )
+
+    assert results.shape[0] == 50
+    assert set(results.column("best_reference")) == set([0, 1])
+    assert results.column("scores").column_names == ['0', '1']
