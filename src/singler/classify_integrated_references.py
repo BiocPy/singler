@@ -43,9 +43,11 @@ def classify_integrated_references(
             Number of threads to use during classification.
 
     Returns:
-        BiocFrame: A data frame containing the ``best_label`` label across references,
-        the ``best_reference`` from which it came, the ``scores`` for each reference
-        (as a nested BiocFrame), and the ``delta`` from the best to the second-best
+        BiocFrame: A data frame containing the ``best_label`` across all
+        references, defined as the assigned label in the best reference; the
+        identity of the ``best_reference``, either as a name string or an
+        integer index; the ``scores`` for each reference, as a nested
+        BiocFrame; and the ``delta`` from the best to the second-best
         reference. Each row corresponds to a column of ``test``.
     """
 
@@ -55,16 +57,19 @@ def classify_integrated_references(
             "number of rows in 'test_data' should equal number of features in 'integrated_prebuilt'"
         )
     nc = test_ptr.ncol()
-    best = ndarray((nc,), dtype=int32)
-    delta = ndarray((nc,), dtype=float64)
+
+    all_labels = integrated_prebuilt.reference_labels
+    nrefs = len(all_labels)
+    coerced_labels = []
 
     all_refs = integrated_prebuilt.reference_names
-    all_labels = integrated_prebuilt.reference_labels
-    nref = len(all_refs)
+    has_names = all_refs is not None
+    if not has_names:
+        all_refs = [str(i) for i in range(nrefs)]
 
     scores = {}
-    score_ptrs = ndarray((nref,), dtype=uintp)
-    assign_ptrs = ndarray((nref,), dtype=uintp)
+    score_ptrs = ndarray((nrefs,), dtype=uintp)
+    assign_ptrs = ndarray((nrefs,), dtype=uintp)
 
     if len(all_refs) != len(results):
         raise ValueError(
@@ -85,9 +90,11 @@ def classify_integrated_references(
             )
 
         ind = array(_match(curlabs, all_labels[i]), dtype=int32)
-        all_labels.append(ind)
+        coerced_labels.append(ind)
         assign_ptrs[i] = ind.ctypes.data
 
+    best = ndarray((nc,), dtype=int32)
+    delta = ndarray((nc,), dtype=float64)
     lib.classify_integrated_references(
         test_ptr.ptr,
         assign_ptrs.ctypes.data,
@@ -99,11 +106,15 @@ def classify_integrated_references(
         num_threads,
     )
 
+    best_label = [results[b][i] for i, b in enumerate(best)]
+    if has_names:
+        best = [all_refs[b] for b in best]
+
     scores_df = BiocFrame(scores, number_of_rows=nc)
     return BiocFrame(
         {
-            "best_label": [results[b][i] for i, b in enumerate(best)],
-            "best_reference": [all_refs[b] for b in best],
+            "best_label": best_label,
+            "best_reference": best,
             "scores": scores_df,
             "delta": delta,
         }
