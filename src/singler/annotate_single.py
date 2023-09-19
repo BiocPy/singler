@@ -6,7 +6,7 @@ from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
 
 
-def annotate(
+def annotate_single(
     test_data,
     test_features: Sequence,
     ref_data,
@@ -17,7 +17,8 @@ def annotate(
     classify_args={},
     num_threads=1,
 ) -> BiocFrame:
-    """Annotate an expression dataset based on the correlation to a labelled reference.
+    """Annotate a single-cell expression dataset based on the correlation 
+    of each cell to profiles in a labelled reference.
 
     Args:
         test_data: A matrix-like object representing the test dataset, where rows are

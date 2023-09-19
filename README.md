@@ -37,7 +37,7 @@ Now we use the Blueprint/ENCODE reference to annotate each cell in `mat`:
 
 ```python
 import singler
-results = singler.annotate(
+results = singler.annotate_single(
     mat,
     features,
     ref_data = "BlueprintEncode",
@@ -70,7 +70,7 @@ results.column("scores").column("Macrophage")
 
 ## Calling low-level functions
 
-The `annotate()` function is a convenient wrapper around a number of lower-level functions in **singler**.
+The `annotate_single()` function is a convenient wrapper around a number of lower-level functions in **singler**.
 Advanced users may prefer to build the reference and run the classification separately.
 This allows us to re-use the same reference for multiple datasets without repeating the build step.
 
