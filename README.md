@@ -30,7 +30,7 @@ Firstly, let's load in the famous PBMC 4k dataset from 10X Genomics:
 import singlecellexperiment as sce
 data = sce.read_tenx_h5("pbmc4k-tenx.h5")
 mat = data.assay("counts")
-features = [x.encode("ASCII") for x in data.row_data["name"]]
+features = [str(x) for x in data.row_data["name"]]
 ```
 
 Now we use the Blueprint/ENCODE reference to annotate each cell in `mat`:
@@ -63,7 +63,7 @@ results.column("best")
 ##  ...
 ## ]
 
-results.column("scores").column("Macrophage")
+results.column("scores").column("Macrophages")
 ## array([0.35935275, 0.40833545, 0.37430726, ..., 0.32135929, 0.29728435,
 ##        0.40208581])
 ```
@@ -114,6 +114,53 @@ output = singler.classify_single_reference(
     test_features=features,
     ref_prebuilt=built,
 )
+```
+
+## Integrating labels across references
+
+We can use annotations from multiple references through the `annotate_integrated()` function:
+
+```python
+import singler
+single_results, integrated = singler.annotate_integrated(
+    mat,
+    features,
+    ref_data = ("BlueprintEncode", "DatabaseImmuneCellExpression"),
+    ref_features = "symbol",
+    ref_labels = "main",
+    build_integrated_args = { "ref_names": ("Blueprint", "DICE") },
+    cache_dir = "_cache",
+    num_threads = 6
+)
+```
+
+This annotates the test dataset against each reference individually to obtain the best per-reference label,
+and then it compares across references to find the best label from all references.
+Both the single and integrated annotations are reported for diagnostics.
+
+```python
+integrated.column("best_label")
+## ['Monocytes', 
+##  'Monocytes',
+##  'Monocytes',
+##  'CD8+ T-cells',
+##  'CD4+ T-cells',
+##  'CD8+ T-cells',
+##  'Monocytes',
+##  'Monocytes',
+##  ...
+## ]
+
+integrated.column("best_reference")
+## ['Blueprint',
+## 'Blueprint',
+## 'Blueprint',
+## 'Blueprint',
+## 'Blueprint',
+## 'Blueprint',
+## 'Blueprint',
+## ...
+##]
 ```
 
 ## Developer notes

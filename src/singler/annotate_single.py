@@ -10,8 +10,6 @@ def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cach
     if isinstance(ref_data, str):
         ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
         ref_features = ref.row_data.column(ref_features)
-        ref_data = ref.assay("ranks")
-        ref_labels=ref.col_data.column(ref_labels)
 
         num_de = None
         if "marker_args" in build_args:
@@ -26,6 +24,8 @@ def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cach
             restrict_to=test_features_set,
         )
 
+        ref_data = ref.assay("ranks")
+        ref_labels=ref.col_data.column(ref_labels)
         built = build_single_reference(
             ref_data=ref_data,
             ref_labels=ref_labels,

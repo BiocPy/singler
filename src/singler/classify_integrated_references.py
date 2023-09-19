@@ -106,7 +106,7 @@ def classify_integrated_references(
         num_threads,
     )
 
-    best_label = [results[b][i] for i, b in enumerate(best)]
+    best_label = [results[b].column("best")[i] for i, b in enumerate(best)]
     if has_names:
         best = [all_refs[b] for b in best]
 

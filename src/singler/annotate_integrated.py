@@ -164,6 +164,7 @@ def annotate_integrated(
         results=all_results,
         integrated_prebuilt=ibuilt,
         **classify_integrated_args,
+        num_threads=num_threads,
     )
 
     return all_results, ires
