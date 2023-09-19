@@ -6,6 +6,48 @@ from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
 
 
+def _build_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, num_threads):
+    if isinstance(ref_data, str):
+        ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
+        ref_features = ref.row_data.column(ref_features)
+        ref_data = ref.assay("ranks")
+        ref_labels=ref.col_data.column(ref_labels)
+
+        num_de = None
+        if "marker_args" in build_args:
+            marker_args = build_args["marker_args"]
+            if "num_de" in marker_args:
+                num_de = marker_args["num_de"]
+
+        markers = realize_github_markers(
+            ref.metadata[ref_labels],
+            ref_features,
+            num_markers=num_de,
+            restrict_to=set(test_features),
+        )
+
+        built = build_single_reference(
+            ref_data=ref_data,
+            ref_labels=ref_labels,
+            ref_features=ref_features,
+            markers=markers,
+            num_threads=num_threads,
+            **build_args,
+        )
+
+    else:
+        built = build_single_reference(
+            ref_data=ref_data,
+            ref_labels=ref_labels,
+            ref_features=ref_features,
+            restrict_to=set(test_features),
+            num_threads=num_threads,
+            **build_args,
+        )
+
+    return ref_data, ref_labels, ref_features, built
+
+
 def annotate_single(
     test_data,
     test_features: Sequence,
@@ -51,7 +93,7 @@ def annotate_single(
             containing the feature identifier associated with each row.
 
             If ``ref_data`` is a string, ``ref_features`` should be a string
-            specifying the label type to use, e.g., "main", "fine", "ont".
+            specifying the label type to use, e.g., "ensembl", "symbol".
 
         cache_dir (str):
             Path to a cache directory for downloading reference files, see
@@ -76,42 +118,14 @@ def annotate_single(
         specifying the markers that were used for each pairwise comparison
         between labels; and a list of ``unique_markers`` across all labels.
     """
-
-    if isinstance(ref_data, str):
-        ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
-        ref_features = ref.row_data.column(ref_features)
-
-        num_de = None
-        if "marker_args" in build_args:
-            marker_args = build_args["marker_args"]
-            if "num_de" in marker_args:
-                num_de = marker_args["num_de"]
-
-        markers = realize_github_markers(
-            ref.metadata[ref_labels],
-            ref_features,
-            num_markers=num_de,
-            restrict_to=set(test_features),
-        )
-
-        built = build_single_reference(
-            ref_data=ref.assay("ranks"),
-            ref_labels=ref.col_data.column(ref_labels),
-            ref_features=ref_features,
-            markers=markers,
-            num_threads=num_threads,
-            **build_args,
-        )
-
-    else:
-        built = build_single_reference(
-            ref_data=ref_data,
-            ref_labels=ref_labels,
-            ref_features=ref_features,
-            restrict_to=set(test_features),
-            num_threads=num_threads,
-            **build_args,
-        )
+    ref_data, ref_labels, ref_features, built = _build_reference(
+        ref_data=ref_data,
+        ref_labels=ref_labels,
+        ref_features=ref_features,
+        cache_dir=cache_dir,
+        build_args=build_args,
+        num_threads=num_threads,
+    )
 
     output = classify_single_reference(
         test_data,
