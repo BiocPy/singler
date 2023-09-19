@@ -1,4 +1,4 @@
-from typing import Sequence, Optional
+from typing import Sequence, Optional, Union
 from numpy import array, ndarray, int32, uintp
 from mattress import tatamize
 
@@ -21,15 +21,16 @@ class IntegratedReferences:
         lib.free_integrated_references(self._ptr)
 
     @property
-    def reference_names(self) -> Sequence[str]:
-        """Sequence containing the names of the references."""
+    def reference_names(self) -> Union[Sequence[str], None]:
+        """Sequence containing the names of the references. Alternatively
+        None, if no names were supplied."""
         return self._names
 
     @property
     def reference_labels(self) -> list:
         """List of lists containing the names of the labels for each reference.
 
-        Each entry corresponds to a reference in :py:attr:`~names`.
+        Each entry corresponds to a reference in :py:attr:`~names`, if not None.
         """
         return self._labels
 
@@ -119,10 +120,11 @@ def build_integrated_references(
     for i, x in enumerate(ref_prebuilt_list):
         ref_prebuilt_ptrs[i] = x._ptr
 
-    if ref_names is None:
-        ref_names = ["reference_" + str(i + 1) for i in range(nrefs)]
-    elif nrefs != len(ref_names):
-        raise ValueError("'ref_names' and 'ref_data_list' should have the same length")
+    if ref_names is not None:
+        if nrefs != len(ref_names):
+            raise ValueError("'ref_names' and 'ref_data_list' should have the same length")
+        elif nrefs != len(set(ref_names)):
+            raise ValueError("'ref_names' should contain unique names")
 
     output = lib.build_integrated_references(
         len(test_features),

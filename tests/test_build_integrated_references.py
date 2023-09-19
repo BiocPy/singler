@@ -24,7 +24,7 @@ def test_build_integrated_references():
         ref_prebuilt_list=[built1, built2],
     )
 
-    assert integrated.reference_names == ["reference_1", "reference_2"]
+    assert integrated.reference_names == None
     assert integrated.reference_labels == [["A", "B", "C", "D", "E"], ["z", "y", "x"]]
     assert integrated.test_features == test_features
 
