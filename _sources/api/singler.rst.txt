@@ -4,10 +4,26 @@ singler package
 Submodules
 ----------
 
-singler.annotate module
------------------------
+singler.annotate\_integrated module
+-----------------------------------
 
-.. automodule:: singler.annotate
+.. automodule:: singler.annotate_integrated
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+singler.annotate\_single module
+-------------------------------
+
+.. automodule:: singler.annotate_single
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+singler.build\_integrated\_references module
+--------------------------------------------
+
+.. automodule:: singler.build_integrated_references
    :members:
    :undoc-members:
    :show-inheritance:
@@ -16,6 +32,14 @@ singler.build\_single\_reference module
 ---------------------------------------
 
 .. automodule:: singler.build_single_reference
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+singler.classify\_integrated\_references module
+-----------------------------------------------
+
+.. automodule:: singler.classify_integrated_references
    :members:
    :undoc-members:
    :show-inheritance:

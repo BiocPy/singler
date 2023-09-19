@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Contributing" href="contributing.html" /><link rel="prev" title="singler" href="index.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.09.10 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Tinder for single-cell data - singler unknown documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=135e06be" />
@@ -223,21 +223,15 @@ So kind of like Tinder, but for cells.</p>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
 <p>Firstly, let’s load in the famous PBMC 4k dataset from 10X Genomics:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># TODO: streamline the loader:</span>
-<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;pbmc4k-tenx.h5&quot;</span>
-<span class="kn">import</span> <span class="nn">h5py</span> <span class="k">as</span> <span class="nn">h5</span>
-<span class="n">fhandle</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">scipy.sparse</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="n">mat</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">csc_matrix</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">fhandle</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">fhandle</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">][</span><span class="s2">&quot;indices&quot;</span><span class="p">],</span> <span class="n">fhandle</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">][</span><span class="s2">&quot;indptr&quot;</span><span class="p">]),</span>
-    <span class="n">fhandle</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fhandle</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">][</span><span class="s2">&quot;features&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singlecellexperiment</span> <span class="k">as</span> <span class="nn">sce</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">sce</span><span class="o">.</span><span class="n">read_tenx_h5</span><span class="p">(</span><span class="s2">&quot;pbmc4k-tenx.h5&quot;</span><span class="p">)</span>
+<span class="n">mat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">assay</span><span class="p">(</span><span class="s2">&quot;counts&quot;</span><span class="p">)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">row_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>Now we use the Blueprint/ENCODE reference to annotate each cell in <code class="docutils literal notranslate"><span class="pre">mat</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singler</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">singler</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">singler</span><span class="o">.</span><span class="n">annotate_single</span><span class="p">(</span>
     <span class="n">mat</span><span class="p">,</span>
     <span class="n">features</span><span class="p">,</span>
     <span class="n">ref_data</span> <span class="o">=</span> <span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span>
@@ -261,7 +255,7 @@ So kind of like Tinder, but for cells.</p>
 <span class="c1">##  ...</span>
 <span class="c1">## ]</span>
 
-<span class="n">results</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;scores&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;Macrophage&quot;</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;scores&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;Macrophages&quot;</span><span class="p">)</span>
 <span class="c1">## array([0.35935275, 0.40833545, 0.37430726, ..., 0.32135929, 0.29728435,</span>
 <span class="c1">##        0.40208581])</span>
 </pre></div>
@@ -269,7 +263,7 @@ So kind of like Tinder, but for cells.</p>
 </section>
 <section id="calling-low-level-functions">
 <h2>Calling low-level functions<a class="headerlink" href="#calling-low-level-functions" title="Link to this heading">#</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">annotate()</span></code> function is a convenient wrapper around a number of lower-level functions in <strong>singler</strong>.
+<p>The <code class="docutils literal notranslate"><span class="pre">annotate_single()</span></code> function is a convenient wrapper around a number of lower-level functions in <strong>singler</strong>.
 Advanced users may prefer to build the reference and run the classification separately.
 This allows us to re-use the same reference for multiple datasets without repeating the build step.</p>
 <p>We start by fetching the reference of interest from <a class="reference external" href="https://github.com/kanaverse/singlepp-references">GitHub</a>.
@@ -304,6 +298,50 @@ This can be repeated with different datasets that have the same features or a su
     <span class="n">test_features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
     <span class="n">ref_prebuilt</span><span class="o">=</span><span class="n">built</span><span class="p">,</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="integrating-labels-across-references">
+<h2>Integrating labels across references<a class="headerlink" href="#integrating-labels-across-references" title="Link to this heading">#</a></h2>
+<p>We can use annotations from multiple references through the <code class="docutils literal notranslate"><span class="pre">annotate_integrated()</span></code> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singler</span>
+<span class="n">single_results</span><span class="p">,</span> <span class="n">integrated</span> <span class="o">=</span> <span class="n">singler</span><span class="o">.</span><span class="n">annotate_integrated</span><span class="p">(</span>
+    <span class="n">mat</span><span class="p">,</span>
+    <span class="n">features</span><span class="p">,</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span> <span class="s2">&quot;DatabaseImmuneCellExpression&quot;</span><span class="p">),</span>
+    <span class="n">ref_features</span> <span class="o">=</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+    <span class="n">ref_labels</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">build_integrated_args</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;ref_names&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Blueprint&quot;</span><span class="p">,</span> <span class="s2">&quot;DICE&quot;</span><span class="p">)</span> <span class="p">},</span>
+    <span class="n">cache_dir</span> <span class="o">=</span> <span class="s2">&quot;_cache&quot;</span><span class="p">,</span>
+    <span class="n">num_threads</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This annotates the test dataset against each reference individually to obtain the best per-reference label,
+and then it compares across references to find the best label from all references.
+Both the single and integrated annotations are reported for diagnostics.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">integrated</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;best_label&quot;</span><span class="p">)</span>
+<span class="c1">## [&#39;Monocytes&#39;, </span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;CD8+ T-cells&#39;,</span>
+<span class="c1">##  &#39;CD4+ T-cells&#39;,</span>
+<span class="c1">##  &#39;CD8+ T-cells&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  &#39;Monocytes&#39;,</span>
+<span class="c1">##  ...</span>
+<span class="c1">## ]</span>
+
+<span class="n">integrated</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s2">&quot;best_reference&quot;</span><span class="p">)</span>
+<span class="c1">## [&#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## &#39;Blueprint&#39;,</span>
+<span class="c1">## ...</span>
+<span class="c1">##]</span>
 </pre></div>
 </div>
 </section>
@@ -387,6 +425,7 @@ This can be repeated with different datasets that have the same features or a su
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#quick-start">Quick start</a></li>
 <li><a class="reference internal" href="#calling-low-level-functions">Calling low-level functions</a></li>
+<li><a class="reference internal" href="#integrating-labels-across-references">Integrating labels across references</a></li>
 <li><a class="reference internal" href="#developer-notes">Developer notes</a></li>
 </ul>
 </li>
