@@ -106,7 +106,13 @@ def classify_integrated_references(
         num_threads,
     )
 
-    best_label = [results[b].column("best")[i] for i, b in enumerate(best)]
+    best_label = []
+    for i, b in enumerate(best):
+        if isinstance(results[b], BiocFrame):
+            best_label.append(results[b].column("best")[i])
+        else:
+            best_label.append(results[b][i])
+
     if has_names:
         best = [all_refs[b] for b in best]
 
