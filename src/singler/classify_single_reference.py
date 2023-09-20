@@ -1,7 +1,7 @@
 from mattress import tatamize
 from numpy import ndarray, int32, float64, uintp
 from biocframe import BiocFrame
-from typing import Sequence
+from typing import Sequence, Any
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
@@ -9,7 +9,7 @@ from ._utils import _create_map
 
 
 def classify_single_reference(
-    test_data,
+    test_data: Any,
     test_features: Sequence,
     ref_prebuilt: SinglePrebuiltReference,
     quantile: float = 0.8,
@@ -26,35 +26,31 @@ def classify_single_reference(
             Normalized and transformed expression values are also acceptable as only
             the ranking is used within this function.
 
-            Alternatively, a
-            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
-            containing such a matrix in one of its assays.
-
-        test_features (Sequence): Sequence of identifiers for each feature in the test
+        test_features: Sequence of identifiers for each feature in the test
             dataset, i.e., row in ``test_data``.
 
-        ref_prebuilt (SinglePrebuiltReference):
+        ref_prebuilt:
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        quantile (float):
+        quantile:
             Quantile of the correlation distribution for computing the score for each label.
             Larger values increase sensitivity of matches at the expense of
             similarity to the average behavior of each label.
 
-        use_fine_tune (bool):
+        use_fine_tune:
             Whether fine-tuning should be performed. This improves accuracy for distinguishing
             between similar labels but requires more computational work.
 
-        fine_tune_threshold (float):
+        fine_tune_threshold:
             Maximum difference from the maximum correlation to use in fine-tuning.
             All labels above this threshold are used for another round of fine-tuning.
 
-        num_threads (int):
+        num_threads:
             Number of threads to use during classification.
 
     Returns:
-        BiocFrame: A data frame containing the ``best`` label, the ``scores``
+        A data frame containing the ``best`` label, the ``scores``
         for each label (as a nested BiocFrame), and the ``delta`` from the best
         to the second-best label.  Each row corresponds to a column of ``test``.
     """

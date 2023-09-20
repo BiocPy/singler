@@ -11,18 +11,6 @@ class SinglePrebuiltReference:
     """A prebuilt reference object, typically created by
     :py:meth:`~singler.build_single_reference.build_single_reference`. This is intended for advanced users only and
     should not be serialized.
-
-    Attributes:
-        labels (Sequence):
-            Sequence of unique label identifiers, usually strings.
-
-        features (Sequence):
-            Sequence of feature identifiers, usually strings.
-            This contains the universe of all features known to the reference,
-            not just the markers that are ultimately used for classification.
-
-        markers (dict[Any, dict[Any, Sequence]]):
-            Upregulated markers for each pairwise comparison between labels.
     """
 
     def __init__(
@@ -59,8 +47,7 @@ class SinglePrebuiltReference:
     def features(self) -> Sequence:
         """
         Returns:
-            Sequence: The universe of features known to this reference,
-            usually as strings.
+            The universe of features known to this reference, usually as strings.
         """
         return self._features
 
@@ -68,7 +55,7 @@ class SinglePrebuiltReference:
     def labels(self) -> Sequence:
         """
         Returns:
-            Sequence: Unique labels in this reference.
+            Unique labels in this reference.
         """
         return self._labels
 
@@ -76,22 +63,21 @@ class SinglePrebuiltReference:
     def markers(self) -> dict[Any, dict[Any, Sequence]]:
         """
         Returns:
-            dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison
-            between labels.
+            Markers for every pairwise comparison between labels.
         """
         return self._markers
 
     def marker_subset(self, indices_only: bool = False) -> Union[ndarray, list]:
         """
         Args:
-            indices_only (bool): Whether to return the markers as indices
+            indices_only: Whether to return the markers as indices
                 into :py:attr:`~features`, or as a list of feature identifiers.
 
         Returns:
-            list: List of feature identifiers for the markers, if ``indices_only = False``.
+            If ``indices_only = False``, a list of feature identifiers for the markers.
 
-            ndarray: Integer indices of features in ``features`` that were
-            chosen as markers, if ``indices_only = True``.
+            If ``indices_only = True``, a NumPy array containing the integer indices of 
+            features in ``features`` that were chosen as markers.
         """
         nmarkers = self.num_markers()
         buffer = ndarray(nmarkers, dtype=int32)
@@ -102,19 +88,16 @@ class SinglePrebuiltReference:
             return [self._features[i] for i in buffer]
 
 
-MARKER_DETECTION_METHODS = Literal["classic"]
-
-
 def build_single_reference(
-    ref_data,
+    ref_data: Any,
     ref_labels: Sequence,
     ref_features: Sequence,
     assay_type: Union[str, int] = "logcounts",
     check_missing: bool = True,
     restrict_to: Optional[Union[set, dict]] = None,
     markers: Optional[dict[Any, dict[Any, Sequence]]] = None,
-    marker_method: MARKER_DETECTION_METHODS = "classic",
-    marker_args={},
+    marker_method: Literal["classic"] = "classic",
+    marker_args: dict = {},
     approximate: bool = True,
     num_threads: int = 1,
 ) -> SinglePrebuiltReference:
@@ -132,33 +115,33 @@ def build_single_reference(
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing such a matrix in one of its assays.
 
-        labels (Sequence): Sequence of labels for each reference profile,
+        labels: Sequence of labels for each reference profile,
             i.e., column in ``ref``.
 
-        features (Sequence): Sequence of identifiers for each feature,
+        features: Sequence of identifiers for each feature,
             i.e., row in ``ref``.
 
-        assay_type(str | int): Assay containing the expression matrix,
+        assay_type: Assay containing the expression matrix,
             if `ref_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
-        check_missing (bool):
+        check_missing:
             Whether to check for and remove rows with missing (NaN) values
             from ``ref_data``.
 
-        restrict_to (Union[set, dict], optional):
+        restrict_to:
             Subset of available features to restrict to. Only features in
             ``restrict_to`` will be used in the reference building. If None,
             no restriction is performed.
 
-        markers (dict[Any, dict[Any, Sequence]], optional):
+        markers:
             Upregulated markers for each pairwise comparison between labels.
             Specifically, ``markers[a][b]`` should be a sequence of features
             that are upregulated in ``a`` compared to ``b``. All such features
             should be present in ``features``, and all labels in ``labels``
             should have keys in the inner and outer dictionaries.
 
-        marker_method (MARKER_DETECTION_METHODS):
+        marker_method:
             Method to identify markers from each pairwise comparisons between
             labels in ``ref_data``.  If "classic", we call
             :py:meth:`~singler.get_classic_markers.get_classic_markers`.
@@ -168,16 +151,16 @@ def build_single_reference(
             Further arguments to pass to the chosen marker detection method.
             Only used if ``markers`` is not supplied.
 
-        approximate (bool):
+        approximate:
             Whether to use an approximate neighbor search to compute scores
             during classification.
 
-        num_threads (int):
+        num_threads:
             Number of threads to use for reference building.
 
     Returns:
-        SinglePrebuiltReference: The pre-built reference, ready for use in downstream
-        methods like :py:meth:`~singler.classify_single_reference.classify_single_reference`.
+        The pre-built reference, ready for use in downstream methods like 
+        :py:meth:`~singler.classify_single_reference.classify_single_reference`.
     """
 
     ref_ptr, ref_features = _clean_matrix(

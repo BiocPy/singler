@@ -1,4 +1,4 @@
-from typing import Union, Sequence, Optional
+from typing import Union, Sequence, Optional, Any
 from biocframe import BiocFrame
 
 from .fetch_reference import fetch_github_reference, realize_github_markers
@@ -49,15 +49,15 @@ def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cach
 
 
 def annotate_single(
-    test_data,
+    test_data: Any,
     test_features: Sequence,
-    ref_data,
+    ref_data: Any,
     ref_labels: Union[Sequence, str],
     ref_features: Union[Sequence, str],
     cache_dir: Optional[str] = None,
-    build_args={},
-    classify_args={},
-    num_threads=1,
+    build_args: dict = {},
+    classify_args: dict = {},
+    num_threads: int = 1,
 ) -> BiocFrame:
     """Annotate a single-cell expression dataset based on the correlation 
     of each cell to profiles in a labelled reference.
@@ -67,7 +67,7 @@ def annotate_single(
             features and columns are samples (usually cells). Entries should be expression
             values; only the ranking within each column will be used.
 
-        test_features (Sequence): Sequence of length equal to the number of rows in
+        test_features: Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
         ref_data: A matrix-like object representing the reference dataset, where rows
@@ -79,7 +79,7 @@ def annotate_single(
             :py:meth:`~singler.fetch_reference.fetch_github_reference`.
             This will use the specified dataset as the reference.
 
-        ref_labels (Union[Sequence, str]):
+        ref_labels:
             If ``ref_data`` is a matrix-like object, ``ref_labels`` should be
             a sequence of length equal to the number of columns of ``ref_data``,
             containing the label associated with each column.
@@ -87,7 +87,7 @@ def annotate_single(
             If ``ref_data`` is a string, ``ref_labels`` should be a string
             specifying the label type to use, e.g., "main", "fine", "ont".
 
-        ref_features (Union[Sequence, str]):
+        ref_features:
             If ``ref_data`` is a matrix-like object, ``ref_features`` should be
             a sequence of length equal to the number of rows of ``ref_data``,
             containing the feature identifier associated with each row.
@@ -95,24 +95,24 @@ def annotate_single(
             If ``ref_data`` is a string, ``ref_features`` should be a string
             specifying the label type to use, e.g., "ensembl", "symbol".
 
-        cache_dir (str):
+        cache_dir:
             Path to a cache directory for downloading reference files, see
             :py:meth:`~singler.fetch_reference.fetch_github_reference` for details.
             Only used if ``ref_data`` is a string.
 
-        build_args (dict):
+        build_args:
             Further arguments to pass to
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        classify_args (dict):
+        classify_args:
             Further arguments to pass to
             :py:meth:`~singler.classify_single_reference.classify_single_reference`.
 
-        num_threads (int):
+        num_threads:
             Number of threads to use for the various steps.
 
     Returns:
-        BiocFrame: A data frame containing the labelling results, see
+        A data frame containing the labelling results, see
         :py:meth:`~singler.classify_single_reference.classify_single_reference`
         for details. The metadata also contains a ``markers`` dictionary,
         specifying the markers that were used for each pairwise comparison

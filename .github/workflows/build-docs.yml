@@ -29,7 +29,8 @@ jobs:
           python -m pip install --upgrade pip setuptools
           DEPENDENCIES=$(python -c 'from setuptools.config.setupcfg import read_configuration as c; a = c("setup.cfg"); print(" ".join(a["options"]["install_requires"][1:]))')
           pip install ${DEPENDENCIES}
-          pip install sphinx myst-parser[linkify] furo
+          DOCDEPENDENCIES=$(python -c 'with open("docs/requirements.txt") as a: available = list(a); print(" ".join(map(lambda x : x.strip(), filter(lambda x : not x.startswith("#"), available))))')
+          pip install ${DOCDEPENDENCIES}
 
       # Note that doc building requires the inplace shared library.
       - name: Build docs

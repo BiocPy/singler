@@ -72,6 +72,7 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -169,7 +170,7 @@ todo_emit_warnings = True
 autodoc_default_options = {
     'special-members': True,
     'undoc-members': False,
-    'exclude-members': '__weakref__, __dict__, __str__, __module__, __init__'
+    'exclude-members': '__weakref__, __dict__, __str__, __module__, __init__, __del__'
 }
 
 autosummary_generate = True
@@ -308,6 +309,9 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     "setuptools": ("https://setuptools.pypa.io/en/stable/", None),
     "pyscaffold": ("https://pyscaffold.org/en/stable", None),
+    "biocframe": ("https://biocpy.github.io/BiocFrame", None),
+    "summarizedexperiment": ("https://biocpy.github.io/SummarizedExperiment", None),
+    "singlecellexperiment": ("https://biocpy.github.io/SingleCellExperiment", None),
 }
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)

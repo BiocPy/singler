@@ -30,19 +30,19 @@ def fetch_github_reference(
     for use in annotation with other **singler** functions.
 
     Args:
-        name (KNOWN_REFERENCE): Name of the reference dataset.
+        name: Name of the reference dataset.
 
-        cache_dir (str, optional): Path to a cache directory in which to store
+        cache_dir: Path to a cache directory in which to store
             the files downloaded from the remote. If the files are already
             present, the download is skipped.
 
-        multiple_ids (bool): Whether to report multiple feature IDs.
+        multiple_ids: Whether to report multiple feature IDs.
             If True, each feature is represented by a list with zero,
             one or more feature identifiers (e.g., for ambiguous mappings).
             If False, each feature is represented by a string or None.
 
     Returns:
-        SummarizedExperiment: The reference dataset as a SummarizedExperiment,
+        The reference dataset as a SummarizedExperiment,
         parts of which can be passed to :py:meth:`~singler.build_single_reference.build_single_reference`.
 
     Specifically, the ``ranks`` assay of the output can be used as ``ref`` in
@@ -190,32 +190,32 @@ def realize_github_markers(
     features: Sequence,
     num_markers: Optional[int] = None,
     restrict_to: Optional[Union[set, dict]] = None,
-):
+) -> dict[Any, dict[Any, Sequence]]: 
     """Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be
     used in :py:meth:`~singler.build_single_reference.build_single_reference`.
 
     Args:
-        markers (dict[Any, dict[Any, Sequence]]):
+        markers:
             Upregulated markers for each pairwise comparison between labels.
             Specifically, ``markers[a][b]`` should be a sequence of features
             that are upregulated in ``a`` compared to ``b``. Features are
             represented as indices into ``features``.
 
-        features (Sequence):
+        features:
             Sequence of identifiers for each feature. Features with no valid
             identifier for a particular gene type (e.g., no known symbol)
             should be represented by None.
 
-        num_markers (int, optional):
+        num_markers:
             Number of markers to retain. If None, all markers are retained.
 
-        restrict_to (Union[set, dict], optional):
+        restrict_to:
             Subset of available features to restrict the marker selection.
             Only features in ``restrict_to`` will be reported in the output.
             If None, no restriction is performed.
 
     Returns:
-        dict[Any, dict[Any, Sequence]]: A dictionary with the same structure
+        A dictionary with the same structure
         as ``markers``, where each inner sequence contains the corresponding
         feature identifiers in ``features``. Feature identifiers are guaranteed
         to be non-None and to be in ``restrict_to`` (if specified). Each

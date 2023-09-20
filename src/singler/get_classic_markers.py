@@ -107,7 +107,7 @@ def get_classic_markers(
     datasets derived from replicated bulk transcriptomic experiments.
 
     Args:
-        ref_data(Any | list[Any]):
+        ref_data:
             A matrix-like object containing the log-normalized expression values of a reference dataset.
             Each column is a sample and each row is a feature.
             Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
@@ -116,41 +116,41 @@ def get_classic_markers(
             typically for multiple batches of the same reference;
             it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.
 
-        ref_labels (Any | list[Any]):
+        ref_labels:
             A sequence of length equal to the number of columns of ``ref``,
             containing a label (usually a string) for each column.
             Alternatively, a list of such sequences of length equal to that of a list ``ref``;
             each sequence should have length equal to the number of columns of the corresponding entry of ``ref``.
 
-        ref_features (Any | list[Any]):
+        ref_features:
             A sequence of length equal to the number of rows of ``ref``,
             containing the feature name (usually a string) for each row.
             Alternatively, a list of such sequences of length equal to that of a list ``ref``;
             each sequence should have length equal to the number of rows of the corresponding entry of ``ref``.
 
-        assay_type (str | int):
+        assay_type:
             Name or index of the assay containing the assay of interest,
             if ``ref`` is or contains
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment` objects.
 
-        check_missing (bool):
+        check_missing:
             Whether to check for and remove rows with missing (NaN) values in the reference matrices.
             This can be set to False if it is known that no NaN values exist.
 
-        restrict_to (Union[set, dict], optional):
+        restrict_to:
             Subset of available features to restrict to. Only features in
             ``restrict_to`` will be used in the reference building. If None,
             no restriction is performed.
 
-        num_de (int, optional):
+        num_de:
             Number of differentially expressed genes to use as markers for each pairwise comparison between labels.
             If None, an appropriate number of genes is automatically determined.
 
-        num_threads (int):
+        num_threads:
             Number of threads to use for the calculations.
 
     Returns:
-        dict[Any, dict[Any, list]]: A dictionary of dictionary of lists
+        A dictionary of dictionary of lists
         containing the markers for each pairwise comparison between labels,
         i.e., ``markers[a][b]`` contains the upregulated markers for label
         ``a`` over label ``b``.
@@ -200,7 +200,7 @@ def number_of_classic_markers(num_labels: int) -> int:
     algorithm.
 
     Args:
-        num_labels (int): Number of labels.
+        num_labels: Number of labels.
 
     Returns:
         int: Number of markers.

@@ -30,7 +30,8 @@ class IntegratedReferences:
     def reference_labels(self) -> list:
         """List of lists containing the names of the labels for each reference.
 
-        Each entry corresponds to a reference in :py:attr:`~names`, if not None.
+        Each entry corresponds to a reference in :py:attr:`~reference_names`, 
+        if ``reference_names`` is not None.
         """
         return self._labels
 
@@ -47,32 +48,34 @@ def build_integrated_references(
     ref_features_list: list[Sequence],
     ref_prebuilt_list: list[SinglePrebuiltReference],
     ref_names: Optional[Sequence[str]] = None,
-    num_threads=1,
+    num_threads: int = 1,
 ) -> IntegratedReferences:
     """Build a set of integrated references for classification of a test dataset.
 
     Arguments:
-        test_features (Sequence): Sequence of features for the test dataset.
+        test_features: Sequence of features for the test dataset.
 
-        ref_data_list (list): List of reference datasets, equivalent to ``ref_data`` in
+        ref_data_list: List of reference datasets, where each entry is equivalent to ``ref_data`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_labels_list (list[Sequence]): List of reference labels, equivalent to ``ref_labels`` in
+        ref_labels_list: List of reference labels, where each entry is equivalent to ``ref_labels`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_features_list (list[Sequence]): List of reference features, equivalent to ``ref_features`` in
+        ref_features_list: List of reference features, where each entry is equivalent to ``ref_features`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_prebuilt_list (list[SinglePrebuiltReference]): List of prebuilt references.
+        ref_prebuilt_list: List of prebuilt references, typically created by 
+            calling :py:meth:`~singler.build_single_reference.build_single_reference` on the corresponding
+            elements of ``ref_data_list``, ``ref_labels_list`` and ``ref_features_list``.
 
-        ref_names (Sequence[str], optional): Sequence of names for the references.
+        ref_names: Sequence of names for the references.
             If None, these are automatically generated.
 
-        num_threads (int):
+        num_threads:
             Number of threads.
 
     Returns:
-        IntegratedReferences: Integrated references for classification with
+        Integrated references for classification with
         :py:meth:`~singler.classify_integrated_references.classify_integrated_references`.
     """
     universe = _stable_union(test_features, *ref_features_list)
