@@ -1,12 +1,14 @@
 from typing import Union, Sequence, Optional, Any
 from biocframe import BiocFrame
+from copy import copy
 
 from .fetch_reference import fetch_github_reference, realize_github_markers
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
+from ._utils import _clean_matrix
 
 
-def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cache_dir, build_args, num_threads):
+def _resolve_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, test_features_set):
     if isinstance(ref_data, str):
         ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
         ref_features = ref.row_data.column(ref_features)
@@ -17,7 +19,7 @@ def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cach
             if "num_de" in marker_args:
                 num_de = marker_args["num_de"]
 
-        markers = realize_github_markers(
+        ref_markers = realize_github_markers(
             ref.metadata[ref_labels],
             ref_features,
             num_markers=num_de,
@@ -26,26 +28,19 @@ def _build_reference(ref_data, ref_labels, ref_features, test_features_set, cach
 
         ref_data = ref.assay("ranks")
         ref_labels=ref.col_data.column(ref_labels)
-        built = build_single_reference(
-            ref_data=ref_data,
-            ref_labels=ref_labels,
-            ref_features=ref_features,
-            markers=markers,
-            num_threads=num_threads,
-            **build_args,
-        )
-
     else:
-        built = build_single_reference(
-            ref_data=ref_data,
-            ref_labels=ref_labels,
-            ref_features=ref_features,
-            restrict_to=test_features_set,
-            num_threads=num_threads,
-            **build_args,
-        )
+        ref_markers = None
 
-    return ref_data, ref_labels, ref_features, built
+    return ref_data, ref_labels, ref_features, ref_markers
+
+
+def _attach_markers(markers, build_args):
+    if markers is not None and "markers" not in build_args:
+        tmp = copy(build_args)
+        tmp["markers"] = markers
+        print(tmp)
+        return tmp
+    return build_args
 
 
 def annotate_single(
@@ -123,13 +118,24 @@ def annotate_single(
         specifying the markers that were used for each pairwise comparison
         between labels; and a list of ``unique_markers`` across all labels.
     """
-    ref_data, ref_labels, ref_features, built = _build_reference(
+    test_features_set = set(test_features)
+
+    ref_data, ref_labels, ref_features, markers = _resolve_reference(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
-        test_features_set=set(test_features),
         cache_dir=cache_dir,
         build_args=build_args,
+        test_features_set=test_features_set,
+    )
+
+    bargs = _attach_markers(markers, build_args)
+    built = build_single_reference(
+        ref_data=ref_data,
+        ref_labels=ref_labels,
+        ref_features=ref_features,
+        restrict_to=test_features_set,
+        **bargs,
         num_threads=num_threads,
     )
 

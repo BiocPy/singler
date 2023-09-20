@@ -19,9 +19,9 @@ def test_annotate_integrated():
     single_results, integrated_results = singler.annotate_integrated(
         test,
         test_features=test_features,
-        ref_data=[ref1, ref2],
-        ref_labels=[labels1, labels2],
-        ref_features=[features1, features2],
+        ref_data_list=[ref1, ref2],
+        ref_labels_list=[labels1, labels2],
+        ref_features_list=[features1, features2],
     )
 
     assert len(single_results) == 2

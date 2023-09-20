@@ -6,17 +6,20 @@ from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
 from .build_integrated_references import build_integrated_references
 from .classify_integrated_references import classify_integrated_references
-from .annotate_single import _build_reference
+from .annotate_single import _resolve_reference, _attach_markers
+from ._utils import _clean_matrix
 
 
 def annotate_integrated(
     test_data: Any,
     test_features: Sequence,
-    ref_data: Sequence[Union[Any, str]],
-    ref_labels: Union[str, Sequence[Union[Sequence, str]]],
-    ref_features: Union[str, Sequence[Union[Sequence, str]]],
+    ref_data_list: Sequence[Union[Any, str]],
+    ref_labels_list: Union[str, Sequence[Union[Sequence, str]]],
+    ref_features_list: Union[str, Sequence[Union[Sequence, str]]],
     test_assay_type: Union[str, int] = 0,
+    test_check_missing: bool = True,
     ref_assay_type: Union[str, int] = "logcounts",
+    ref_check_missing: bool = True,
     cache_dir: Optional[str] = None,
     build_single_args: dict = {},
     classify_single_args: dict = {},
@@ -40,7 +43,7 @@ def annotate_integrated(
         test_features: Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
-        ref_data:
+        ref_data_list:
             Sequence consisting of one or more of the following:
 
             - A matrix-like object representing the reference dataset, where rows
@@ -54,25 +57,25 @@ def annotate_integrated(
               :py:meth:`~singler.fetch_reference.fetch_github_reference`.
               This will use the specified dataset as the reference.
 
-        ref_labels:
+        ref_labels_list:
             Sequence of the same length as ``ref_data``, where the contents
             depend on the type of value in the corresponding entry of ``ref_data``:
 
-            - If ``ref_data[i]`` is a matrix-like object, ``ref_labels[i]`` should be
-              a sequence of length equal to the number of columns of ``ref_data[i]``,
+            - If ``ref_data_list[i]`` is a matrix-like object, ``ref_labels_list[i]`` should be
+              a sequence of length equal to the number of columns of ``ref_data_list[i]``,
               containing the label associated with each column.
-            - If ``ref_data[i]`` is a string, ``ref_labels[i]`` should be a string
+            - If ``ref_data_list[i]`` is a string, ``ref_labels_list[i]`` should be a string
               specifying the label type to use, e.g., "main", "fine", "ont".
               If a single string is supplied, it is recycled for all ``ref_data``.
 
-        ref_features:
-            Sequence of the same length as ``ref_data``, where the contents
+        ref_features_list:
+            Sequence of the same length as ``ref_data_list``, where the contents
             depend on the type of value in the corresponding entry of ``ref_data``:
 
-            - If ``ref_data[i]`` is a matrix-like object, ``ref_features[i]`` should be
-              a sequence of length equal to the number of rows of ``ref_data``,
+            - If ``ref_data_list[i]`` is a matrix-like object, ``ref_features_list[i]`` should be
+              a sequence of length equal to the number of rows of ``ref_data_list[i]``,
               containing the feature identifier associated with each row.
-            - If ``ref_data[i]`` is a string, ``ref_features[i]`` should be a string
+            - If ``ref_data_list[i]`` is a string, ``ref_features_list[i]`` should be a string
               specifying the feature type to use, e.g., "ensembl", "symbol".
               If a single string is supplied, it is recycled for all ``ref_data``.
 
@@ -80,9 +83,15 @@ def annotate_integrated(
             Assay of ``test_data`` containing the expression matrix, if ``test_data`` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
+        test_check_missing:
+            Whether to check for and remove missing (i.e., NaN) values from the test dataset.
+
         ref_assay_type:
             Assay containing the expression matrix for any entry of ``ref_data_list`` that is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
+
+        ref_check_missing:
+            Whether to check for and remove missing (i.e., NaN) values from the reference datasets.
 
         cache_dir:
             Path to a cache directory for downloading reference files, see
@@ -116,15 +125,23 @@ def annotate_integrated(
         (i.e., a BiocFrame from
         :py:meth:`~singler.classify_integrated_references.classify_integrated_references`).
     """
-    nrefs = len(ref_data)
-    if isinstance(ref_labels, str):
-        ref_labels = [ref_labels] * nrefs
-    elif nrefs != len(ref_labels):
-        raise ValueError("'ref_data' and 'ref_labels' must be the same length")
-    if isinstance(ref_features, str):
-        ref_features = [ref_features] * nrefs
-    elif nrefs != len(ref_features):
-        raise ValueError("'ref_data' and 'ref_features' must be the same length")
+    nrefs = len(ref_data_list)
+    if isinstance(ref_labels_list, str):
+        ref_labels_list = [ref_labels_list] * nrefs
+    elif nrefs != len(ref_labels_list):
+        raise ValueError("'ref_data_list' and 'ref_labels_list' must be the same length")
+    if isinstance(ref_features_list, str):
+        ref_features_list = [ref_features_list] * nrefs
+    elif nrefs != len(ref_features_list):
+        raise ValueError("'ref_data_list' and 'ref_features_list' must be the same length")
+
+    test_ptr, test_features = _clean_matrix(
+        test_data,
+        test_features,
+        assay_type = test_assay_type,
+        check_missing = test_check_missing,
+        num_threads = num_threads,
+    )
 
     all_ref_data = []
     all_ref_labels = []
@@ -134,14 +151,30 @@ def annotate_integrated(
     test_features_set = set(test_features)
 
     for r in range(nrefs):
-        curref_data, curref_labels, curref_features, curbuilt = _build_reference(
-            ref_data=ref_data[r],
-            ref_labels=ref_labels[r],
-            ref_features=ref_features[r],
-            test_features_set=test_features_set,
+        curref_mat, curref_labels, curref_features, curref_markers = _resolve_reference(
+            ref_data=ref_data_list[r],
+            ref_labels=ref_labels_list[r],
+            ref_features=ref_features_list[r],
             cache_dir=cache_dir,
             build_args=build_single_args,
+            test_features_set=test_features_set,
+        )
+
+        curref_ptr, curref_features = _clean_matrix(
+            curref_mat,
+            curref_features,
             assay_type = ref_assay_type,
+            check_missing = ref_check_missing,
+            num_threads = num_threads,
+        )
+
+        bargs = _attach_markers(curref_markers, build_single_args)
+        curbuilt = build_single_reference(
+            ref_data=curref_ptr,
+            ref_labels=curref_labels,
+            ref_features=curref_features,
+            restrict_to=test_features_set,
+            **bargs,
             num_threads=num_threads,
         )
 
@@ -150,20 +183,19 @@ def annotate_integrated(
             test_features=test_features,
             ref_prebuilt=curbuilt,
             **classify_single_args,
-            assay_type = test_assay_type,
             num_threads=num_threads,
         )
+
+        all_ref_data.append(curref_ptr)
+        all_ref_labels.append(curref_labels)
+        all_ref_features.append(curref_features)
+        all_built.append(curbuilt)
+        all_results.append(res)
 
         res.metadata = {
             "markers": curbuilt.markers,
             "unique_markers": curbuilt.marker_subset(),
         }
-
-        all_ref_data.append(curref_data)
-        all_ref_labels.append(curref_labels)
-        all_ref_features.append(curref_features)
-        all_built.append(curbuilt)
-        all_results.append(res)
 
     ibuilt = build_integrated_references(
         test_features=test_features,
@@ -171,17 +203,15 @@ def annotate_integrated(
         ref_labels_list=all_ref_labels,
         ref_features_list=all_ref_features,
         ref_prebuilt_list=all_built,
-        assay_type = ref_assay_type,
-        num_threads=num_threads,
         **build_integrated_args,
+        num_threads=num_threads,
     )
 
     ires = classify_integrated_references(
-        test_data=test_data,
+        test_data=test_ptr,
         results=all_results,
         integrated_prebuilt=ibuilt,
         **classify_integrated_args,
-        assay_type = test_assay_type,
         num_threads=num_threads,
     )
 
