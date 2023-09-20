@@ -231,19 +231,19 @@
 <span class="sd">    for use in annotation with other **singler** functions.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        name (KNOWN_REFERENCE): Name of the reference dataset.</span>
+<span class="sd">        name: Name of the reference dataset.</span>
 
-<span class="sd">        cache_dir (str, optional): Path to a cache directory in which to store</span>
+<span class="sd">        cache_dir: Path to a cache directory in which to store</span>
 <span class="sd">            the files downloaded from the remote. If the files are already</span>
 <span class="sd">            present, the download is skipped.</span>
 
-<span class="sd">        multiple_ids (bool): Whether to report multiple feature IDs.</span>
+<span class="sd">        multiple_ids: Whether to report multiple feature IDs.</span>
 <span class="sd">            If True, each feature is represented by a list with zero,</span>
 <span class="sd">            one or more feature identifiers (e.g., for ambiguous mappings).</span>
 <span class="sd">            If False, each feature is represented by a string or None.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        SummarizedExperiment: The reference dataset as a SummarizedExperiment,</span>
+<span class="sd">        The reference dataset as a SummarizedExperiment,</span>
 <span class="sd">        parts of which can be passed to :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
 <span class="sd">    Specifically, the ``ranks`` assay of the output can be used as ``ref`` in</span>
@@ -394,32 +394,32 @@
     <span class="n">features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">num_markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">restrict_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">set</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]:</span> 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be</span>
 <span class="sd">    used in :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        markers (dict[Any, dict[Any, Sequence]]):</span>
+<span class="sd">        markers:</span>
 <span class="sd">            Upregulated markers for each pairwise comparison between labels.</span>
 <span class="sd">            Specifically, ``markers[a][b]`` should be a sequence of features</span>
 <span class="sd">            that are upregulated in ``a`` compared to ``b``. Features are</span>
 <span class="sd">            represented as indices into ``features``.</span>
 
-<span class="sd">        features (Sequence):</span>
+<span class="sd">        features:</span>
 <span class="sd">            Sequence of identifiers for each feature. Features with no valid</span>
 <span class="sd">            identifier for a particular gene type (e.g., no known symbol)</span>
 <span class="sd">            should be represented by None.</span>
 
-<span class="sd">        num_markers (int, optional):</span>
+<span class="sd">        num_markers:</span>
 <span class="sd">            Number of markers to retain. If None, all markers are retained.</span>
 
-<span class="sd">        restrict_to (Union[set, dict], optional):</span>
+<span class="sd">        restrict_to:</span>
 <span class="sd">            Subset of available features to restrict the marker selection.</span>
 <span class="sd">            Only features in ``restrict_to`` will be reported in the output.</span>
 <span class="sd">            If None, no restriction is performed.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict[Any, dict[Any, Sequence]]: A dictionary with the same structure</span>
+<span class="sd">        A dictionary with the same structure</span>
 <span class="sd">        as ``markers``, where each inner sequence contains the corresponding</span>
 <span class="sd">        feature identifiers in ``features``. Feature identifiers are guaranteed</span>
 <span class="sd">        to be non-None and to be in ``restrict_to`` (if specified). Each</span>

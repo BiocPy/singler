@@ -200,7 +200,7 @@
 <span></span><span class="kn">from</span> <span class="nn">mattress</span> <span class="kn">import</span> <span class="n">tatamize</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">uintp</span>
 <span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">SinglePrebuiltReference</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cpphelpers</span> <span class="k">as</span> <span class="n">lib</span>
@@ -210,7 +210,7 @@
 <div class="viewcode-block" id="classify_single_reference">
 <a class="viewcode-back" href="../../api/singler.html#singler.classify_single_reference.classify_single_reference">[docs]</a>
 <span class="k">def</span> <span class="nf">classify_single_reference</span><span class="p">(</span>
-    <span class="n">test_data</span><span class="p">,</span>
+    <span class="n">test_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">test_features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">ref_prebuilt</span><span class="p">:</span> <span class="n">SinglePrebuiltReference</span><span class="p">,</span>
     <span class="n">quantile</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
@@ -227,35 +227,31 @@
 <span class="sd">            Normalized and transformed expression values are also acceptable as only</span>
 <span class="sd">            the ranking is used within this function.</span>
 
-<span class="sd">            Alternatively, a</span>
-<span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
-<span class="sd">            containing such a matrix in one of its assays.</span>
-
-<span class="sd">        test_features (Sequence): Sequence of identifiers for each feature in the test</span>
+<span class="sd">        test_features: Sequence of identifiers for each feature in the test</span>
 <span class="sd">            dataset, i.e., row in ``test_data``.</span>
 
-<span class="sd">        ref_prebuilt (SinglePrebuiltReference):</span>
+<span class="sd">        ref_prebuilt:</span>
 <span class="sd">            A pre-built reference created with</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        quantile (float):</span>
+<span class="sd">        quantile:</span>
 <span class="sd">            Quantile of the correlation distribution for computing the score for each label.</span>
 <span class="sd">            Larger values increase sensitivity of matches at the expense of</span>
 <span class="sd">            similarity to the average behavior of each label.</span>
 
-<span class="sd">        use_fine_tune (bool):</span>
+<span class="sd">        use_fine_tune:</span>
 <span class="sd">            Whether fine-tuning should be performed. This improves accuracy for distinguishing</span>
 <span class="sd">            between similar labels but requires more computational work.</span>
 
-<span class="sd">        fine_tune_threshold (float):</span>
+<span class="sd">        fine_tune_threshold:</span>
 <span class="sd">            Maximum difference from the maximum correlation to use in fine-tuning.</span>
 <span class="sd">            All labels above this threshold are used for another round of fine-tuning.</span>
 
-<span class="sd">        num_threads (int):</span>
+<span class="sd">        num_threads:</span>
 <span class="sd">            Number of threads to use during classification.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        BiocFrame: A data frame containing the ``best`` label, the ``scores``</span>
+<span class="sd">        A data frame containing the ``best`` label, the ``scores``</span>
 <span class="sd">        for each label (as a nested BiocFrame), and the ``delta`` from the best</span>
 <span class="sd">        to the second-best label.  Each row corresponds to a column of ``test``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

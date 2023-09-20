@@ -218,11 +218,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">ref_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_features</span> <span class="o">=</span> <span class="n">test_features</span>
 
-<div class="viewcode-block" id="IntegratedReferences.__del__">
-<a class="viewcode-back" href="../../api/singler.html#singler.build_integrated_references.IntegratedReferences.__del__">[docs]</a>
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">lib</span><span class="o">.</span><span class="n">free_integrated_references</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span></div>
-
+        <span class="n">lib</span><span class="o">.</span><span class="n">free_integrated_references</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">reference_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
@@ -234,7 +231,8 @@
     <span class="k">def</span> <span class="nf">reference_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List of lists containing the names of the labels for each reference.</span>
 
-<span class="sd">        Each entry corresponds to a reference in :py:attr:`~names`, if not None.</span>
+<span class="sd">        Each entry corresponds to a reference in :py:attr:`~reference_names`, </span>
+<span class="sd">        if ``reference_names`` is not None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
 
@@ -254,32 +252,34 @@
     <span class="n">ref_features_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Sequence</span><span class="p">],</span>
     <span class="n">ref_prebuilt_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">SinglePrebuiltReference</span><span class="p">],</span>
     <span class="n">ref_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">num_threads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegratedReferences</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a set of integrated references for classification of a test dataset.</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        test_features (Sequence): Sequence of features for the test dataset.</span>
+<span class="sd">        test_features: Sequence of features for the test dataset.</span>
 
-<span class="sd">        ref_data_list (list): List of reference datasets, equivalent to ``ref_data`` in</span>
+<span class="sd">        ref_data_list: List of reference datasets, where each entry is equivalent to ``ref_data`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_labels_list (list[Sequence]): List of reference labels, equivalent to ``ref_labels`` in</span>
+<span class="sd">        ref_labels_list: List of reference labels, where each entry is equivalent to ``ref_labels`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_features_list (list[Sequence]): List of reference features, equivalent to ``ref_features`` in</span>
+<span class="sd">        ref_features_list: List of reference features, where each entry is equivalent to ``ref_features`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_prebuilt_list (list[SinglePrebuiltReference]): List of prebuilt references.</span>
+<span class="sd">        ref_prebuilt_list: List of prebuilt references, typically created by </span>
+<span class="sd">            calling :py:meth:`~singler.build_single_reference.build_single_reference` on the corresponding</span>
+<span class="sd">            elements of ``ref_data_list``, ``ref_labels_list`` and ``ref_features_list``.</span>
 
-<span class="sd">        ref_names (Sequence[str], optional): Sequence of names for the references.</span>
+<span class="sd">        ref_names: Sequence of names for the references.</span>
 <span class="sd">            If None, these are automatically generated.</span>
 
-<span class="sd">        num_threads (int):</span>
+<span class="sd">        num_threads:</span>
 <span class="sd">            Number of threads.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        IntegratedReferences: Integrated references for classification with</span>
+<span class="sd">        Integrated references for classification with</span>
 <span class="sd">        :py:meth:`~singler.classify_integrated_references.classify_integrated_references`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">universe</span> <span class="o">=</span> <span class="n">_stable_union</span><span class="p">(</span><span class="n">test_features</span><span class="p">,</span> <span class="o">*</span><span class="n">ref_features_list</span><span class="p">)</span>

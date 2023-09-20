@@ -212,18 +212,6 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A prebuilt reference object, typically created by</span>
 <span class="sd">    :py:meth:`~singler.build_single_reference.build_single_reference`. This is intended for advanced users only and</span>
 <span class="sd">    should not be serialized.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        labels (Sequence):</span>
-<span class="sd">            Sequence of unique label identifiers, usually strings.</span>
-
-<span class="sd">        features (Sequence):</span>
-<span class="sd">            Sequence of feature identifiers, usually strings.</span>
-<span class="sd">            This contains the universe of all features known to the reference,</span>
-<span class="sd">            not just the markers that are ultimately used for classification.</span>
-
-<span class="sd">        markers (dict[Any, dict[Any, Sequence]]):</span>
-<span class="sd">            Upregulated markers for each pairwise comparison between labels.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -238,11 +226,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span> <span class="o">=</span> <span class="n">markers</span>
 
-<div class="viewcode-block" id="SinglePrebuiltReference.__del__">
-<a class="viewcode-back" href="../../api/singler.html#singler.build_single_reference.SinglePrebuiltReference.__del__">[docs]</a>
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">lib</span><span class="o">.</span><span class="n">free_single_reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span></div>
-
+        <span class="n">lib</span><span class="o">.</span><span class="n">free_single_reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SinglePrebuiltReference.num_markers">
 <a class="viewcode-back" href="../../api/singler.html#singler.build_single_reference.SinglePrebuiltReference.num_markers">[docs]</a>
@@ -269,8 +254,7 @@
     <span class="k">def</span> <span class="nf">features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            Sequence: The universe of features known to this reference,</span>
-<span class="sd">            usually as strings.</span>
+<span class="sd">            The universe of features known to this reference, usually as strings.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_features</span>
 
@@ -278,7 +262,7 @@
     <span class="k">def</span> <span class="nf">labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            Sequence: Unique labels in this reference.</span>
+<span class="sd">            Unique labels in this reference.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
 
@@ -286,8 +270,7 @@
     <span class="k">def</span> <span class="nf">markers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison</span>
-<span class="sd">            between labels.</span>
+<span class="sd">            Markers for every pairwise comparison between labels.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span>
 
@@ -296,14 +279,14 @@
     <span class="k">def</span> <span class="nf">marker_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
-<span class="sd">            indices_only (bool): Whether to return the markers as indices</span>
+<span class="sd">            indices_only: Whether to return the markers as indices</span>
 <span class="sd">                into :py:attr:`~features`, or as a list of feature identifiers.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list: List of feature identifiers for the markers, if ``indices_only = False``.</span>
+<span class="sd">            If ``indices_only = False``, a list of feature identifiers for the markers.</span>
 
-<span class="sd">            ndarray: Integer indices of features in ``features`` that were</span>
-<span class="sd">            chosen as markers, if ``indices_only = True``.</span>
+<span class="sd">            If ``indices_only = True``, a NumPy array containing the integer indices of </span>
+<span class="sd">            features in ``features`` that were chosen as markers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nmarkers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_markers</span><span class="p">()</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">nmarkers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
@@ -316,21 +299,18 @@
 
 
 
-<span class="n">MARKER_DETECTION_METHODS</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;classic&quot;</span><span class="p">]</span>
-
-
 <div class="viewcode-block" id="build_single_reference">
 <a class="viewcode-back" href="../../api/singler.html#singler.build_single_reference.build_single_reference">[docs]</a>
 <span class="k">def</span> <span class="nf">build_single_reference</span><span class="p">(</span>
-    <span class="n">ref_data</span><span class="p">,</span>
+    <span class="n">ref_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">ref_labels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">ref_features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">assay_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;logcounts&quot;</span><span class="p">,</span>
     <span class="n">check_missing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">restrict_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">set</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">marker_method</span><span class="p">:</span> <span class="n">MARKER_DETECTION_METHODS</span> <span class="o">=</span> <span class="s2">&quot;classic&quot;</span><span class="p">,</span>
-    <span class="n">marker_args</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">marker_method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;classic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classic&quot;</span><span class="p">,</span>
+    <span class="n">marker_args</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="n">approximate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SinglePrebuiltReference</span><span class="p">:</span>
@@ -348,33 +328,33 @@
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
 <span class="sd">            containing such a matrix in one of its assays.</span>
 
-<span class="sd">        labels (Sequence): Sequence of labels for each reference profile,</span>
+<span class="sd">        labels: Sequence of labels for each reference profile,</span>
 <span class="sd">            i.e., column in ``ref``.</span>
 
-<span class="sd">        features (Sequence): Sequence of identifiers for each feature,</span>
+<span class="sd">        features: Sequence of identifiers for each feature,</span>
 <span class="sd">            i.e., row in ``ref``.</span>
 
-<span class="sd">        assay_type(str | int): Assay containing the expression matrix,</span>
+<span class="sd">        assay_type: Assay containing the expression matrix,</span>
 <span class="sd">            if `ref_data` is a</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.</span>
 
-<span class="sd">        check_missing (bool):</span>
+<span class="sd">        check_missing:</span>
 <span class="sd">            Whether to check for and remove rows with missing (NaN) values</span>
 <span class="sd">            from ``ref_data``.</span>
 
-<span class="sd">        restrict_to (Union[set, dict], optional):</span>
+<span class="sd">        restrict_to:</span>
 <span class="sd">            Subset of available features to restrict to. Only features in</span>
 <span class="sd">            ``restrict_to`` will be used in the reference building. If None,</span>
 <span class="sd">            no restriction is performed.</span>
 
-<span class="sd">        markers (dict[Any, dict[Any, Sequence]], optional):</span>
+<span class="sd">        markers:</span>
 <span class="sd">            Upregulated markers for each pairwise comparison between labels.</span>
 <span class="sd">            Specifically, ``markers[a][b]`` should be a sequence of features</span>
 <span class="sd">            that are upregulated in ``a`` compared to ``b``. All such features</span>
 <span class="sd">            should be present in ``features``, and all labels in ``labels``</span>
 <span class="sd">            should have keys in the inner and outer dictionaries.</span>
 
-<span class="sd">        marker_method (MARKER_DETECTION_METHODS):</span>
+<span class="sd">        marker_method:</span>
 <span class="sd">            Method to identify markers from each pairwise comparisons between</span>
 <span class="sd">            labels in ``ref_data``.  If &quot;classic&quot;, we call</span>
 <span class="sd">            :py:meth:`~singler.get_classic_markers.get_classic_markers`.</span>
@@ -384,16 +364,16 @@
 <span class="sd">            Further arguments to pass to the chosen marker detection method.</span>
 <span class="sd">            Only used if ``markers`` is not supplied.</span>
 
-<span class="sd">        approximate (bool):</span>
+<span class="sd">        approximate:</span>
 <span class="sd">            Whether to use an approximate neighbor search to compute scores</span>
 <span class="sd">            during classification.</span>
 
-<span class="sd">        num_threads (int):</span>
+<span class="sd">        num_threads:</span>
 <span class="sd">            Number of threads to use for reference building.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        SinglePrebuiltReference: The pre-built reference, ready for use in downstream</span>
-<span class="sd">        methods like :py:meth:`~singler.classify_single_reference.classify_single_reference`.</span>
+<span class="sd">        The pre-built reference, ready for use in downstream methods like </span>
+<span class="sd">        :py:meth:`~singler.classify_single_reference.classify_single_reference`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ref_ptr</span><span class="p">,</span> <span class="n">ref_features</span> <span class="o">=</span> <span class="n">_clean_matrix</span><span class="p">(</span>

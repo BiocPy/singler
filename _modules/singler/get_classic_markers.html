@@ -308,7 +308,7 @@
 <span class="sd">    datasets derived from replicated bulk transcriptomic experiments.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        ref_data(Any | list[Any]):</span>
+<span class="sd">        ref_data:</span>
 <span class="sd">            A matrix-like object containing the log-normalized expression values of a reference dataset.</span>
 <span class="sd">            Each column is a sample and each row is a feature.</span>
 <span class="sd">            Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
@@ -317,41 +317,41 @@
 <span class="sd">            typically for multiple batches of the same reference;</span>
 <span class="sd">            it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.</span>
 
-<span class="sd">        ref_labels (Any | list[Any]):</span>
+<span class="sd">        ref_labels:</span>
 <span class="sd">            A sequence of length equal to the number of columns of ``ref``,</span>
 <span class="sd">            containing a label (usually a string) for each column.</span>
 <span class="sd">            Alternatively, a list of such sequences of length equal to that of a list ``ref``;</span>
 <span class="sd">            each sequence should have length equal to the number of columns of the corresponding entry of ``ref``.</span>
 
-<span class="sd">        ref_features (Any | list[Any]):</span>
+<span class="sd">        ref_features:</span>
 <span class="sd">            A sequence of length equal to the number of rows of ``ref``,</span>
 <span class="sd">            containing the feature name (usually a string) for each row.</span>
 <span class="sd">            Alternatively, a list of such sequences of length equal to that of a list ``ref``;</span>
 <span class="sd">            each sequence should have length equal to the number of rows of the corresponding entry of ``ref``.</span>
 
-<span class="sd">        assay_type (str | int):</span>
+<span class="sd">        assay_type:</span>
 <span class="sd">            Name or index of the assay containing the assay of interest,</span>
 <span class="sd">            if ``ref`` is or contains</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment` objects.</span>
 
-<span class="sd">        check_missing (bool):</span>
+<span class="sd">        check_missing:</span>
 <span class="sd">            Whether to check for and remove rows with missing (NaN) values in the reference matrices.</span>
 <span class="sd">            This can be set to False if it is known that no NaN values exist.</span>
 
-<span class="sd">        restrict_to (Union[set, dict], optional):</span>
+<span class="sd">        restrict_to:</span>
 <span class="sd">            Subset of available features to restrict to. Only features in</span>
 <span class="sd">            ``restrict_to`` will be used in the reference building. If None,</span>
 <span class="sd">            no restriction is performed.</span>
 
-<span class="sd">        num_de (int, optional):</span>
+<span class="sd">        num_de:</span>
 <span class="sd">            Number of differentially expressed genes to use as markers for each pairwise comparison between labels.</span>
 <span class="sd">            If None, an appropriate number of genes is automatically determined.</span>
 
-<span class="sd">        num_threads (int):</span>
+<span class="sd">        num_threads:</span>
 <span class="sd">            Number of threads to use for the calculations.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        dict[Any, dict[Any, list]]: A dictionary of dictionary of lists</span>
+<span class="sd">        A dictionary of dictionary of lists</span>
 <span class="sd">        containing the markers for each pairwise comparison between labels,</span>
 <span class="sd">        i.e., ``markers[a][b]`` contains the upregulated markers for label</span>
 <span class="sd">        ``a`` over label ``b``.</span>
@@ -404,7 +404,7 @@
 <span class="sd">    algorithm.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        num_labels (int): Number of labels.</span>
+<span class="sd">        num_labels: Number of labels.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        int: Number of markers.</span>
