@@ -203,32 +203,631 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
-<section id="singler-annotate-integrated-module">
-<h2>singler.annotate_integrated module<a class="headerlink" href="#singler-annotate-integrated-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.annotate_integrated">
+<span id="singler-annotate-integrated-module"></span><h2>singler.annotate_integrated module<a class="headerlink" href="#module-singler.annotate_integrated" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.annotate_integrated.annotate_integrated">
+<span class="sig-prename descclassname"><span class="pre">singler.annotate_integrated.</span></span><span class="sig-name descname"><span class="pre">annotate_integrated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_single_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify_single_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_integrated_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify_integrated_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">BiocFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">BiocFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/singler/annotate_integrated.html#annotate_integrated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.annotate_integrated.annotate_integrated" title="Link to this definition">#</a></dt>
+<dd><p>Annotate a single-cell expression dataset based on the correlation
+of each cell to profiles in multiple labelled references, where the
+annotation from each reference is then integrated across references.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – A matrix-like object representing the test dataset, where rows are
+features and columns are samples (usually cells). Entries should be expression
+values; only the ranking within each column will be used.</p></li>
+<li><p><strong>test_features</strong> (<em>Sequence</em>) – Sequence of length equal to the number of rows in
+<code class="docutils literal notranslate"><span class="pre">test_data</span></code>, containing the feature identifier for each row.</p></li>
+<li><p><strong>ref_data</strong> – <p>Sequence consisting of one or more of the following:</p>
+<ul>
+<li><p>A matrix-like object representing the reference dataset, where rows
+are features and columns are samples. Entries should be expression values,
+usually log-transformed (see comments for the <code class="docutils literal notranslate"><span class="pre">ref</span></code> argument in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>).</p></li>
+<li><p>A string that can be passed as <code class="docutils literal notranslate"><span class="pre">name</span></code> to
+<a class="reference internal" href="#singler.fetch_reference.fetch_github_reference" title="singler.fetch_reference.fetch_github_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_github_reference()</span></code></a>.
+This will use the specified dataset as the reference.</p></li>
+</ul>
+</p></li>
+<li><p><strong>ref_labels</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>Sequence</em><em>[</em><em>Union</em><em>[</em><em>Sequence</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – <p>Sequence of the same length as <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>, where the contents
+depend on the type of value in the corresponding entry of <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>:</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ref_data[i]</span></code> is a matrix-like object, <code class="docutils literal notranslate"><span class="pre">ref_labels[i]</span></code> should be
+a sequence of length equal to the number of columns of <code class="docutils literal notranslate"><span class="pre">ref_data[i]</span></code>,
+containing the label associated with each column.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ref_data[i]</span></code> is a string, <code class="docutils literal notranslate"><span class="pre">ref_labels[i]</span></code> should be a string
+specifying the label type to use, e.g., “main”, “fine”, “ont”.</p></li>
+</ul>
+<blockquote>
+<div><p>If a single string is supplied, it is recycled for all <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>ref_features</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>Sequence</em><em>[</em><em>Union</em><em>[</em><em>Sequence</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – <p>Sequence of the same length as <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>, where the contents
+depend on the type of value in the corresponding entry of <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>:</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ref_data[i]</span></code> is a matrix-like object, <code class="docutils literal notranslate"><span class="pre">ref_features[i]</span></code> should be
+a sequence of length equal to the number of rows of <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>,
+containing the feature identifier associated with each row.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ref_data[i]</span></code> is a string, <code class="docutils literal notranslate"><span class="pre">ref_features[i]</span></code> should be a string
+specifying the feature type to use, e.g., “ensembl”, “symbol”.</p></li>
+</ul>
+<blockquote>
+<div><p>If a single string is supplied, it is recycled for all <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Path to a cache directory for downloading reference files, see
+<a class="reference internal" href="#singler.fetch_reference.fetch_github_reference" title="singler.fetch_reference.fetch_github_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_github_reference()</span></code></a> for details.
+Only used if <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a string.</p></li>
+<li><p><strong>build_single_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>classify_single_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<a class="reference internal" href="#singler.classify_single_reference.classify_single_reference" title="singler.classify_single_reference.classify_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a>.</p></li>
+<li><p><strong>build_integrated_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">build_integrated_reference()</span></code>.</p></li>
+<li><p><strong>classify_integrated_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_integrated_reference()</span></code>.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use for the various steps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple where the first element
+contains per-reference results (i.e. a list of BiocFrame outputs
+equivalent to running
+<a class="reference internal" href="#singler.annotate_single.annotate_single" title="singler.annotate_single.annotate_single"><code class="xref py py-meth docutils literal notranslate"><span class="pre">annotate_single()</span></code></a> on each reference)
+and the second element contains integrated results across references
+(i.e., a BiocFrame from
+<a class="reference internal" href="#singler.classify_integrated_references.classify_integrated_references" title="singler.classify_integrated_references.classify_integrated_references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_integrated_references()</span></code></a>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)">list</a>[BiocFrame], BiocFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-annotate-single-module">
-<h2>singler.annotate_single module<a class="headerlink" href="#singler-annotate-single-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.annotate_single">
+<span id="singler-annotate-single-module"></span><h2>singler.annotate_single module<a class="headerlink" href="#module-singler.annotate_single" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.annotate_single.annotate_single">
+<span class="sig-prename descclassname"><span class="pre">singler.annotate_single.</span></span><span class="sig-name descname"><span class="pre">annotate_single</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classify_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BiocFrame</span></span></span><a class="reference internal" href="../_modules/singler/annotate_single.html#annotate_single"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.annotate_single.annotate_single" title="Link to this definition">#</a></dt>
+<dd><p>Annotate a single-cell expression dataset based on the correlation
+of each cell to profiles in a labelled reference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – A matrix-like object representing the test dataset, where rows are
+features and columns are samples (usually cells). Entries should be expression
+values; only the ranking within each column will be used.</p></li>
+<li><p><strong>test_features</strong> (<em>Sequence</em>) – Sequence of length equal to the number of rows in
+<code class="docutils literal notranslate"><span class="pre">test_data</span></code>, containing the feature identifier for each row.</p></li>
+<li><p><strong>ref_data</strong> – <p>A matrix-like object representing the reference dataset, where rows
+are features and columns are samples. Entries should be expression values,
+usually log-transformed (see comments for the <code class="docutils literal notranslate"><span class="pre">ref</span></code> argument in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>).</p>
+<p>Alternatively, a string that can be passed as <code class="docutils literal notranslate"><span class="pre">name</span></code> to
+<a class="reference internal" href="#singler.fetch_reference.fetch_github_reference" title="singler.fetch_reference.fetch_github_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_github_reference()</span></code></a>.
+This will use the specified dataset as the reference.</p>
+</p></li>
+<li><p><strong>ref_labels</strong> (<em>Union</em><em>[</em><em>Sequence</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a matrix-like object, <code class="docutils literal notranslate"><span class="pre">ref_labels</span></code> should be
+a sequence of length equal to the number of columns of <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>,
+containing the label associated with each column.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a string, <code class="docutils literal notranslate"><span class="pre">ref_labels</span></code> should be a string
+specifying the label type to use, e.g., “main”, “fine”, “ont”.</p>
+</p></li>
+<li><p><strong>ref_features</strong> (<em>Union</em><em>[</em><em>Sequence</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a matrix-like object, <code class="docutils literal notranslate"><span class="pre">ref_features</span></code> should be
+a sequence of length equal to the number of rows of <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>,
+containing the feature identifier associated with each row.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a string, <code class="docutils literal notranslate"><span class="pre">ref_features</span></code> should be a string
+specifying the label type to use, e.g., “ensembl”, “symbol”.</p>
+</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Path to a cache directory for downloading reference files, see
+<a class="reference internal" href="#singler.fetch_reference.fetch_github_reference" title="singler.fetch_reference.fetch_github_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_github_reference()</span></code></a> for details.
+Only used if <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> is a string.</p></li>
+<li><p><strong>build_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>classify_args</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Further arguments to pass to
+<a class="reference internal" href="#singler.classify_single_reference.classify_single_reference" title="singler.classify_single_reference.classify_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a>.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use for the various steps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A data frame containing the labelling results, see
+<a class="reference internal" href="#singler.classify_single_reference.classify_single_reference" title="singler.classify_single_reference.classify_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a>
+for details. The metadata also contains a <code class="docutils literal notranslate"><span class="pre">markers</span></code> dictionary,
+specifying the markers that were used for each pairwise comparison
+between labels; and a list of <code class="docutils literal notranslate"><span class="pre">unique_markers</span></code> across all labels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BiocFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-build-integrated-references-module">
-<h2>singler.build_integrated_references module<a class="headerlink" href="#singler-build-integrated-references-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.build_integrated_references">
+<span id="singler-build-integrated-references-module"></span><h2>singler.build_integrated_references module<a class="headerlink" href="#module-singler.build_integrated_references" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="singler.build_integrated_references.IntegratedReferences">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singler.build_integrated_references.</span></span><span class="sig-name descname"><span class="pre">IntegratedReferences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singler/build_integrated_references.html#IntegratedReferences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_integrated_references.IntegratedReferences" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Object containing integrated references, typically constructed by
+<a class="reference internal" href="#singler.build_integrated_references.build_integrated_references" title="singler.build_integrated_references.build_integrated_references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_integrated_references()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="singler.build_integrated_references.IntegratedReferences.__del__">
+<span class="sig-name descname"><span class="pre">__del__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singler/build_integrated_references.html#IntegratedReferences.__del__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_integrated_references.IntegratedReferences.__del__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="singler.build_integrated_references.IntegratedReferences.reference_labels">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reference_labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a></em><a class="headerlink" href="#singler.build_integrated_references.IntegratedReferences.reference_labels" title="Link to this definition">#</a></dt>
+<dd><p>List of lists containing the names of the labels for each reference.</p>
+<p>Each entry corresponds to a reference in <code class="xref py py-attr docutils literal notranslate"><span class="pre">names</span></code>, if not None.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="singler.build_integrated_references.IntegratedReferences.reference_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reference_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></em><a class="headerlink" href="#singler.build_integrated_references.IntegratedReferences.reference_names" title="Link to this definition">#</a></dt>
+<dd><p>Sequence containing the names of the references. Alternatively
+None, if no names were supplied.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="singler.build_integrated_references.IntegratedReferences.test_features">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#singler.build_integrated_references.IntegratedReferences.test_features" title="Link to this definition">#</a></dt>
+<dd><p>Sequence containing the names of the test features.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.build_integrated_references.build_integrated_references">
+<span class="sig-prename descclassname"><span class="pre">singler.build_integrated_references.</span></span><span class="sig-name descname"><span class="pre">build_integrated_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_data_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_features_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_prebuilt_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference"><span class="pre">SinglePrebuiltReference</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences" title="singler.build_integrated_references.IntegratedReferences"><span class="pre">IntegratedReferences</span></a></span></span><a class="reference internal" href="../_modules/singler/build_integrated_references.html#build_integrated_references"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_integrated_references.build_integrated_references" title="Link to this definition">#</a></dt>
+<dd><p>Build a set of integrated references for classification of a test dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_features</strong> (<em>Sequence</em>) – Sequence of features for the test dataset.</p></li>
+<li><p><strong>ref_data_list</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – List of reference datasets, equivalent to <code class="docutils literal notranslate"><span class="pre">ref_data</span></code> in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>ref_labels_list</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Sequence</em><em>]</em>) – List of reference labels, equivalent to <code class="docutils literal notranslate"><span class="pre">ref_labels</span></code> in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>ref_features_list</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Sequence</em><em>]</em>) – List of reference features, equivalent to <code class="docutils literal notranslate"><span class="pre">ref_features</span></code> in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>ref_prebuilt_list</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference"><em>SinglePrebuiltReference</em></a><em>]</em>) – List of prebuilt references.</p></li>
+<li><p><strong>ref_names</strong> (<em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – Sequence of names for the references.
+If None, these are automatically generated.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Integrated references for classification with
+<a class="reference internal" href="#singler.classify_integrated_references.classify_integrated_references" title="singler.classify_integrated_references.classify_integrated_references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_integrated_references()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences" title="singler.build_integrated_references.IntegratedReferences">IntegratedReferences</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-build-single-reference-module">
-<h2>singler.build_single_reference module<a class="headerlink" href="#singler-build-single-reference-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.build_single_reference">
+<span id="singler-build-single-reference-module"></span><h2>singler.build_single_reference module<a class="headerlink" href="#module-singler.build_single_reference" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">singler.build_single_reference.</span></span><span class="sig-name descname"><span class="pre">SinglePrebuiltReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ptr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singler/build_single_reference.html#SinglePrebuiltReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A prebuilt reference object, typically created by
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>. This is intended for advanced users only and
+should not be serialized.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.labels" title="Link to this definition">#</a></dt>
+<dd><p>Sequence of unique label identifiers, usually strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.features">
+<span class="sig-name descname"><span class="pre">features</span></span><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.features" title="Link to this definition">#</a></dt>
+<dd><p>Sequence of feature identifiers, usually strings.
+This contains the universe of all features known to the reference,
+not just the markers that are ultimately used for classification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.markers">
+<span class="sig-name descname"><span class="pre">markers</span></span><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.markers" title="Link to this definition">#</a></dt>
+<dd><p>Upregulated markers for each pairwise comparison between labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, Sequence]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.__del__">
+<span class="sig-name descname"><span class="pre">__del__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singler/build_single_reference.html#SinglePrebuiltReference.__del__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.__del__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></em><a class="headerlink" href="#id0" title="Link to this definition">#</a></dt>
+<dd><p>Returns:
+Sequence: The universe of features known to this reference,
+usually as strings.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></em><a class="headerlink" href="#id1" title="Link to this definition">#</a></dt>
+<dd><p>Returns:
+Sequence: Unique labels in this reference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.marker_subset">
+<span class="sig-name descname"><span class="pre">marker_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a></span></span><a class="reference internal" href="../_modules/singler/build_single_reference.html#SinglePrebuiltReference.marker_subset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.marker_subset" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>indices_only</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether to return the markers as indices
+into <a class="reference internal" href="#id0" title="singler.build_single_reference.SinglePrebuiltReference.features"><code class="xref py py-attr docutils literal notranslate"><span class="pre">features</span></code></a>, or as a list of feature identifiers.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>List of feature identifiers for the markers, if <code class="docutils literal notranslate"><span class="pre">indices_only</span> <span class="pre">=</span> <span class="pre">False</span></code>.</p>
+<p>ndarray: Integer indices of features in <code class="docutils literal notranslate"><span class="pre">features</span></code> that were
+chosen as markers, if <code class="docutils literal notranslate"><span class="pre">indices_only</span> <span class="pre">=</span> <span class="pre">True</span></code>.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">markers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#id2" title="Link to this definition">#</a></dt>
+<dd><p>Returns:
+dict[Any, dict[Any, Sequence]]: Markers for every pairwise comparison
+between labels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.num_labels">
+<span class="sig-name descname"><span class="pre">num_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/singler/build_single_reference.html#SinglePrebuiltReference.num_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.num_labels" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of unique labels in this reference.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="singler.build_single_reference.SinglePrebuiltReference.num_markers">
+<span class="sig-name descname"><span class="pre">num_markers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/singler/build_single_reference.html#SinglePrebuiltReference.num_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.SinglePrebuiltReference.num_markers" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of markers to be used for classification. This is the
+same as the size of the array from <a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.marker_subset" title="singler.build_single_reference.SinglePrebuiltReference.marker_subset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">marker_subset()</span></code></a>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.build_single_reference.build_single_reference">
+<span class="sig-prename descclassname"><span class="pre">singler.build_single_reference.</span></span><span class="sig-name descname"><span class="pre">build_single_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">assay_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logcounts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restrict_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><span class="pre">set</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'classic'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approximate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference"><span class="pre">SinglePrebuiltReference</span></a></span></span><a class="reference internal" href="../_modules/singler/build_single_reference.html#build_single_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.build_single_reference.build_single_reference" title="Link to this definition">#</a></dt>
+<dd><p>Build a single reference dataset in preparation for classification.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_data</strong> – <p>A matrix-like object where rows are features, columns are
+reference profiles, and each entry is the expression value.
+If <cite>markers</cite> is not provided, expression should be normalized
+and log-transformed in preparation for marker prioritization via
+differential expression analyses. Otherwise, any expression values
+are acceptable as only the ranking within each column is used.</p>
+<p>Alternatively, a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code>
+containing such a matrix in one of its assays.</p>
+</p></li>
+<li><p><strong>labels</strong> (<em>Sequence</em>) – Sequence of labels for each reference profile,
+i.e., column in <code class="docutils literal notranslate"><span class="pre">ref</span></code>.</p></li>
+<li><p><strong>features</strong> (<em>Sequence</em>) – Sequence of identifiers for each feature,
+i.e., row in <code class="docutils literal notranslate"><span class="pre">ref</span></code>.</p></li>
+<li><p><strong>assay_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Assay containing the expression matrix,
+if <cite>ref_data</cite> is a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code>.</p></li>
+<li><p><strong>check_missing</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether to check for and remove rows with missing (NaN) values
+from <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>.</p></li>
+<li><p><strong>restrict_to</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>]</em><em>, </em><em>optional</em>) – Subset of available features to restrict to. Only features in
+<code class="docutils literal notranslate"><span class="pre">restrict_to</span></code> will be used in the reference building. If None,
+no restriction is performed.</p></li>
+<li><p><strong>markers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><em>Any</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><em>Any</em><em>, </em><em>Sequence</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Upregulated markers for each pairwise comparison between labels.
+Specifically, <code class="docutils literal notranslate"><span class="pre">markers[a][b]</span></code> should be a sequence of features
+that are upregulated in <code class="docutils literal notranslate"><span class="pre">a</span></code> compared to <code class="docutils literal notranslate"><span class="pre">b</span></code>. All such features
+should be present in <code class="docutils literal notranslate"><span class="pre">features</span></code>, and all labels in <code class="docutils literal notranslate"><span class="pre">labels</span></code>
+should have keys in the inner and outer dictionaries.</p></li>
+<li><p><strong>marker_method</strong> (<em>MARKER_DETECTION_METHODS</em>) – Method to identify markers from each pairwise comparisons between
+labels in <code class="docutils literal notranslate"><span class="pre">ref_data</span></code>.  If “classic”, we call
+<a class="reference internal" href="#singler.get_classic_markers.get_classic_markers" title="singler.get_classic_markers.get_classic_markers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_classic_markers()</span></code></a>.
+Only used if <code class="docutils literal notranslate"><span class="pre">markers</span></code> is not supplied.</p></li>
+<li><p><strong>marker_args</strong> – Further arguments to pass to the chosen marker detection method.
+Only used if <code class="docutils literal notranslate"><span class="pre">markers</span></code> is not supplied.</p></li>
+<li><p><strong>approximate</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether to use an approximate neighbor search to compute scores
+during classification.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use for reference building.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The pre-built reference, ready for use in downstream
+methods like <a class="reference internal" href="#singler.classify_single_reference.classify_single_reference" title="singler.classify_single_reference.classify_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference">SinglePrebuiltReference</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-classify-integrated-references-module">
-<h2>singler.classify_integrated_references module<a class="headerlink" href="#singler-classify-integrated-references-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.classify_integrated_references">
+<span id="singler-classify-integrated-references-module"></span><h2>singler.classify_integrated_references module<a class="headerlink" href="#module-singler.classify_integrated_references" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.classify_integrated_references.classify_integrated_references">
+<span class="sig-prename descclassname"><span class="pre">singler.classify_integrated_references.</span></span><span class="sig-name descname"><span class="pre">classify_integrated_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><span class="pre">BiocFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrated_prebuilt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences" title="singler.build_integrated_references.IntegratedReferences"><span class="pre">IntegratedReferences</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BiocFrame</span></span></span><a class="reference internal" href="../_modules/singler/classify_integrated_references.html#classify_integrated_references"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.classify_integrated_references.classify_integrated_references" title="Link to this definition">#</a></dt>
+<dd><p>Integrate classification results across multiple references for a single test dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – A matrix-like object where each row is a feature and each column
+is a test sample (usually a single cell), containing expression values.
+Normalized and/or transformed expression values are also acceptable as only
+the ranking is used within this function.</p></li>
+<li><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Union</em><em>[</em><em>BiocFrame</em><em>, </em><em>Sequence</em><em>]</em><em>]</em>) – List of classification results generated by running
+<a class="reference internal" href="#singler.classify_single_reference.classify_single_reference" title="singler.classify_single_reference.classify_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a>
+on <code class="docutils literal notranslate"><span class="pre">test_data</span></code> with each reference. This may be either the full
+data frame or just the <code class="docutils literal notranslate"><span class="pre">&quot;best&quot;</span></code> column. References should be ordered
+as in <code class="docutils literal notranslate"><span class="pre">integrated_prebuilt.reference_names</span></code>.</p></li>
+<li><p><strong>integrated_prebuilt</strong> (<a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences" title="singler.build_integrated_references.IntegratedReferences"><em>IntegratedReferences</em></a>) – Integrated reference object, constructed with
+<a class="reference internal" href="#singler.build_integrated_references.build_integrated_references" title="singler.build_integrated_references.build_integrated_references"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_integrated_references()</span></code></a>.</p></li>
+<li><p><strong>quantile</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Quantile of the correlation distribution for computing the score for each label.
+Larger values increase sensitivity of matches at the expense of
+similarity to the average behavior of each label.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use during classification.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A data frame containing the <code class="docutils literal notranslate"><span class="pre">best_label</span></code> across all
+references, defined as the assigned label in the best reference; the
+identity of the <code class="docutils literal notranslate"><span class="pre">best_reference</span></code>, either as a name string or an
+integer index; the <code class="docutils literal notranslate"><span class="pre">scores</span></code> for each reference, as a nested
+BiocFrame; and the <code class="docutils literal notranslate"><span class="pre">delta</span></code> from the best to the second-best
+reference. Each row corresponds to a column of <code class="docutils literal notranslate"><span class="pre">test</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BiocFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-classify-single-reference-module">
-<h2>singler.classify_single_reference module<a class="headerlink" href="#singler-classify-single-reference-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.classify_single_reference">
+<span id="singler-classify-single-reference-module"></span><h2>singler.classify_single_reference module<a class="headerlink" href="#module-singler.classify_single_reference" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.classify_single_reference.classify_single_reference">
+<span class="sig-prename descclassname"><span class="pre">singler.classify_single_reference.</span></span><span class="sig-name descname"><span class="pre">classify_single_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_prebuilt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference"><span class="pre">SinglePrebuiltReference</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fine_tune</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fine_tune_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BiocFrame</span></span></span><a class="reference internal" href="../_modules/singler/classify_single_reference.html#classify_single_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.classify_single_reference.classify_single_reference" title="Link to this definition">#</a></dt>
+<dd><p>Classify a test dataset against a reference by assigning labels from the latter to each column of the former
+using the SingleR algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_data</strong> – <p>A matrix-like object where each row is a feature and each column
+is a test sample (usually a single cell), containing expression values.
+Normalized and transformed expression values are also acceptable as only
+the ranking is used within this function.</p>
+<p>Alternatively, a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code>
+containing such a matrix in one of its assays.</p>
+</p></li>
+<li><p><strong>test_features</strong> (<em>Sequence</em>) – Sequence of identifiers for each feature in the test
+dataset, i.e., row in <code class="docutils literal notranslate"><span class="pre">test_data</span></code>.</p></li>
+<li><p><strong>ref_prebuilt</strong> (<a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference" title="singler.build_single_reference.SinglePrebuiltReference"><em>SinglePrebuiltReference</em></a>) – A pre-built reference created with
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p></li>
+<li><p><strong>quantile</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Quantile of the correlation distribution for computing the score for each label.
+Larger values increase sensitivity of matches at the expense of
+similarity to the average behavior of each label.</p></li>
+<li><p><strong>use_fine_tune</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether fine-tuning should be performed. This improves accuracy for distinguishing
+between similar labels but requires more computational work.</p></li>
+<li><p><strong>fine_tune_threshold</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Maximum difference from the maximum correlation to use in fine-tuning.
+All labels above this threshold are used for another round of fine-tuning.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use during classification.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A data frame containing the <code class="docutils literal notranslate"><span class="pre">best</span></code> label, the <code class="docutils literal notranslate"><span class="pre">scores</span></code>
+for each label (as a nested BiocFrame), and the <code class="docutils literal notranslate"><span class="pre">delta</span></code> from the best
+to the second-best label.  Each row corresponds to a column of <code class="docutils literal notranslate"><span class="pre">test</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BiocFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-fetch-reference-module">
-<h2>singler.fetch_reference module<a class="headerlink" href="#singler-fetch-reference-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.fetch_reference">
+<span id="singler-fetch-reference-module"></span><h2>singler.fetch_reference module<a class="headerlink" href="#module-singler.fetch_reference" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.fetch_reference.fetch_github_reference">
+<span class="sig-prename descclassname"><span class="pre">singler.fetch_reference.</span></span><span class="sig-name descname"><span class="pre">fetch_github_reference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'BlueprintEncode'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'DatabaseImmuneCellExpression'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'HumanPrimaryCellAtlas'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'MonacoImmune'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'NovershternHematopoietic'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ImmGen'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'MouseRNAseq'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiple_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">SummarizedExperiment</span></span></span><a class="reference internal" href="../_modules/singler/fetch_reference.html#fetch_github_reference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.fetch_reference.fetch_github_reference" title="Link to this definition">#</a></dt>
+<dd><p>Fetch a reference dataset from the
+<a class="reference external" href="https://github.com/kanaverse/singlepp-references">pre-compiled GitHub registry</a>,
+for use in annotation with other <strong>singler</strong> functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>KNOWN_REFERENCE</em>) – Name of the reference dataset.</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a cache directory in which to store
+the files downloaded from the remote. If the files are already
+present, the download is skipped.</p></li>
+<li><p><strong>multiple_ids</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether to report multiple feature IDs.
+If True, each feature is represented by a list with zero,
+one or more feature identifiers (e.g., for ambiguous mappings).
+If False, each feature is represented by a string or None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The reference dataset as a SummarizedExperiment,
+parts of which can be passed to <a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SummarizedExperiment</p>
+</dd>
+</dl>
+<p>Specifically, the <code class="docutils literal notranslate"><span class="pre">ranks</span></code> assay of the output can be used as <code class="docutils literal notranslate"><span class="pre">ref</span></code> in
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>;
+one of the labels in the column data can be used as <code class="docutils literal notranslate"><span class="pre">labels</span></code>;
+and one of the gene types in the row data can be used as <code class="docutils literal notranslate"><span class="pre">features</span></code>.</p>
+<p>As the ranks are not log-normalized values, users should also use
+the relevant pre-computed marker list in the metadata. The selected
+marker list should match up with the chosen set of <code class="docutils literal notranslate"><span class="pre">labels</span></code>. In
+addition, the markers are stored as row indices and need to be converted
+to feature identifiers; this is achieved by passing the marker list to
+<a class="reference internal" href="#singler.fetch_reference.realize_github_markers" title="singler.fetch_reference.realize_github_markers"><code class="xref py py-meth docutils literal notranslate"><span class="pre">realize_github_markers()</span></code></a> with the same
+gene types that were used in <code class="docutils literal notranslate"><span class="pre">features</span></code>. The output can then be passed
+as <code class="docutils literal notranslate"><span class="pre">markers</span></code> in the <cite>build_reference()</cite> call.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">multiple_ids</span> <span class="pre">=</span> <span class="pre">True</span></code>, each <code class="docutils literal notranslate"><span class="pre">row_data</span></code> column will be a list of
+lists of possible identifiers for each feature. Callers are responsible for
+resolving this list of lists into a list of single identifiers for each
+feature, before passing it onto other functions like
+<a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.fetch_reference.realize_github_markers">
+<span class="sig-prename descclassname"><span class="pre">singler.fetch_reference.</span></span><span class="sig-name descname"><span class="pre">realize_github_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_markers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restrict_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><span class="pre">set</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/singler/fetch_reference.html#realize_github_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.fetch_reference.realize_github_markers" title="Link to this definition">#</a></dt>
+<dd><p>Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be
+used in <a class="reference internal" href="#singler.build_single_reference.build_single_reference" title="singler.build_single_reference.build_single_reference"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>markers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><em>Any</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><em>Any</em><em>, </em><em>Sequence</em><em>]</em><em>]</em>) – Upregulated markers for each pairwise comparison between labels.
+Specifically, <code class="docutils literal notranslate"><span class="pre">markers[a][b]</span></code> should be a sequence of features
+that are upregulated in <code class="docutils literal notranslate"><span class="pre">a</span></code> compared to <code class="docutils literal notranslate"><span class="pre">b</span></code>. Features are
+represented as indices into <code class="docutils literal notranslate"><span class="pre">features</span></code>.</p></li>
+<li><p><strong>features</strong> (<em>Sequence</em>) – Sequence of identifiers for each feature. Features with no valid
+identifier for a particular gene type (e.g., no known symbol)
+should be represented by None.</p></li>
+<li><p><strong>num_markers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of markers to retain. If None, all markers are retained.</p></li>
+<li><p><strong>restrict_to</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>]</em><em>, </em><em>optional</em>) – Subset of available features to restrict the marker selection.
+Only features in <code class="docutils literal notranslate"><span class="pre">restrict_to</span></code> will be reported in the output.
+If None, no restriction is performed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary with the same structure
+as <code class="docutils literal notranslate"><span class="pre">markers</span></code>, where each inner sequence contains the corresponding
+feature identifiers in <code class="docutils literal notranslate"><span class="pre">features</span></code>. Feature identifiers are guaranteed
+to be non-None and to be in <code class="docutils literal notranslate"><span class="pre">restrict_to</span></code> (if specified). Each
+inner sequence should have length <code class="docutils literal notranslate"><span class="pre">num_markers</span></code> (or less, if not
+enough non-None/restricted identifiers are available).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, Sequence]]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="singler-get-classic-markers-module">
-<h2>singler.get_classic_markers module<a class="headerlink" href="#singler-get-classic-markers-module" title="Link to this heading">#</a></h2>
+<section id="module-singler.get_classic_markers">
+<span id="singler-get-classic-markers-module"></span><h2>singler.get_classic_markers module<a class="headerlink" href="#module-singler.get_classic_markers" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.get_classic_markers.get_classic_markers">
+<span class="sig-prename descclassname"><span class="pre">singler.get_classic_markers.</span></span><span class="sig-name descname"><span class="pre">get_classic_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Sequence" title="(in Python v3.9)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assay_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'logcounts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restrict_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><span class="pre">set</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_de</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_threads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/singler/get_classic_markers.html#get_classic_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.get_classic_markers.get_classic_markers" title="Link to this definition">#</a></dt>
+<dd><p>Compute markers from a reference using the classic SingleR algorithm. This is typically done for reference
+datasets derived from replicated bulk transcriptomic experiments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref_data</strong> (<em>Any</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Any</em><em>]</em>) – A matrix-like object containing the log-normalized expression values of a reference dataset.
+Each column is a sample and each row is a feature.
+Alternatively, this can be a <code class="xref py py-class docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code>
+containing a matrix-like object in one of its assays.
+Alternatively, a list of such matrices or <code class="docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code> objects,
+typically for multiple batches of the same reference;
+it is assumed that different batches exhibit at least some overlap in their <code class="docutils literal notranslate"><span class="pre">features</span></code> and <code class="docutils literal notranslate"><span class="pre">labels</span></code>.</p></li>
+<li><p><strong>ref_labels</strong> (<em>Any</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Any</em><em>]</em>) – A sequence of length equal to the number of columns of <code class="docutils literal notranslate"><span class="pre">ref</span></code>,
+containing a label (usually a string) for each column.
+Alternatively, a list of such sequences of length equal to that of a list <code class="docutils literal notranslate"><span class="pre">ref</span></code>;
+each sequence should have length equal to the number of columns of the corresponding entry of <code class="docutils literal notranslate"><span class="pre">ref</span></code>.</p></li>
+<li><p><strong>ref_features</strong> (<em>Any</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><em>Any</em><em>]</em>) – A sequence of length equal to the number of rows of <code class="docutils literal notranslate"><span class="pre">ref</span></code>,
+containing the feature name (usually a string) for each row.
+Alternatively, a list of such sequences of length equal to that of a list <code class="docutils literal notranslate"><span class="pre">ref</span></code>;
+each sequence should have length equal to the number of rows of the corresponding entry of <code class="docutils literal notranslate"><span class="pre">ref</span></code>.</p></li>
+<li><p><strong>assay_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Name or index of the assay containing the assay of interest,
+if <code class="docutils literal notranslate"><span class="pre">ref</span></code> is or contains
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SummarizedExperiment</span></code> objects.</p></li>
+<li><p><strong>check_missing</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Whether to check for and remove rows with missing (NaN) values in the reference matrices.
+This can be set to False if it is known that no NaN values exist.</p></li>
+<li><p><strong>restrict_to</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#set" title="(in Python v3.9)"><em>set</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>]</em><em>, </em><em>optional</em>) – Subset of available features to restrict to. Only features in
+<code class="docutils literal notranslate"><span class="pre">restrict_to</span></code> will be used in the reference building. If None,
+no restriction is performed.</p></li>
+<li><p><strong>num_de</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of differentially expressed genes to use as markers for each pairwise comparison between labels.
+If None, an appropriate number of genes is automatically determined.</p></li>
+<li><p><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of threads to use for the calculations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary of dictionary of lists
+containing the markers for each pairwise comparison between labels,
+i.e., <code class="docutils literal notranslate"><span class="pre">markers[a][b]</span></code> contains the upregulated markers for label
+<code class="docutils literal notranslate"><span class="pre">a</span></code> over label <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a>[Any, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)">list</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="singler.get_classic_markers.number_of_classic_markers">
+<span class="sig-prename descclassname"><span class="pre">singler.get_classic_markers.</span></span><span class="sig-name descname"><span class="pre">number_of_classic_markers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../_modules/singler/get_classic_markers.html#number_of_classic_markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#singler.get_classic_markers.number_of_classic_markers" title="Link to this definition">#</a></dt>
+<dd><p>Compute the number of markers to detect for a given number of labels, using the classic SingleR marker detection
+algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of labels.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of markers.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+<section id="module-singler">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-singler" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -281,15 +880,61 @@
             <ul>
 <li><a class="reference internal" href="#">singler package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#singler-annotate-integrated-module">singler.annotate_integrated module</a></li>
-<li><a class="reference internal" href="#singler-annotate-single-module">singler.annotate_single module</a></li>
-<li><a class="reference internal" href="#singler-build-integrated-references-module">singler.build_integrated_references module</a></li>
-<li><a class="reference internal" href="#singler-build-single-reference-module">singler.build_single_reference module</a></li>
-<li><a class="reference internal" href="#singler-classify-integrated-references-module">singler.classify_integrated_references module</a></li>
-<li><a class="reference internal" href="#singler-classify-single-reference-module">singler.classify_single_reference module</a></li>
-<li><a class="reference internal" href="#singler-fetch-reference-module">singler.fetch_reference module</a></li>
-<li><a class="reference internal" href="#singler-get-classic-markers-module">singler.get_classic_markers module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-singler.annotate_integrated">singler.annotate_integrated module</a><ul>
+<li><a class="reference internal" href="#singler.annotate_integrated.annotate_integrated"><code class="docutils literal notranslate"><span class="pre">annotate_integrated()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.annotate_single">singler.annotate_single module</a><ul>
+<li><a class="reference internal" href="#singler.annotate_single.annotate_single"><code class="docutils literal notranslate"><span class="pre">annotate_single()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.build_integrated_references">singler.build_integrated_references module</a><ul>
+<li><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences"><code class="docutils literal notranslate"><span class="pre">IntegratedReferences</span></code></a><ul>
+<li><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences.__del__"><code class="docutils literal notranslate"><span class="pre">IntegratedReferences.__del__()</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences.reference_labels"><code class="docutils literal notranslate"><span class="pre">IntegratedReferences.reference_labels</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences.reference_names"><code class="docutils literal notranslate"><span class="pre">IntegratedReferences.reference_names</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_integrated_references.IntegratedReferences.test_features"><code class="docutils literal notranslate"><span class="pre">IntegratedReferences.test_features</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#singler.build_integrated_references.build_integrated_references"><code class="docutils literal notranslate"><span class="pre">build_integrated_references()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.build_single_reference">singler.build_single_reference module</a><ul>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference</span></code></a><ul>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.labels"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.labels</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.features"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.features</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.markers"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.markers</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.__del__"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.__del__()</span></code></a></li>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.features</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.labels</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.marker_subset"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.marker_subset()</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.markers</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.num_labels"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.num_labels()</span></code></a></li>
+<li><a class="reference internal" href="#singler.build_single_reference.SinglePrebuiltReference.num_markers"><code class="docutils literal notranslate"><span class="pre">SinglePrebuiltReference.num_markers()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#singler.build_single_reference.build_single_reference"><code class="docutils literal notranslate"><span class="pre">build_single_reference()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.classify_integrated_references">singler.classify_integrated_references module</a><ul>
+<li><a class="reference internal" href="#singler.classify_integrated_references.classify_integrated_references"><code class="docutils literal notranslate"><span class="pre">classify_integrated_references()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.classify_single_reference">singler.classify_single_reference module</a><ul>
+<li><a class="reference internal" href="#singler.classify_single_reference.classify_single_reference"><code class="docutils literal notranslate"><span class="pre">classify_single_reference()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.fetch_reference">singler.fetch_reference module</a><ul>
+<li><a class="reference internal" href="#singler.fetch_reference.fetch_github_reference"><code class="docutils literal notranslate"><span class="pre">fetch_github_reference()</span></code></a></li>
+<li><a class="reference internal" href="#singler.fetch_reference.realize_github_markers"><code class="docutils literal notranslate"><span class="pre">realize_github_markers()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler.get_classic_markers">singler.get_classic_markers module</a><ul>
+<li><a class="reference internal" href="#singler.get_classic_markers.get_classic_markers"><code class="docutils literal notranslate"><span class="pre">get_classic_markers()</span></code></a></li>
+<li><a class="reference internal" href="#singler.get_classic_markers.number_of_classic_markers"><code class="docutils literal notranslate"><span class="pre">number_of_classic_markers()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-singler">Module contents</a></li>
 </ul>
 </li>
 </ul>
