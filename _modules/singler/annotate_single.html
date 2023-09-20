@@ -199,13 +199,15 @@
           <h1>Source code for singler.annotate_single</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 
 <span class="kn">from</span> <span class="nn">.fetch_reference</span> <span class="kn">import</span> <span class="n">fetch_github_reference</span><span class="p">,</span> <span class="n">realize_github_markers</span>
 <span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">build_single_reference</span>
 <span class="kn">from</span> <span class="nn">.classify_single_reference</span> <span class="kn">import</span> <span class="n">classify_single_reference</span>
+<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_clean_matrix</span>
 
 
-<span class="k">def</span> <span class="nf">_build_reference</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">test_features_set</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">,</span> <span class="n">build_args</span><span class="p">,</span> <span class="n">num_threads</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_resolve_reference</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">,</span> <span class="n">build_args</span><span class="p">,</span> <span class="n">test_features_set</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">ref</span> <span class="o">=</span> <span class="n">fetch_github_reference</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
         <span class="n">ref_features</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">row_data</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">ref_features</span><span class="p">)</span>
@@ -216,7 +218,7 @@
             <span class="k">if</span> <span class="s2">&quot;num_de&quot;</span> <span class="ow">in</span> <span class="n">marker_args</span><span class="p">:</span>
                 <span class="n">num_de</span> <span class="o">=</span> <span class="n">marker_args</span><span class="p">[</span><span class="s2">&quot;num_de&quot;</span><span class="p">]</span>
 
-        <span class="n">markers</span> <span class="o">=</span> <span class="n">realize_github_markers</span><span class="p">(</span>
+        <span class="n">ref_markers</span> <span class="o">=</span> <span class="n">realize_github_markers</span><span class="p">(</span>
             <span class="n">ref</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">ref_labels</span><span class="p">],</span>
             <span class="n">ref_features</span><span class="p">,</span>
             <span class="n">num_markers</span><span class="o">=</span><span class="n">num_de</span><span class="p">,</span>
@@ -225,26 +227,19 @@
 
         <span class="n">ref_data</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">assay</span><span class="p">(</span><span class="s2">&quot;ranks&quot;</span><span class="p">)</span>
         <span class="n">ref_labels</span><span class="o">=</span><span class="n">ref</span><span class="o">.</span><span class="n">col_data</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">ref_labels</span><span class="p">)</span>
-        <span class="n">built</span> <span class="o">=</span> <span class="n">build_single_reference</span><span class="p">(</span>
-            <span class="n">ref_data</span><span class="o">=</span><span class="n">ref_data</span><span class="p">,</span>
-            <span class="n">ref_labels</span><span class="o">=</span><span class="n">ref_labels</span><span class="p">,</span>
-            <span class="n">ref_features</span><span class="o">=</span><span class="n">ref_features</span><span class="p">,</span>
-            <span class="n">markers</span><span class="o">=</span><span class="n">markers</span><span class="p">,</span>
-            <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">build_args</span><span class="p">,</span>
-        <span class="p">)</span>
-
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">built</span> <span class="o">=</span> <span class="n">build_single_reference</span><span class="p">(</span>
-            <span class="n">ref_data</span><span class="o">=</span><span class="n">ref_data</span><span class="p">,</span>
-            <span class="n">ref_labels</span><span class="o">=</span><span class="n">ref_labels</span><span class="p">,</span>
-            <span class="n">ref_features</span><span class="o">=</span><span class="n">ref_features</span><span class="p">,</span>
-            <span class="n">restrict_to</span><span class="o">=</span><span class="n">test_features_set</span><span class="p">,</span>
-            <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">build_args</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">ref_markers</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">return</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">built</span>
+    <span class="k">return</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">ref_markers</span>
+
+
+<span class="k">def</span> <span class="nf">_attach_markers</span><span class="p">(</span><span class="n">markers</span><span class="p">,</span> <span class="n">build_args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">markers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;markers&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">build_args</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">build_args</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;markers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">markers</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tmp</span>
+    <span class="k">return</span> <span class="n">build_args</span>
 
 
 <div class="viewcode-block" id="annotate_single">
@@ -267,6 +262,11 @@
 <span class="sd">        test_data: A matrix-like object representing the test dataset, where rows are</span>
 <span class="sd">            features and columns are samples (usually cells). Entries should be expression</span>
 <span class="sd">            values; only the ranking within each column will be used.</span>
+
+<span class="sd">            Alternatively, a</span>
+<span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
+<span class="sd">            containing such a matrix in one of its assays. Non-default assay</span>
+<span class="sd">            types can be specified in ``classify_args``.</span>
 
 <span class="sd">        test_features: Sequence of length equal to the number of rows in</span>
 <span class="sd">            ``test_data``, containing the feature identifier for each row.</span>
@@ -319,13 +319,24 @@
 <span class="sd">        specifying the markers that were used for each pairwise comparison</span>
 <span class="sd">        between labels; and a list of ``unique_markers`` across all labels.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">built</span> <span class="o">=</span> <span class="n">_build_reference</span><span class="p">(</span>
+    <span class="n">test_features_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">test_features</span><span class="p">)</span>
+
+    <span class="n">ref_data</span><span class="p">,</span> <span class="n">ref_labels</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">,</span> <span class="n">markers</span> <span class="o">=</span> <span class="n">_resolve_reference</span><span class="p">(</span>
         <span class="n">ref_data</span><span class="o">=</span><span class="n">ref_data</span><span class="p">,</span>
         <span class="n">ref_labels</span><span class="o">=</span><span class="n">ref_labels</span><span class="p">,</span>
         <span class="n">ref_features</span><span class="o">=</span><span class="n">ref_features</span><span class="p">,</span>
-        <span class="n">test_features_set</span><span class="o">=</span><span class="nb">set</span><span class="p">(</span><span class="n">test_features</span><span class="p">),</span>
         <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span>
         <span class="n">build_args</span><span class="o">=</span><span class="n">build_args</span><span class="p">,</span>
+        <span class="n">test_features_set</span><span class="o">=</span><span class="n">test_features_set</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">bargs</span> <span class="o">=</span> <span class="n">_attach_markers</span><span class="p">(</span><span class="n">markers</span><span class="p">,</span> <span class="n">build_args</span><span class="p">)</span>
+    <span class="n">built</span> <span class="o">=</span> <span class="n">build_single_reference</span><span class="p">(</span>
+        <span class="n">ref_data</span><span class="o">=</span><span class="n">ref_data</span><span class="p">,</span>
+        <span class="n">ref_labels</span><span class="o">=</span><span class="n">ref_labels</span><span class="p">,</span>
+        <span class="n">ref_features</span><span class="o">=</span><span class="n">ref_features</span><span class="p">,</span>
+        <span class="n">restrict_to</span><span class="o">=</span><span class="n">test_features_set</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">bargs</span><span class="p">,</span>
         <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
     <span class="p">)</span>
 
