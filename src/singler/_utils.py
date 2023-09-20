@@ -90,7 +90,9 @@ def _stable_union(*args) -> list:
 
 def _clean_matrix(x, features, assay_type, check_missing, num_threads):
     if isinstance(x, TatamiNumericPointer):
-        # Assume it's already clean of NaNs.
+        # Assume the pointer was previously generated from _clean_matrix,
+        # so it's 2-dimensional, matches up with features and it's already
+        # clean of NaNs... so we no-op and just return it directly. 
         return x, features
 
     if isinstance(x, SummarizedExperiment):

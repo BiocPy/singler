@@ -67,6 +67,11 @@ def annotate_single(
             features and columns are samples (usually cells). Entries should be expression
             values; only the ranking within each column will be used.
 
+            Alternatively, a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing such a matrix in one of its assays. Non-default assay
+            types can be specified in ``classify_args``.
+
         test_features: Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 

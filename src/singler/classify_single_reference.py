@@ -1,17 +1,19 @@
 from mattress import tatamize
 from numpy import ndarray, int32, float64, uintp
 from biocframe import BiocFrame
-from typing import Sequence, Any
+from typing import Sequence, Any, Union
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
-from ._utils import _create_map
+from ._utils import _create_map, _clean_matrix
 
 
 def classify_single_reference(
     test_data: Any,
     test_features: Sequence,
     ref_prebuilt: SinglePrebuiltReference,
+    assay_type: Union[str, int] = 0,
+    check_missing: bool = True,
     quantile: float = 0.8,
     use_fine_tune: bool = True,
     fine_tune_threshold: float = 0.05,
@@ -26,12 +28,24 @@ def classify_single_reference(
             Normalized and transformed expression values are also acceptable as only
             the ranking is used within this function.
 
+            Alternatively, a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing such a matrix in one of its assays.
+
         test_features: Sequence of identifiers for each feature in the test
             dataset, i.e., row in ``test_data``.
 
         ref_prebuilt:
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
+
+        assay_type: Assay containing the expression matrix,
+            if `test_data` is a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
+
+        check_missing:
+            Whether to check for and remove rows with missing (NaN) values
+            from ``test_data``.
 
         quantile:
             Quantile of the correlation distribution for computing the score for each label.
@@ -54,9 +68,15 @@ def classify_single_reference(
         for each label (as a nested BiocFrame), and the ``delta`` from the best
         to the second-best label.  Each row corresponds to a column of ``test``.
     """
+    mat_ptr, test_features = _clean_matrix(
+        test_data,
+        test_features,
+        assay_type=assay_type,
+        check_missing=check_missing,
+        num_threads=num_threads,
+    )
 
     nl = ref_prebuilt.num_labels()
-    mat_ptr = tatamize(test_data)
     nc = mat_ptr.ncol()
 
     best = ndarray((nc,), dtype=int32)

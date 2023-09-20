@@ -15,6 +15,8 @@ def annotate_integrated(
     ref_data: Sequence[Union[Any, str]],
     ref_labels: Union[str, Sequence[Union[Sequence, str]]],
     ref_features: Union[str, Sequence[Union[Sequence, str]]],
+    test_assay_type: Union[str, int] = 0,
+    ref_assay_type: Union[str, int] = "logcounts",
     cache_dir: Optional[str] = None,
     build_single_args: dict = {},
     classify_single_args: dict = {},
@@ -31,6 +33,10 @@ def annotate_integrated(
             features and columns are samples (usually cells). Entries should be expression
             values; only the ranking within each column will be used.
 
+            Alternatively, a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing such a matrix in one of its assays. 
+
         test_features: Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
@@ -41,6 +47,9 @@ def annotate_integrated(
               are features and columns are samples. Entries should be expression values,
               usually log-transformed (see comments for the ``ref`` argument in
               :py:meth:`~singler.build_single_reference.build_single_reference`).
+            - A 
+              :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+              object containing such a matrix in its assays.
             - A string that can be passed as ``name`` to
               :py:meth:`~singler.fetch_reference.fetch_github_reference`.
               This will use the specified dataset as the reference.
@@ -66,6 +75,14 @@ def annotate_integrated(
             - If ``ref_data[i]`` is a string, ``ref_features[i]`` should be a string
               specifying the feature type to use, e.g., "ensembl", "symbol".
               If a single string is supplied, it is recycled for all ``ref_data``.
+
+        test_assay_type:
+            Assay of ``test_data`` containing the expression matrix, if ``test_data`` is a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
+
+        ref_assay_type:
+            Assay containing the expression matrix for any entry of ``ref_data_list`` that is a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
         cache_dir:
             Path to a cache directory for downloading reference files, see
@@ -124,6 +141,7 @@ def annotate_integrated(
             test_features_set=test_features_set,
             cache_dir=cache_dir,
             build_args=build_single_args,
+            assay_type = ref_assay_type,
             num_threads=num_threads,
         )
 
@@ -132,6 +150,7 @@ def annotate_integrated(
             test_features=test_features,
             ref_prebuilt=curbuilt,
             **classify_single_args,
+            assay_type = test_assay_type,
             num_threads=num_threads,
         )
 
@@ -152,6 +171,7 @@ def annotate_integrated(
         ref_labels_list=all_ref_labels,
         ref_features_list=all_ref_features,
         ref_prebuilt_list=all_built,
+        assay_type = ref_assay_type,
         num_threads=num_threads,
         **build_integrated_args,
     )
@@ -161,6 +181,7 @@ def annotate_integrated(
         results=all_results,
         integrated_prebuilt=ibuilt,
         **classify_integrated_args,
+        assay_type = test_assay_type,
         num_threads=num_threads,
     )
 

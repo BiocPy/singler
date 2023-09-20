@@ -4,7 +4,7 @@ from mattress import tatamize
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
-from ._utils import _stable_union, _factorize, _match
+from ._utils import _stable_union, _factorize, _match, _clean_matrix
 
 
 class IntegratedReferences:
@@ -48,6 +48,8 @@ def build_integrated_references(
     ref_features_list: list[Sequence],
     ref_prebuilt_list: list[SinglePrebuiltReference],
     ref_names: Optional[Sequence[str]] = None,
+    assay_type: Union[str, int] = "logcounts",
+    check_missing: bool = True,
     num_threads: int = 1,
 ) -> IntegratedReferences:
     """Build a set of integrated references for classification of a test dataset.
@@ -71,6 +73,14 @@ def build_integrated_references(
         ref_names: Sequence of names for the references.
             If None, these are automatically generated.
 
+        assay_type:
+            Assay containing the expression matrix for any entry of ``ref_data_list`` that is a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
+
+        check_missing:
+            Whether to check for and remove rows with missing (NaN) values
+            from each entry of ``ref_data_list``.
+
         num_threads:
             Number of threads.
 
@@ -78,17 +88,35 @@ def build_integrated_references(
         Integrated references for classification with
         :py:meth:`~singler.classify_integrated_references.classify_integrated_references`.
     """
+    nrefs = len(ref_data_list)
+    if nrefs != len(ref_features_list):
+        raise ValueError(
+            "'ref_features_list' and 'ref_data_list' should have the same length"
+        )
+
     universe = _stable_union(test_features, *ref_features_list)
     original_test_features = test_features
     test_features = array(_match(test_features, universe), dtype=int32)
 
-    nrefs = len(ref_data_list)
     converted_ref_data = []
     ref_data_ptrs = ndarray(nrefs, dtype=uintp)
+    converted_feature_data = []
+    ref_features_ptrs = ndarray(nrefs, dtype=uintp)
+
     for i, x in enumerate(ref_data_list):
-        current = tatamize(x)
-        converted_ref_data.append(current)
-        ref_data_ptrs[i] = current.ptr
+        curptr, curfeatures = _clean_matrix(
+            x,
+            ref_features_list[i],
+            assay_type = assay_type,
+            check_missing = check_missing,
+            num_threads = num_threads,
+        )
+        converted_ref_data.append(curptr)
+        ref_data_ptrs[i] = curptr.ptr
+
+        ind = array(_match(curfeatures, universe), dtype=int32)
+        converted_feature_data.append(ind)
+        ref_features_ptrs[i] = ind.ctypes.data
 
     if nrefs != len(ref_labels_list):
         raise ValueError(
@@ -103,17 +131,6 @@ def build_integrated_references(
         ind = array(ind, dtype=int32)
         converted_label_indices.append(ind)
         ref_labels_ptrs[i] = ind.ctypes.data
-
-    if nrefs != len(ref_features_list):
-        raise ValueError(
-            "'ref_features_list' and 'ref_data_list' should have the same length"
-        )
-    converted_feature_data = []
-    ref_features_ptrs = ndarray(nrefs, dtype=uintp)
-    for i, x in enumerate(ref_features_list):
-        ind = array(_match(x, universe), dtype=int32)
-        converted_feature_data.append(ind)
-        ref_features_ptrs[i] = ind.ctypes.data
 
     if nrefs != len(ref_prebuilt_list):
         raise ValueError(
