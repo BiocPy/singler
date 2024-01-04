@@ -181,7 +181,7 @@ def fetch_github_reference(
             sample += 1
 
     return summarizedexperiment.SummarizedExperiment(
-        {"ranks": mat}, row_data=row_data, col_data=col_data, metadata=markers
+        {"ranks": mat}, row_data=row_data, column_data=col_data, metadata=markers
     )
 
 

@@ -96,5 +96,5 @@ def test_annotate_single_github():
         cache_dir="_cache",
     )
 
-    ref_labels = list(set(se.col_data.column("main")))
+    ref_labels = list(set(se.column_data.column("main")))
     assert len(more_output.metadata["markers"][ref_labels[0]][ref_labels[1]]) == 10

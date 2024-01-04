@@ -70,4 +70,4 @@ def test_classify_integrated_references():
 
     assert results.shape[0] == 50
     assert set(results.column("best_reference")) == set([0, 1])
-    assert results.column("scores").column_names == ['0', '1']
+    assert list(results.column("scores").column_names) == ['0', '1']
