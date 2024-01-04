@@ -1,12 +1,13 @@
-from typing import Sequence, Union, Any
-from numpy import array, ndarray, int32, float64, uintp
-from mattress import tatamize, TatamiNumericPointer
+from typing import Any, Sequence, Union
+
+import biocutils as ut
 from biocframe import BiocFrame
+from mattress import TatamiNumericPointer, tatamize
+from numpy import array, float64, int32, ndarray, uintp
 from summarizedexperiment import SummarizedExperiment
 
-from .build_integrated_references import IntegratedReferences
 from . import _cpphelpers as lib
-from ._utils import _match
+from .build_integrated_references import IntegratedReferences
 
 
 def classify_integrated_references(
@@ -103,7 +104,7 @@ def classify_integrated_references(
                 "each entry of 'results' should have results for all cells in 'test_data'"
             )
 
-        ind = array(_match(curlabs, all_labels[i]), dtype=int32)
+        ind = array(ut.match(curlabs, all_labels[i]), dtype=int32)
         coerced_labels.append(ind)
         assign_ptrs[i] = ind.ctypes.data
 

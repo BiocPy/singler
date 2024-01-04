@@ -1,9 +1,11 @@
-from numpy import int32, array, ndarray
-from typing import Sequence, Union, Any, Optional, Literal
+from typing import Any, Literal, Optional, Sequence, Union
 
-from ._Markers import _Markers
+import biocutils as ut
+from numpy import array, int32, ndarray
+
 from . import _cpphelpers as lib
-from ._utils import _factorize, _match, _clean_matrix, _restrict_features
+from ._Markers import _Markers
+from ._utils import _clean_matrix, _factorize, _restrict_features
 from .get_classic_markers import _get_classic_markers_raw
 
 
@@ -183,7 +185,7 @@ def build_single_reference(
                 **marker_args,
             )
             markers = mrk.to_dict(lablev, ref_features)
-            labind = array(_match(ref_labels, lablev), dtype=int32)
+            labind = array(ut.match(ref_labels, lablev), dtype=int32)
         else:
             raise NotImplementedError("other marker methods are not implemented, sorry")
     else:

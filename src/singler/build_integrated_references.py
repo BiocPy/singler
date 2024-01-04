@@ -1,10 +1,11 @@
 from typing import Sequence, Optional, Union
 from numpy import array, ndarray, int32, uintp
-from mattress import tatamize
+
+import biocutils as ut
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
-from ._utils import _stable_union, _factorize, _match, _clean_matrix
+from ._utils import _stable_union, _factorize, _clean_matrix
 
 
 class IntegratedReferences:
@@ -96,7 +97,7 @@ def build_integrated_references(
 
     universe = _stable_union(test_features, *ref_features_list)
     original_test_features = test_features
-    test_features = array(_match(test_features, universe), dtype=int32)
+    test_features = array(ut.match(test_features, universe), dtype=int32)
 
     converted_ref_data = []
     ref_data_ptrs = ndarray(nrefs, dtype=uintp)
@@ -114,7 +115,7 @@ def build_integrated_references(
         converted_ref_data.append(curptr)
         ref_data_ptrs[i] = curptr.ptr
 
-        ind = array(_match(curfeatures, universe), dtype=int32)
+        ind = array(ut.match(curfeatures, universe), dtype=int32)
         converted_feature_data.append(ind)
         ref_features_ptrs[i] = ind.ctypes.data
 
