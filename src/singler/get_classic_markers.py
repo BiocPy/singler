@@ -1,17 +1,18 @@
-from numpy import ndarray, int32, uintp
-from mattress import tatamize
-from typing import Union, Sequence, Optional, Any
+from typing import Any, Optional, Sequence, Union
+
 import delayedarray
+from mattress import tatamize
+from numpy import int32, ndarray, uintp
 
 from . import _cpphelpers as lib
+from ._Markers import _Markers
 from ._utils import (
     _clean_matrix,
-    _stable_intersect,
-    _stable_union,
     _create_map,
     _restrict_features,
+    _stable_intersect,
+    _stable_union,
 )
-from ._Markers import _Markers
 
 
 def _get_classic_markers_raw(

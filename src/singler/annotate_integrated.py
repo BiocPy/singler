@@ -1,13 +1,13 @@
-from typing import Union, Sequence, Optional, Any, Tuple
+from typing import Any, Optional, Sequence, Tuple, Union
+
 from biocframe import BiocFrame
 
-from .fetch_reference import fetch_github_reference, realize_github_markers
-from .build_single_reference import build_single_reference
-from .classify_single_reference import classify_single_reference
-from .build_integrated_references import build_integrated_references
-from .classify_integrated_references import classify_integrated_references
-from .annotate_single import _resolve_reference, _attach_markers
 from ._utils import _clean_matrix
+from .annotate_single import _attach_markers, _resolve_reference
+from .build_integrated_references import build_integrated_references
+from .build_single_reference import build_single_reference
+from .classify_integrated_references import classify_integrated_references
+from .classify_single_reference import classify_single_reference
 
 
 def annotate_integrated(
@@ -27,20 +27,22 @@ def annotate_integrated(
     classify_integrated_args: dict = {},
     num_threads: int = 1,
 ) -> Tuple[list[BiocFrame], BiocFrame]:
-    """Annotate a single-cell expression dataset based on the correlation 
+    """Annotate a single-cell expression dataset based on the correlation
     of each cell to profiles in multiple labelled references, where the
     annotation from each reference is then integrated across references.
 
     Args:
-        test_data: A matrix-like object representing the test dataset, where rows are
+        test_data:
+            A matrix-like object representing the test dataset, where rows are
             features and columns are samples (usually cells). Entries should be expression
             values; only the ranking within each column will be used.
 
             Alternatively, a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
-            containing such a matrix in one of its assays. 
+            containing such a matrix in one of its assays.
 
-        test_features: Sequence of length equal to the number of rows in
+        test_features:
+            Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
         ref_data_list:
@@ -50,7 +52,7 @@ def annotate_integrated(
               are features and columns are samples. Entries should be expression values,
               usually log-transformed (see comments for the ``ref`` argument in
               :py:meth:`~singler.build_single_reference.build_single_reference`).
-            - A 
+            - A
               :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
               object containing such a matrix in its assays.
             - A string that can be passed as ``name`` to
@@ -129,18 +131,22 @@ def annotate_integrated(
     if isinstance(ref_labels_list, str):
         ref_labels_list = [ref_labels_list] * nrefs
     elif nrefs != len(ref_labels_list):
-        raise ValueError("'ref_data_list' and 'ref_labels_list' must be the same length")
+        raise ValueError(
+            "'ref_data_list' and 'ref_labels_list' must be the same length"
+        )
     if isinstance(ref_features_list, str):
         ref_features_list = [ref_features_list] * nrefs
     elif nrefs != len(ref_features_list):
-        raise ValueError("'ref_data_list' and 'ref_features_list' must be the same length")
+        raise ValueError(
+            "'ref_data_list' and 'ref_features_list' must be the same length"
+        )
 
     test_ptr, test_features = _clean_matrix(
         test_data,
         test_features,
-        assay_type = test_assay_type,
-        check_missing = test_check_missing,
-        num_threads = num_threads,
+        assay_type=test_assay_type,
+        check_missing=test_check_missing,
+        num_threads=num_threads,
     )
 
     all_ref_data = []
@@ -163,9 +169,9 @@ def annotate_integrated(
         curref_ptr, curref_features = _clean_matrix(
             curref_mat,
             curref_features,
-            assay_type = ref_assay_type,
-            check_missing = ref_check_missing,
-            num_threads = num_threads,
+            assay_type=ref_assay_type,
+            check_missing=ref_check_missing,
+            num_threads=num_threads,
         )
 
         bargs = _attach_markers(curref_markers, build_single_args)

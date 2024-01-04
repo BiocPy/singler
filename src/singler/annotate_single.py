@@ -1,14 +1,16 @@
-from typing import Union, Sequence, Optional, Any
-from biocframe import BiocFrame
 from copy import copy
+from typing import Any, Optional, Sequence, Union
 
-from .fetch_reference import fetch_github_reference, realize_github_markers
+from biocframe import BiocFrame
+
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
-from ._utils import _clean_matrix
+from .fetch_reference import fetch_github_reference, realize_github_markers
 
 
-def _resolve_reference(ref_data, ref_labels, ref_features, cache_dir, build_args, test_features_set):
+def _resolve_reference(
+    ref_data, ref_labels, ref_features, cache_dir, build_args, test_features_set
+):
     if isinstance(ref_data, str):
         ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
         ref_features = ref.row_data.column(ref_features)
@@ -27,7 +29,7 @@ def _resolve_reference(ref_data, ref_labels, ref_features, cache_dir, build_args
         )
 
         ref_data = ref.assay("ranks")
-        ref_labels=ref.col_data.column(ref_labels)
+        ref_labels = ref.col_data.column(ref_labels)
     else:
         ref_markers = None
 
@@ -54,11 +56,12 @@ def annotate_single(
     classify_args: dict = {},
     num_threads: int = 1,
 ) -> BiocFrame:
-    """Annotate a single-cell expression dataset based on the correlation 
+    """Annotate a single-cell expression dataset based on the correlation
     of each cell to profiles in a labelled reference.
 
     Args:
-        test_data: A matrix-like object representing the test dataset, where rows are
+        test_data:
+            A matrix-like object representing the test dataset, where rows are
             features and columns are samples (usually cells). Entries should be expression
             values; only the ranking within each column will be used.
 
@@ -67,10 +70,12 @@ def annotate_single(
             containing such a matrix in one of its assays. Non-default assay
             types can be specified in ``classify_args``.
 
-        test_features: Sequence of length equal to the number of rows in
+        test_features:
+            Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
-        ref_data: A matrix-like object representing the reference dataset, where rows
+        ref_data:
+            A matrix-like object representing the reference dataset, where rows
             are features and columns are samples. Entries should be expression values,
             usually log-transformed (see comments for the ``ref`` argument in
             :py:meth:`~singler.build_single_reference.build_single_reference`).

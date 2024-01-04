@@ -21,7 +21,8 @@ def classify_integrated_references(
     """Integrate classification results across multiple references for a single test dataset.
 
     Args:
-        test_data: A matrix-like object where each row is a feature and each column
+        test_data:
+            A matrix-like object where each row is a feature and each column
             is a test sample (usually a single cell), containing expression values.
             Normalized and/or transformed expression values are also acceptable as only
             the ranking is used within this function.

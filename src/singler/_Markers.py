@@ -1,6 +1,8 @@
+from typing import Any, Sequence
+
+from numpy import array, int32, ndarray
+
 from . import _cpphelpers as lib
-from numpy import ndarray, int32, array
-from typing import Sequence, Any
 
 
 class _Markers:

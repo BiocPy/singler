@@ -1,11 +1,11 @@
-from mattress import tatamize
-from numpy import ndarray, int32, float64, uintp
-from biocframe import BiocFrame
-from typing import Sequence, Any, Union
+from typing import Any, Sequence, Union
 
-from .build_single_reference import SinglePrebuiltReference
+from biocframe import BiocFrame
+from numpy import float64, int32, ndarray, uintp
+
 from . import _cpphelpers as lib
-from ._utils import _create_map, _clean_matrix
+from ._utils import _clean_matrix, _create_map
+from .build_single_reference import SinglePrebuiltReference
 
 
 def classify_single_reference(
@@ -23,7 +23,8 @@ def classify_single_reference(
     using the SingleR algorithm.
 
     Args:
-        test_data: A matrix-like object where each row is a feature and each column
+        test_data:
+            A matrix-like object where each row is a feature and each column
             is a test sample (usually a single cell), containing expression values.
             Normalized and transformed expression values are also acceptable as only
             the ranking is used within this function.
@@ -32,14 +33,16 @@ def classify_single_reference(
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing such a matrix in one of its assays.
 
-        test_features: Sequence of identifiers for each feature in the test
+        test_features:
+            Sequence of identifiers for each feature in the test
             dataset, i.e., row in ``test_data``.
 
         ref_prebuilt:
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        assay_type: Assay containing the expression matrix,
+        assay_type: 
+            Assay containing the expression matrix,
             if `test_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
