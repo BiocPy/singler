@@ -116,6 +116,18 @@ output = singler.classify_single_reference(
 )
 ```
 
+    ## output
+    BiocFrame with 4340 rows and 3 columns
+                best                                   scores                delta
+            <list>                              <BiocFrame>   <ndarray[float64]>
+    [0] Monocytes 0.33265560369962943:0.407117403330602...  0.40706830113982534
+    [1] Monocytes 0.4078771641637374:0.4783396310685646...  0.07000418564184802
+    [2] Monocytes 0.3517036021728629:0.4076971245524348...  0.30997293412307647
+                ...                                      ...                  ...
+    [4337]  NK cells 0.3472631136865701:0.3937898240670208...  0.09640242155786138
+    [4338]   B-cells 0.26974632191999887:0.334862058137758... 0.061215905058676856
+    [4339] Monocytes 0.39390119034537324:0.468867490667427...  0.06678168346812047
+
 ## Integrating labels across references
 
 We can use annotations from multiple references through the `annotate_integrated()` function:
@@ -125,9 +137,9 @@ import singler
 single_results, integrated = singler.annotate_integrated(
     mat,
     features,
-    ref_data = ("BlueprintEncode", "DatabaseImmuneCellExpression"),
-    ref_features = "symbol",
-    ref_labels = "main",
+    ref_data_list = ("BlueprintEncode", "DatabaseImmuneCellExpression"),
+    ref_features_list= "symbol",
+    ref_labels_list = "main",
     build_integrated_args = { "ref_names": ("Blueprint", "DICE") },
     cache_dir = "_cache",
     num_threads = 6
