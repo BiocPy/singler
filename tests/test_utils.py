@@ -1,6 +1,5 @@
 from singler._utils import (
     _factorize,
-    _match,
     _stable_intersect,
     _stable_union,
     _clean_matrix,
@@ -12,36 +11,18 @@ from summarizedexperiment import SummarizedExperiment
 
 def test_factorize():
     lev, ind = _factorize([1, 3, 5, 5, 3, 1])
-    assert lev == [1, 3, 5]
-    assert ind == [0, 1, 2, 2, 1, 0]
+    assert list(lev) == ["1", "3", "5"]
+    assert (ind == [0, 1, 2, 2, 1, 0]).all()
 
     # Preserves the order.
     lev, ind = _factorize(["C", "D", "A", "B", "C", "A"])
-    assert lev == ["C", "D", "A", "B"]
-    assert ind == [0, 1, 2, 3, 0, 2]
+    assert list(lev) == ["C", "D", "A", "B"]
+    assert (ind == [0, 1, 2, 3, 0, 2]).all()
 
     # Handles None-ness.
     lev, ind = _factorize([1, None, 5, None, 3, None])
-    assert lev == [1, 5, 3]
-    assert ind == [0, None, 1, None, 2, None]
-
-
-def test_match():
-    mm = _match(["A", "C", "B", "D", "A", "A", "C", "D", "B"], ["D", "C", "B", "A"])
-    assert list(mm) == [3, 1, 2, 0, 3, 3, 1, 0, 2]
-
-    # Handles duplicate targets.
-    x = [5, 1, 2, 3, 5, 6, 7, 7, 2, 1]
-    mm = _match(x, [1, 2, 3, 3, 5, 6, 1, 7, 6])
-    assert mm == [4, 0, 1, 2, 4, 5, 7, 7, 1, 0]
-
-    # Handles None-ness.
-    mm = _match(["A", None, "B", "D", None, "A", "C", None, "B"], ["D", "C", "B", "A"])
-    assert list(mm) == [3, None, 2, 0, None, 3, 1, None, 2]
-
-    mm = _match(["A", "B", "D", "A", "C", "B"], ["D", None, "C", "B", None, "A"])
-    assert list(mm) == [5, 3, 0, 5, 2, 3]
-
+    assert list(lev) == ["1", "5", "3"]
+    assert (ind == [0, -1, 1, -1, 2, -1]).all()
 
 def test_intersect():
     # Preserves the order in the first argument.

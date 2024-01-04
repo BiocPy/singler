@@ -1,10 +1,11 @@
 from typing import Sequence, Optional, Union
 from numpy import array, ndarray, int32, uintp
-from mattress import tatamize
+
+import biocutils as ut
 
 from .build_single_reference import SinglePrebuiltReference
 from . import _cpphelpers as lib
-from ._utils import _stable_union, _factorize, _match, _clean_matrix
+from ._utils import _stable_union, _factorize, _clean_matrix
 
 
 class IntegratedReferences:
@@ -30,7 +31,7 @@ class IntegratedReferences:
     def reference_labels(self) -> list:
         """List of lists containing the names of the labels for each reference.
 
-        Each entry corresponds to a reference in :py:attr:`~reference_names`, 
+        Each entry corresponds to a reference in :py:attr:`~reference_names`,
         if ``reference_names`` is not None.
         """
         return self._labels
@@ -55,25 +56,31 @@ def build_integrated_references(
     """Build a set of integrated references for classification of a test dataset.
 
     Arguments:
-        test_features: Sequence of features for the test dataset.
+        test_features:
+            Sequence of features for the test dataset.
 
-        ref_data_list: List of reference datasets, where each entry is equivalent to ``ref_data`` in
+        ref_data_list:
+            List of reference datasets, where each entry is equivalent to ``ref_data`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_labels_list: List of reference labels, where each entry is equivalent to ``ref_labels`` in
+        ref_labels_list:
+            List of reference labels, where each entry is equivalent to ``ref_labels`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_features_list: List of reference features, where each entry is equivalent to ``ref_features`` in
+        ref_features_list:
+            List of reference features, where each entry is equivalent to ``ref_features`` in
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        ref_prebuilt_list: List of prebuilt references, typically created by 
+        ref_prebuilt_list:
+            List of prebuilt references, typically created by
             calling :py:meth:`~singler.build_single_reference.build_single_reference` on the corresponding
             elements of ``ref_data_list``, ``ref_labels_list`` and ``ref_features_list``.
 
-        ref_names: Sequence of names for the references.
+        ref_names:
+            Sequence of names for the references.
             If None, these are automatically generated.
 
-        assay_type:
+        assasy_type:
             Assay containing the expression matrix for any entry of ``ref_data_list`` that is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
@@ -96,7 +103,7 @@ def build_integrated_references(
 
     universe = _stable_union(test_features, *ref_features_list)
     original_test_features = test_features
-    test_features = array(_match(test_features, universe), dtype=int32)
+    test_features = array(ut.match(test_features, universe), dtype=int32)
 
     converted_ref_data = []
     ref_data_ptrs = ndarray(nrefs, dtype=uintp)
@@ -107,14 +114,14 @@ def build_integrated_references(
         curptr, curfeatures = _clean_matrix(
             x,
             ref_features_list[i],
-            assay_type = assay_type,
-            check_missing = check_missing,
-            num_threads = num_threads,
+            assay_type=assay_type,
+            check_missing=check_missing,
+            num_threads=num_threads,
         )
         converted_ref_data.append(curptr)
         ref_data_ptrs[i] = curptr.ptr
 
-        ind = array(_match(curfeatures, universe), dtype=int32)
+        ind = array(ut.match(curfeatures, universe), dtype=int32)
         converted_feature_data.append(ind)
         ref_features_ptrs[i] = ind.ctypes.data
 
@@ -142,7 +149,9 @@ def build_integrated_references(
 
     if ref_names is not None:
         if nrefs != len(ref_names):
-            raise ValueError("'ref_names' and 'ref_data_list' should have the same length")
+            raise ValueError(
+                "'ref_names' and 'ref_data_list' should have the same length"
+            )
         elif nrefs != len(set(ref_names)):
             raise ValueError("'ref_names' should contain unique names")
 

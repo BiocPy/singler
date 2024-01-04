@@ -1,37 +1,15 @@
-from numpy import ndarray
 from typing import Sequence, Tuple
-from summarizedexperiment import SummarizedExperiment
-from mattress import tatamize, TatamiNumericPointer
+
+import biocutils as ut
+import numpy as np
 from delayedarray import DelayedArray
+from mattress import TatamiNumericPointer, tatamize
+from summarizedexperiment import SummarizedExperiment
 
 
-def _factorize(x: Sequence) -> Tuple[Sequence, ndarray]:
-    levels = []
-    mapping = {}
-    indices = []
-
-    for i, lev in enumerate(x):
-        if lev is None:
-            indices.append(None)
-        else:
-            if lev not in mapping:
-                mapping[lev] = len(levels)
-                levels.append(lev)
-            indices.append(mapping[lev])
-
-    return levels, indices
-
-
-def _match(x: Sequence, levels: Sequence) -> ndarray:
-    mapping = _create_map(levels)
-    indices = []
-    for i, y in enumerate(x):
-        if y is None or y not in mapping:
-            indices.append(None)
-        else:
-            indices.append(mapping[y])
-
-    return indices
+def _factorize(x: Sequence) -> Tuple[list, np.ndarray]:
+    _factor = ut.Factor.from_sequence(x, sort_levels=False)
+    return _factor.levels, np.array(_factor.codes, np.int32)
 
 
 def _create_map(x: Sequence) -> dict:
@@ -92,7 +70,7 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
     if isinstance(x, TatamiNumericPointer):
         # Assume the pointer was previously generated from _clean_matrix,
         # so it's 2-dimensional, matches up with features and it's already
-        # clean of NaNs... so we no-op and just return it directly. 
+        # clean of NaNs... so we no-op and just return it directly.
         return x, features
 
     if isinstance(x, SummarizedExperiment):

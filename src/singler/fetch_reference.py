@@ -1,13 +1,13 @@
-import urllib.request as req
-import urllib.parse
-import summarizedexperiment
-import tempfile
-import os
 import gzip
+import os
+import tempfile
+import urllib.parse
+import urllib.request as req
+from typing import Any, Literal, Optional, Sequence, Union
+
 import biocframe
 import numpy
-from typing import Literal, Any, Sequence, Optional, Union
-
+import summarizedexperiment
 
 SESSION_DIR = None
 
@@ -23,7 +23,7 @@ KNOWN_REFERENCE = Literal[
 
 
 def fetch_github_reference(
-    name: KNOWN_REFERENCE, cache_dir: str = None, multiple_ids: bool = False
+    name: KNOWN_REFERENCE, cache_dir: Optional[str] = None, multiple_ids: bool = False
 ) -> summarizedexperiment.SummarizedExperiment:
     """Fetch a reference dataset from the
     `pre-compiled GitHub registry <https://github.com/kanaverse/singlepp-references>`_,
@@ -181,7 +181,7 @@ def fetch_github_reference(
             sample += 1
 
     return summarizedexperiment.SummarizedExperiment(
-        {"ranks": mat}, row_data=row_data, col_data=col_data, metadata=markers
+        {"ranks": mat}, row_data=row_data, column_data=col_data, metadata=markers
     )
 
 
@@ -190,7 +190,7 @@ def realize_github_markers(
     features: Sequence,
     num_markers: Optional[int] = None,
     restrict_to: Optional[Union[set, dict]] = None,
-) -> dict[Any, dict[Any, Sequence]]: 
+) -> dict[Any, dict[Any, Sequence]]:
     """Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be
     used in :py:meth:`~singler.build_single_reference.build_single_reference`.
 

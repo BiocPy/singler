@@ -1,12 +1,13 @@
-from typing import Sequence, Union, Any
-from numpy import array, ndarray, int32, float64, uintp
-from mattress import tatamize, TatamiNumericPointer
+from typing import Any, Sequence, Union
+
+import biocutils as ut
 from biocframe import BiocFrame
+from mattress import TatamiNumericPointer, tatamize
+from numpy import array, float64, int32, ndarray, uintp
 from summarizedexperiment import SummarizedExperiment
 
-from .build_integrated_references import IntegratedReferences
 from . import _cpphelpers as lib
-from ._utils import _match
+from .build_integrated_references import IntegratedReferences
 
 
 def classify_integrated_references(
@@ -20,7 +21,8 @@ def classify_integrated_references(
     """Integrate classification results across multiple references for a single test dataset.
 
     Args:
-        test_data: A matrix-like object where each row is a feature and each column
+        test_data:
+            A matrix-like object where each row is a feature and each column
             is a test sample (usually a single cell), containing expression values.
             Normalized and/or transformed expression values are also acceptable as only
             the ranking is used within this function.
@@ -103,7 +105,7 @@ def classify_integrated_references(
                 "each entry of 'results' should have results for all cells in 'test_data'"
             )
 
-        ind = array(_match(curlabs, all_labels[i]), dtype=int32)
+        ind = array(ut.match(curlabs, all_labels[i]), dtype=int32)
         coerced_labels.append(ind)
         assign_ptrs[i] = ind.ctypes.data
 

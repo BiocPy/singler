@@ -1,9 +1,11 @@
-from numpy import int32, array, ndarray
-from typing import Sequence, Union, Any, Optional, Literal
+from typing import Any, Literal, Optional, Sequence, Union
 
-from ._Markers import _Markers
+import biocutils as ut
+from numpy import array, int32, ndarray
+
 from . import _cpphelpers as lib
-from ._utils import _factorize, _match, _clean_matrix, _restrict_features
+from ._Markers import _Markers
+from ._utils import _clean_matrix, _factorize, _restrict_features
 from .get_classic_markers import _get_classic_markers_raw
 
 
@@ -31,7 +33,7 @@ class SinglePrebuiltReference:
     def num_markers(self) -> int:
         """
         Returns:
-            int: Number of markers to be used for classification. This is the
+            Number of markers to be used for classification. This is the
             same as the size of the array from :py:meth:`~marker_subset`.
         """
         return lib.get_nsubset_from_single_reference(self._ptr)
@@ -39,7 +41,7 @@ class SinglePrebuiltReference:
     def num_labels(self) -> int:
         """
         Returns:
-            int: Number of unique labels in this reference.
+            Number of unique labels in this reference.
         """
         return lib.get_nlabels_from_single_reference(self._ptr)
 
@@ -70,13 +72,14 @@ class SinglePrebuiltReference:
     def marker_subset(self, indices_only: bool = False) -> Union[ndarray, list]:
         """
         Args:
-            indices_only: Whether to return the markers as indices
+            indices_only:
+                Whether to return the markers as indices
                 into :py:attr:`~features`, or as a list of feature identifiers.
 
         Returns:
             If ``indices_only = False``, a list of feature identifiers for the markers.
 
-            If ``indices_only = True``, a NumPy array containing the integer indices of 
+            If ``indices_only = True``, a NumPy array containing the integer indices of
             features in ``features`` that were chosen as markers.
         """
         nmarkers = self.num_markers()
@@ -104,7 +107,8 @@ def build_single_reference(
     """Build a single reference dataset in preparation for classification.
 
     Args:
-        ref_data: A matrix-like object where rows are features, columns are
+        ref_data:
+            A matrix-like object where rows are features, columns are
             reference profiles, and each entry is the expression value.
             If `markers` is not provided, expression should be normalized
             and log-transformed in preparation for marker prioritization via
@@ -115,13 +119,16 @@ def build_single_reference(
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing such a matrix in one of its assays.
 
-        labels: Sequence of labels for each reference profile,
+        labels:
+            Sequence of labels for each reference profile,
             i.e., column in ``ref``.
 
-        features: Sequence of identifiers for each feature,
+        features:
+            Sequence of identifiers for each feature,
             i.e., row in ``ref``.
 
-        assay_type: Assay containing the expression matrix,
+        assay_type:
+            Assay containing the expression matrix,
             if `ref_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
@@ -159,7 +166,7 @@ def build_single_reference(
             Number of threads to use for reference building.
 
     Returns:
-        The pre-built reference, ready for use in downstream methods like 
+        The pre-built reference, ready for use in downstream methods like
         :py:meth:`~singler.classify_single_reference.classify_single_reference`.
     """
 
@@ -183,7 +190,7 @@ def build_single_reference(
                 **marker_args,
             )
             markers = mrk.to_dict(lablev, ref_features)
-            labind = array(_match(ref_labels, lablev), dtype=int32)
+            labind = array(ut.match(ref_labels, lablev), dtype=int32)
         else:
             raise NotImplementedError("other marker methods are not implemented, sorry")
     else:

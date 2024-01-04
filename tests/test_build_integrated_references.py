@@ -25,7 +25,8 @@ def test_build_integrated_references():
     )
 
     assert integrated.reference_names == None
-    assert integrated.reference_labels == [["A", "B", "C", "D", "E"], ["z", "y", "x"]]
+    assert list(integrated.reference_labels[0]) == ["A", "B", "C", "D", "E"]
+    assert list(integrated.reference_labels[1]) == ["z", "y", "x"]
     assert integrated.test_features == test_features
 
     # Works in parallel.
