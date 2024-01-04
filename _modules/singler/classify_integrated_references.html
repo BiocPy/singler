@@ -197,15 +197,16 @@
         </div>
         <article role="main">
           <h1>Source code for singler.classify_integrated_references</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">uintp</span>
-<span class="kn">from</span> <span class="nn">mattress</span> <span class="kn">import</span> <span class="n">tatamize</span><span class="p">,</span> <span class="n">TatamiNumericPointer</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">biocutils</span> <span class="k">as</span> <span class="nn">ut</span>
 <span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
+<span class="kn">from</span> <span class="nn">mattress</span> <span class="kn">import</span> <span class="n">TatamiNumericPointer</span><span class="p">,</span> <span class="n">tatamize</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">uintp</span>
 <span class="kn">from</span> <span class="nn">summarizedexperiment</span> <span class="kn">import</span> <span class="n">SummarizedExperiment</span>
 
-<span class="kn">from</span> <span class="nn">.build_integrated_references</span> <span class="kn">import</span> <span class="n">IntegratedReferences</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cpphelpers</span> <span class="k">as</span> <span class="n">lib</span>
-<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_match</span>
+<span class="kn">from</span> <span class="nn">.build_integrated_references</span> <span class="kn">import</span> <span class="n">IntegratedReferences</span>
 
 
 <div class="viewcode-block" id="classify_integrated_references">
@@ -221,7 +222,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Integrate classification results across multiple references for a single test dataset.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        test_data: A matrix-like object where each row is a feature and each column</span>
+<span class="sd">        test_data:</span>
+<span class="sd">            A matrix-like object where each row is a feature and each column</span>
 <span class="sd">            is a test sample (usually a single cell), containing expression values.</span>
 <span class="sd">            Normalized and/or transformed expression values are also acceptable as only</span>
 <span class="sd">            the ranking is used within this function.</span>
@@ -304,7 +306,7 @@
                 <span class="s2">&quot;each entry of &#39;results&#39; should have results for all cells in &#39;test_data&#39;&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">_match</span><span class="p">(</span><span class="n">curlabs</span><span class="p">,</span> <span class="n">all_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">curlabs</span><span class="p">,</span> <span class="n">all_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
         <span class="n">coerced_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="n">assign_ptrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data</span>
 

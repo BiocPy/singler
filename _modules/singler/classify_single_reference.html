@@ -197,14 +197,14 @@
         </div>
         <article role="main">
           <h1>Source code for singler.classify_single_reference</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">mattress</span> <span class="kn">import</span> <span class="n">tatamize</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">uintp</span>
-<span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">SinglePrebuiltReference</span>
+<span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">float64</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">uintp</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cpphelpers</span> <span class="k">as</span> <span class="n">lib</span>
-<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_create_map</span><span class="p">,</span> <span class="n">_clean_matrix</span>
+<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_clean_matrix</span><span class="p">,</span> <span class="n">_create_map</span>
+<span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">SinglePrebuiltReference</span>
 
 
 <div class="viewcode-block" id="classify_single_reference">
@@ -224,7 +224,8 @@
 <span class="sd">    using the SingleR algorithm.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        test_data: A matrix-like object where each row is a feature and each column</span>
+<span class="sd">        test_data:</span>
+<span class="sd">            A matrix-like object where each row is a feature and each column</span>
 <span class="sd">            is a test sample (usually a single cell), containing expression values.</span>
 <span class="sd">            Normalized and transformed expression values are also acceptable as only</span>
 <span class="sd">            the ranking is used within this function.</span>
@@ -233,14 +234,16 @@
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
 <span class="sd">            containing such a matrix in one of its assays.</span>
 
-<span class="sd">        test_features: Sequence of identifiers for each feature in the test</span>
+<span class="sd">        test_features:</span>
+<span class="sd">            Sequence of identifiers for each feature in the test</span>
 <span class="sd">            dataset, i.e., row in ``test_data``.</span>
 
 <span class="sd">        ref_prebuilt:</span>
 <span class="sd">            A pre-built reference created with</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        assay_type: Assay containing the expression matrix,</span>
+<span class="sd">        assay_type: </span>
+<span class="sd">            Assay containing the expression matrix,</span>
 <span class="sd">            if `test_data` is a</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.</span>
 

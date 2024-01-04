@@ -300,6 +300,19 @@ This can be repeated with different datasets that have the same features or a su
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>## output
+BiocFrame with 4340 rows and 3 columns
+            best                                   scores                delta
+        &lt;list&gt;                              &lt;BiocFrame&gt;   &lt;ndarray[float64]&gt;
+[0] Monocytes 0.33265560369962943:0.407117403330602...  0.40706830113982534
+[1] Monocytes 0.4078771641637374:0.4783396310685646...  0.07000418564184802
+[2] Monocytes 0.3517036021728629:0.4076971245524348...  0.30997293412307647
+            ...                                      ...                  ...
+[4337]  NK cells 0.3472631136865701:0.3937898240670208...  0.09640242155786138
+[4338]   B-cells 0.26974632191999887:0.334862058137758... 0.061215905058676856
+[4339] Monocytes 0.39390119034537324:0.468867490667427...  0.06678168346812047
+</pre></div>
+</div>
 </section>
 <section id="integrating-labels-across-references">
 <h2>Integrating labels across references<a class="headerlink" href="#integrating-labels-across-references" title="Link to this heading">#</a></h2>
@@ -308,9 +321,9 @@ This can be repeated with different datasets that have the same features or a su
 <span class="n">single_results</span><span class="p">,</span> <span class="n">integrated</span> <span class="o">=</span> <span class="n">singler</span><span class="o">.</span><span class="n">annotate_integrated</span><span class="p">(</span>
     <span class="n">mat</span><span class="p">,</span>
     <span class="n">features</span><span class="p">,</span>
-    <span class="n">ref_data</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span> <span class="s2">&quot;DatabaseImmuneCellExpression&quot;</span><span class="p">),</span>
-    <span class="n">ref_features</span> <span class="o">=</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
-    <span class="n">ref_labels</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">ref_data_list</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;BlueprintEncode&quot;</span><span class="p">,</span> <span class="s2">&quot;DatabaseImmuneCellExpression&quot;</span><span class="p">),</span>
+    <span class="n">ref_features_list</span><span class="o">=</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span>
+    <span class="n">ref_labels_list</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
     <span class="n">build_integrated_args</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;ref_names&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Blueprint&quot;</span><span class="p">,</span> <span class="s2">&quot;DICE&quot;</span><span class="p">)</span> <span class="p">},</span>
     <span class="n">cache_dir</span> <span class="o">=</span> <span class="s2">&quot;_cache&quot;</span><span class="p">,</span>
     <span class="n">num_threads</span> <span class="o">=</span> <span class="mi">6</span>

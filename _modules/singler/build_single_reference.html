@@ -197,12 +197,14 @@
         </div>
         <article role="main">
           <h1>Source code for singler.build_single_reference</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">int32</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">ndarray</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Literal</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">._Markers</span> <span class="kn">import</span> <span class="n">_Markers</span>
+<span class="kn">import</span> <span class="nn">biocutils</span> <span class="k">as</span> <span class="nn">ut</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">ndarray</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cpphelpers</span> <span class="k">as</span> <span class="n">lib</span>
-<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_factorize</span><span class="p">,</span> <span class="n">_match</span><span class="p">,</span> <span class="n">_clean_matrix</span><span class="p">,</span> <span class="n">_restrict_features</span>
+<span class="kn">from</span> <span class="nn">._Markers</span> <span class="kn">import</span> <span class="n">_Markers</span>
+<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_clean_matrix</span><span class="p">,</span> <span class="n">_factorize</span><span class="p">,</span> <span class="n">_restrict_features</span>
 <span class="kn">from</span> <span class="nn">.get_classic_markers</span> <span class="kn">import</span> <span class="n">_get_classic_markers_raw</span>
 
 
@@ -234,7 +236,7 @@
     <span class="k">def</span> <span class="nf">num_markers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            int: Number of markers to be used for classification. This is the</span>
+<span class="sd">            Number of markers to be used for classification. This is the</span>
 <span class="sd">            same as the size of the array from :py:meth:`~marker_subset`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">lib</span><span class="o">.</span><span class="n">get_nsubset_from_single_reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span></div>
@@ -245,7 +247,7 @@
     <span class="k">def</span> <span class="nf">num_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns:</span>
-<span class="sd">            int: Number of unique labels in this reference.</span>
+<span class="sd">            Number of unique labels in this reference.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">lib</span><span class="o">.</span><span class="n">get_nlabels_from_single_reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ptr</span><span class="p">)</span></div>
 
@@ -279,13 +281,14 @@
     <span class="k">def</span> <span class="nf">marker_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
-<span class="sd">            indices_only: Whether to return the markers as indices</span>
+<span class="sd">            indices_only:</span>
+<span class="sd">                Whether to return the markers as indices</span>
 <span class="sd">                into :py:attr:`~features`, or as a list of feature identifiers.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            If ``indices_only = False``, a list of feature identifiers for the markers.</span>
 
-<span class="sd">            If ``indices_only = True``, a NumPy array containing the integer indices of </span>
+<span class="sd">            If ``indices_only = True``, a NumPy array containing the integer indices of</span>
 <span class="sd">            features in ``features`` that were chosen as markers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nmarkers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_markers</span><span class="p">()</span>
@@ -317,7 +320,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a single reference dataset in preparation for classification.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        ref_data: A matrix-like object where rows are features, columns are</span>
+<span class="sd">        ref_data:</span>
+<span class="sd">            A matrix-like object where rows are features, columns are</span>
 <span class="sd">            reference profiles, and each entry is the expression value.</span>
 <span class="sd">            If `markers` is not provided, expression should be normalized</span>
 <span class="sd">            and log-transformed in preparation for marker prioritization via</span>
@@ -328,13 +332,16 @@
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
 <span class="sd">            containing such a matrix in one of its assays.</span>
 
-<span class="sd">        labels: Sequence of labels for each reference profile,</span>
+<span class="sd">        labels:</span>
+<span class="sd">            Sequence of labels for each reference profile,</span>
 <span class="sd">            i.e., column in ``ref``.</span>
 
-<span class="sd">        features: Sequence of identifiers for each feature,</span>
+<span class="sd">        features:</span>
+<span class="sd">            Sequence of identifiers for each feature,</span>
 <span class="sd">            i.e., row in ``ref``.</span>
 
-<span class="sd">        assay_type: Assay containing the expression matrix,</span>
+<span class="sd">        assay_type:</span>
+<span class="sd">            Assay containing the expression matrix,</span>
 <span class="sd">            if `ref_data` is a</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.</span>
 
@@ -372,7 +379,7 @@
 <span class="sd">            Number of threads to use for reference building.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The pre-built reference, ready for use in downstream methods like </span>
+<span class="sd">        The pre-built reference, ready for use in downstream methods like</span>
 <span class="sd">        :py:meth:`~singler.classify_single_reference.classify_single_reference`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -396,7 +403,7 @@
                 <span class="o">**</span><span class="n">marker_args</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">markers</span> <span class="o">=</span> <span class="n">mrk</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">lablev</span><span class="p">,</span> <span class="n">ref_features</span><span class="p">)</span>
-            <span class="n">labind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">_match</span><span class="p">(</span><span class="n">ref_labels</span><span class="p">,</span> <span class="n">lablev</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+            <span class="n">labind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">ref_labels</span><span class="p">,</span> <span class="n">lablev</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;other marker methods are not implemented, sorry&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>

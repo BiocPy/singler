@@ -199,11 +199,12 @@
           <h1>Source code for singler.build_integrated_references</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">int32</span><span class="p">,</span> <span class="n">uintp</span>
-<span class="kn">from</span> <span class="nn">mattress</span> <span class="kn">import</span> <span class="n">tatamize</span>
+
+<span class="kn">import</span> <span class="nn">biocutils</span> <span class="k">as</span> <span class="nn">ut</span>
 
 <span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">SinglePrebuiltReference</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cpphelpers</span> <span class="k">as</span> <span class="n">lib</span>
-<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_stable_union</span><span class="p">,</span> <span class="n">_factorize</span><span class="p">,</span> <span class="n">_match</span><span class="p">,</span> <span class="n">_clean_matrix</span>
+<span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_stable_union</span><span class="p">,</span> <span class="n">_factorize</span><span class="p">,</span> <span class="n">_clean_matrix</span>
 
 
 <div class="viewcode-block" id="IntegratedReferences">
@@ -231,7 +232,7 @@
     <span class="k">def</span> <span class="nf">reference_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List of lists containing the names of the labels for each reference.</span>
 
-<span class="sd">        Each entry corresponds to a reference in :py:attr:`~reference_names`, </span>
+<span class="sd">        Each entry corresponds to a reference in :py:attr:`~reference_names`,</span>
 <span class="sd">        if ``reference_names`` is not None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels</span>
@@ -259,25 +260,31 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a set of integrated references for classification of a test dataset.</span>
 
 <span class="sd">    Arguments:</span>
-<span class="sd">        test_features: Sequence of features for the test dataset.</span>
+<span class="sd">        test_features:</span>
+<span class="sd">            Sequence of features for the test dataset.</span>
 
-<span class="sd">        ref_data_list: List of reference datasets, where each entry is equivalent to ``ref_data`` in</span>
+<span class="sd">        ref_data_list:</span>
+<span class="sd">            List of reference datasets, where each entry is equivalent to ``ref_data`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_labels_list: List of reference labels, where each entry is equivalent to ``ref_labels`` in</span>
+<span class="sd">        ref_labels_list:</span>
+<span class="sd">            List of reference labels, where each entry is equivalent to ``ref_labels`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_features_list: List of reference features, where each entry is equivalent to ``ref_features`` in</span>
+<span class="sd">        ref_features_list:</span>
+<span class="sd">            List of reference features, where each entry is equivalent to ``ref_features`` in</span>
 <span class="sd">            :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
-<span class="sd">        ref_prebuilt_list: List of prebuilt references, typically created by </span>
+<span class="sd">        ref_prebuilt_list:</span>
+<span class="sd">            List of prebuilt references, typically created by</span>
 <span class="sd">            calling :py:meth:`~singler.build_single_reference.build_single_reference` on the corresponding</span>
 <span class="sd">            elements of ``ref_data_list``, ``ref_labels_list`` and ``ref_features_list``.</span>
 
-<span class="sd">        ref_names: Sequence of names for the references.</span>
+<span class="sd">        ref_names:</span>
+<span class="sd">            Sequence of names for the references.</span>
 <span class="sd">            If None, these are automatically generated.</span>
 
-<span class="sd">        assay_type:</span>
+<span class="sd">        assasy_type:</span>
 <span class="sd">            Assay containing the expression matrix for any entry of ``ref_data_list`` that is a</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.</span>
 
@@ -300,7 +307,7 @@
 
     <span class="n">universe</span> <span class="o">=</span> <span class="n">_stable_union</span><span class="p">(</span><span class="n">test_features</span><span class="p">,</span> <span class="o">*</span><span class="n">ref_features_list</span><span class="p">)</span>
     <span class="n">original_test_features</span> <span class="o">=</span> <span class="n">test_features</span>
-    <span class="n">test_features</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">_match</span><span class="p">(</span><span class="n">test_features</span><span class="p">,</span> <span class="n">universe</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">test_features</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">test_features</span><span class="p">,</span> <span class="n">universe</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
 
     <span class="n">converted_ref_data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">ref_data_ptrs</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">nrefs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">uintp</span><span class="p">)</span>
@@ -311,14 +318,14 @@
         <span class="n">curptr</span><span class="p">,</span> <span class="n">curfeatures</span> <span class="o">=</span> <span class="n">_clean_matrix</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
             <span class="n">ref_features_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-            <span class="n">assay_type</span> <span class="o">=</span> <span class="n">assay_type</span><span class="p">,</span>
-            <span class="n">check_missing</span> <span class="o">=</span> <span class="n">check_missing</span><span class="p">,</span>
-            <span class="n">num_threads</span> <span class="o">=</span> <span class="n">num_threads</span><span class="p">,</span>
+            <span class="n">assay_type</span><span class="o">=</span><span class="n">assay_type</span><span class="p">,</span>
+            <span class="n">check_missing</span><span class="o">=</span><span class="n">check_missing</span><span class="p">,</span>
+            <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">converted_ref_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curptr</span><span class="p">)</span>
         <span class="n">ref_data_ptrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">curptr</span><span class="o">.</span><span class="n">ptr</span>
 
-        <span class="n">ind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">_match</span><span class="p">(</span><span class="n">curfeatures</span><span class="p">,</span> <span class="n">universe</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ut</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">curfeatures</span><span class="p">,</span> <span class="n">universe</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span>
         <span class="n">converted_feature_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="n">ref_features_ptrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data</span>
 
@@ -346,7 +353,9 @@
 
     <span class="k">if</span> <span class="n">ref_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrefs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_names</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;ref_names&#39; and &#39;ref_data_list&#39; should have the same length&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;ref_names&#39; and &#39;ref_data_list&#39; should have the same length&quot;</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="n">nrefs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">ref_names</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;ref_names&#39; should contain unique names&quot;</span><span class="p">)</span>
 

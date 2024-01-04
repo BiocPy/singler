@@ -197,16 +197,16 @@
         </div>
         <article role="main">
           <h1>Source code for singler.annotate_integrated</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">from</span> <span class="nn">biocframe</span> <span class="kn">import</span> <span class="n">BiocFrame</span>
 
-<span class="kn">from</span> <span class="nn">.fetch_reference</span> <span class="kn">import</span> <span class="n">fetch_github_reference</span><span class="p">,</span> <span class="n">realize_github_markers</span>
-<span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">build_single_reference</span>
-<span class="kn">from</span> <span class="nn">.classify_single_reference</span> <span class="kn">import</span> <span class="n">classify_single_reference</span>
-<span class="kn">from</span> <span class="nn">.build_integrated_references</span> <span class="kn">import</span> <span class="n">build_integrated_references</span>
-<span class="kn">from</span> <span class="nn">.classify_integrated_references</span> <span class="kn">import</span> <span class="n">classify_integrated_references</span>
-<span class="kn">from</span> <span class="nn">.annotate_single</span> <span class="kn">import</span> <span class="n">_resolve_reference</span><span class="p">,</span> <span class="n">_attach_markers</span>
 <span class="kn">from</span> <span class="nn">._utils</span> <span class="kn">import</span> <span class="n">_clean_matrix</span>
+<span class="kn">from</span> <span class="nn">.annotate_single</span> <span class="kn">import</span> <span class="n">_attach_markers</span><span class="p">,</span> <span class="n">_resolve_reference</span>
+<span class="kn">from</span> <span class="nn">.build_integrated_references</span> <span class="kn">import</span> <span class="n">build_integrated_references</span>
+<span class="kn">from</span> <span class="nn">.build_single_reference</span> <span class="kn">import</span> <span class="n">build_single_reference</span>
+<span class="kn">from</span> <span class="nn">.classify_integrated_references</span> <span class="kn">import</span> <span class="n">classify_integrated_references</span>
+<span class="kn">from</span> <span class="nn">.classify_single_reference</span> <span class="kn">import</span> <span class="n">classify_single_reference</span>
 
 
 <div class="viewcode-block" id="annotate_integrated">
@@ -228,20 +228,22 @@
     <span class="n">classify_integrated_args</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">BiocFrame</span><span class="p">],</span> <span class="n">BiocFrame</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate a single-cell expression dataset based on the correlation </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotate a single-cell expression dataset based on the correlation</span>
 <span class="sd">    of each cell to profiles in multiple labelled references, where the</span>
 <span class="sd">    annotation from each reference is then integrated across references.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        test_data: A matrix-like object representing the test dataset, where rows are</span>
+<span class="sd">        test_data:</span>
+<span class="sd">            A matrix-like object representing the test dataset, where rows are</span>
 <span class="sd">            features and columns are samples (usually cells). Entries should be expression</span>
 <span class="sd">            values; only the ranking within each column will be used.</span>
 
 <span class="sd">            Alternatively, a</span>
 <span class="sd">            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
-<span class="sd">            containing such a matrix in one of its assays. </span>
+<span class="sd">            containing such a matrix in one of its assays.</span>
 
-<span class="sd">        test_features: Sequence of length equal to the number of rows in</span>
+<span class="sd">        test_features:</span>
+<span class="sd">            Sequence of length equal to the number of rows in</span>
 <span class="sd">            ``test_data``, containing the feature identifier for each row.</span>
 
 <span class="sd">        ref_data_list:</span>
@@ -251,7 +253,7 @@
 <span class="sd">              are features and columns are samples. Entries should be expression values,</span>
 <span class="sd">              usually log-transformed (see comments for the ``ref`` argument in</span>
 <span class="sd">              :py:meth:`~singler.build_single_reference.build_single_reference`).</span>
-<span class="sd">            - A </span>
+<span class="sd">            - A</span>
 <span class="sd">              :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`</span>
 <span class="sd">              object containing such a matrix in its assays.</span>
 <span class="sd">            - A string that can be passed as ``name`` to</span>
@@ -330,18 +332,22 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref_labels_list</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">ref_labels_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ref_labels_list</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrefs</span>
     <span class="k">elif</span> <span class="n">nrefs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_labels_list</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;ref_data_list&#39; and &#39;ref_labels_list&#39; must be the same length&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;ref_data_list&#39; and &#39;ref_labels_list&#39; must be the same length&quot;</span>
+        <span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref_features_list</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">ref_features_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ref_features_list</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrefs</span>
     <span class="k">elif</span> <span class="n">nrefs</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref_features_list</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;ref_data_list&#39; and &#39;ref_features_list&#39; must be the same length&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;ref_data_list&#39; and &#39;ref_features_list&#39; must be the same length&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">test_ptr</span><span class="p">,</span> <span class="n">test_features</span> <span class="o">=</span> <span class="n">_clean_matrix</span><span class="p">(</span>
         <span class="n">test_data</span><span class="p">,</span>
         <span class="n">test_features</span><span class="p">,</span>
-        <span class="n">assay_type</span> <span class="o">=</span> <span class="n">test_assay_type</span><span class="p">,</span>
-        <span class="n">check_missing</span> <span class="o">=</span> <span class="n">test_check_missing</span><span class="p">,</span>
-        <span class="n">num_threads</span> <span class="o">=</span> <span class="n">num_threads</span><span class="p">,</span>
+        <span class="n">assay_type</span><span class="o">=</span><span class="n">test_assay_type</span><span class="p">,</span>
+        <span class="n">check_missing</span><span class="o">=</span><span class="n">test_check_missing</span><span class="p">,</span>
+        <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">all_ref_data</span> <span class="o">=</span> <span class="p">[]</span>
@@ -364,9 +370,9 @@
         <span class="n">curref_ptr</span><span class="p">,</span> <span class="n">curref_features</span> <span class="o">=</span> <span class="n">_clean_matrix</span><span class="p">(</span>
             <span class="n">curref_mat</span><span class="p">,</span>
             <span class="n">curref_features</span><span class="p">,</span>
-            <span class="n">assay_type</span> <span class="o">=</span> <span class="n">ref_assay_type</span><span class="p">,</span>
-            <span class="n">check_missing</span> <span class="o">=</span> <span class="n">ref_check_missing</span><span class="p">,</span>
-            <span class="n">num_threads</span> <span class="o">=</span> <span class="n">num_threads</span><span class="p">,</span>
+            <span class="n">assay_type</span><span class="o">=</span><span class="n">ref_assay_type</span><span class="p">,</span>
+            <span class="n">check_missing</span><span class="o">=</span><span class="n">ref_check_missing</span><span class="p">,</span>
+            <span class="n">num_threads</span><span class="o">=</span><span class="n">num_threads</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">bargs</span> <span class="o">=</span> <span class="n">_attach_markers</span><span class="p">(</span><span class="n">curref_markers</span><span class="p">,</span> <span class="n">build_single_args</span><span class="p">)</span>

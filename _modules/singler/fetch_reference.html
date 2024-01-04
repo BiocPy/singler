@@ -197,16 +197,16 @@
         </div>
         <article role="main">
           <h1>Source code for singler.fetch_reference</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">req</span>
-<span class="kn">import</span> <span class="nn">urllib.parse</span>
-<span class="kn">import</span> <span class="nn">summarizedexperiment</span>
-<span class="kn">import</span> <span class="nn">tempfile</span>
+<span></span><span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span> <span class="k">as</span> <span class="nn">req</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span> <span class="nn">biocframe</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-
+<span class="kn">import</span> <span class="nn">summarizedexperiment</span>
 
 <span class="n">SESSION_DIR</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -224,7 +224,7 @@
 <div class="viewcode-block" id="fetch_github_reference">
 <a class="viewcode-back" href="../../api/singler.html#singler.fetch_reference.fetch_github_reference">[docs]</a>
 <span class="k">def</span> <span class="nf">fetch_github_reference</span><span class="p">(</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">KNOWN_REFERENCE</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">multiple_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">KNOWN_REFERENCE</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">multiple_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">summarizedexperiment</span><span class="o">.</span><span class="n">SummarizedExperiment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch a reference dataset from the</span>
 <span class="sd">    `pre-compiled GitHub registry &lt;https://github.com/kanaverse/singlepp-references&gt;`_,</span>
@@ -382,7 +382,7 @@
             <span class="n">sample</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">summarizedexperiment</span><span class="o">.</span><span class="n">SummarizedExperiment</span><span class="p">(</span>
-        <span class="p">{</span><span class="s2">&quot;ranks&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">},</span> <span class="n">row_data</span><span class="o">=</span><span class="n">row_data</span><span class="p">,</span> <span class="n">col_data</span><span class="o">=</span><span class="n">col_data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">markers</span>
+        <span class="p">{</span><span class="s2">&quot;ranks&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">},</span> <span class="n">row_data</span><span class="o">=</span><span class="n">row_data</span><span class="p">,</span> <span class="n">column_data</span><span class="o">=</span><span class="n">col_data</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">markers</span>
     <span class="p">)</span></div>
 
 
@@ -394,7 +394,7 @@
     <span class="n">features</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
     <span class="n">num_markers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">restrict_to</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">set</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]:</span> 
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert marker indices from a GitHub reference dataset into feature identifiers.  This allows the markers to be</span>
 <span class="sd">    used in :py:meth:`~singler.build_single_reference.build_single_reference`.</span>
 
