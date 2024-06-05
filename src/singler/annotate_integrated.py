@@ -3,7 +3,7 @@ from typing import Any, Optional, Sequence, Tuple, Union
 from biocframe import BiocFrame
 
 from ._utils import _clean_matrix
-from .annotate_single import _attach_markers, _resolve_reference
+from .annotate_single import _resolve_reference
 from .build_integrated_references import build_integrated_references
 from .build_single_reference import build_single_reference
 from .classify_integrated_references import classify_integrated_references
@@ -128,18 +128,16 @@ def annotate_integrated(
         :py:meth:`~singler.classify_integrated_references.classify_integrated_references`).
     """
     nrefs = len(ref_data_list)
+
     if isinstance(ref_labels_list, str):
         ref_labels_list = [ref_labels_list] * nrefs
     elif nrefs != len(ref_labels_list):
-        raise ValueError(
-            "'ref_data_list' and 'ref_labels_list' must be the same length"
-        )
+        raise ValueError("'ref_data_list' and 'ref_labels_list' must be the same length")
+
     if isinstance(ref_features_list, str):
         ref_features_list = [ref_features_list] * nrefs
     elif nrefs != len(ref_features_list):
-        raise ValueError(
-            "'ref_data_list' and 'ref_features_list' must be the same length"
-        )
+        raise ValueError("'ref_data_list' and 'ref_features_list' must be the same length")
 
     test_ptr, test_features = _clean_matrix(
         test_data,
@@ -157,13 +155,11 @@ def annotate_integrated(
     test_features_set = set(test_features)
 
     for r in range(nrefs):
-        curref_mat, curref_labels, curref_features, curref_markers = _resolve_reference(
+        curref_mat, curref_labels, curref_features = _resolve_reference(
             ref_data=ref_data_list[r],
             ref_labels=ref_labels_list[r],
             ref_features=ref_features_list[r],
-            cache_dir=cache_dir,
             build_args=build_single_args,
-            test_features_set=test_features_set,
         )
 
         curref_ptr, curref_features = _clean_matrix(
@@ -174,13 +170,12 @@ def annotate_integrated(
             num_threads=num_threads,
         )
 
-        bargs = _attach_markers(curref_markers, build_single_args)
         curbuilt = build_single_reference(
             ref_data=curref_ptr,
             ref_labels=curref_labels,
             ref_features=curref_features,
             restrict_to=test_features_set,
-            **bargs,
+            **build_single_args,
             num_threads=num_threads,
         )
 

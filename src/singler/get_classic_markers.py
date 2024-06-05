@@ -111,8 +111,10 @@ def get_classic_markers(
         ref_data:
             A matrix-like object containing the log-normalized expression values of a reference dataset.
             Each column is a sample and each row is a feature.
+            
             Alternatively, this can be a :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
             containing a matrix-like object in one of its assays.
+            
             Alternatively, a list of such matrices or ``SummarizedExperiment`` objects,
             typically for multiple batches of the same reference;
             it is assumed that different batches exhibit at least some overlap in their ``features`` and ``labels``.

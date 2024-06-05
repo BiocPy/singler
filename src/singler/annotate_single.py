@@ -1,4 +1,3 @@
-from copy import copy
 from typing import Any, Optional, Sequence, Union
 
 from biocframe import BiocFrame
@@ -8,20 +7,22 @@ from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
 
 
-def _resolve_reference(ref_data, ref_labels, ref_features):
-    if isinstance(ref_data, SummarizedExperiment) or issubclass(
-        ref_data, SummarizedExperiment
-    ):
+def _resolve_reference(ref_data, ref_labels, ref_features, build_args):
+    if isinstance(ref_data, SummarizedExperiment) or issubclass(type(ref_data), SummarizedExperiment):
         if ref_features is None:
             ref_features = ref_data.get_row_names()
         elif isinstance(ref_features, str):
             ref_features = ref_data.get_row_data().column(ref_features)
         else:
-            raise ValueError(
-                "'ref_features' must be None or a column name that contains feature labels."
-            )
+            raise ValueError("'ref_features' must be None or a column name that contains feature labels.")
 
-        ref_data = ref_data.assay("logcounts")
+        try:
+            _default_asy = "logcounts"
+            if "assay_type" in build_args:
+                _default_asy = build_args["assay_type"]
+            ref_data = ref_data.assay(_default_asy)
+        except Exception as _:
+            raise ValueError(f"Reference dataset must contain log-normalized count ('{_default_asy}') assay.")
 
         if ref_labels is None:
             ref_labels = ref_data.get_column_names()
@@ -29,19 +30,11 @@ def _resolve_reference(ref_data, ref_labels, ref_features):
             ref_labels = ref_data.get_column_data().column(ref_labels)
         else:
             raise ValueError(
-                "'ref_labels' must be None or a column name that contains reference labels."
+                "'ref_labels' must be `None` or a column name in `coldata` that contains reference labels."
             )
         ref_labels = ref_data.col_data.column(ref_labels)
 
     return ref_data, ref_labels, ref_features
-
-
-def _attach_markers(markers, build_args):
-    if markers is not None and "markers" not in build_args:
-        tmp = copy(build_args)
-        tmp["markers"] = markers
-        return tmp
-    return build_args
 
 
 def annotate_single(
@@ -124,21 +117,19 @@ def annotate_single(
     """
     test_features_set = set(test_features)
 
-    ref_data, ref_labels, ref_features, markers = _resolve_reference(
+    ref_data, ref_labels, ref_features = _resolve_reference(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
         build_args=build_args,
-        test_features_set=test_features_set,
     )
 
-    bargs = _attach_markers(markers, build_args)
     built = build_single_reference(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
         restrict_to=test_features_set,
-        **bargs,
+        **build_args,
         num_threads=num_threads,
     )
 
