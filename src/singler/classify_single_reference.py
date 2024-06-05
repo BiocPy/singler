@@ -12,7 +12,8 @@ def classify_single_reference(
     test_data: Any,
     test_features: Sequence,
     ref_prebuilt: SinglePrebuiltReference,
-    assay_type: Union[str, int] = 0,
+    test_assay_type: str = "logcounts",
+    ref_assay_type: str = "logcounts",
     check_missing: bool = True,
     quantile: float = 0.8,
     use_fine_tune: bool = True,
@@ -41,9 +42,14 @@ def classify_single_reference(
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        assay_type: 
+        test_assay_type: 
             Assay containing the expression matrix,
             if `test_data` is a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
+
+        ref_assay_type: 
+            Assay containing the expression matrix,
+            if `ref_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.
 
         check_missing:
@@ -74,7 +80,7 @@ def classify_single_reference(
     mat_ptr, test_features = _clean_matrix(
         test_data,
         test_features,
-        assay_type=assay_type,
+        assay_type=test_assay_type,
         check_missing=check_missing,
         num_threads=num_threads,
     )
