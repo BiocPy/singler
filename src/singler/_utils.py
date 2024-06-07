@@ -74,11 +74,18 @@ def _clean_matrix(x, features, assay_type, check_missing, num_threads):
         return x, features
 
     if isinstance(x, SummarizedExperiment):
+        if features is None:
+            features = x.get_row_names()
+        elif isinstance(features, str):
+            features = x.get_row_data().column(features)
+        features = list(features)
+
         x = x.assay(assay_type)
 
     curshape = x.shape
     if len(curshape) != 2:
         raise ValueError("each entry of 'ref' should be a 2-dimensional array")
+
     if curshape[0] != len(features):
         raise ValueError(
             "number of rows of 'x' should be equal to the length of 'features'"

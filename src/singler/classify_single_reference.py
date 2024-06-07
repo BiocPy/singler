@@ -37,11 +37,16 @@ def classify_single_reference(
             Sequence of identifiers for each feature in the test
             dataset, i.e., row in ``test_data``.
 
+            If ``test_data`` is a ``SummarizedExperiment``, ``test_features`` 
+            may be a string speciying the column name in `row_data`that contains the
+            features. Alternatively can be set to `None`, to use the `row_names` of 
+            the experiment as used as features.
+
         ref_prebuilt:
             A pre-built reference created with
             :py:meth:`~singler.build_single_reference.build_single_reference`.
 
-        assay_type: 
+        assay_type:
             Assay containing the expression matrix,
             if `test_data` is a
             :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`.

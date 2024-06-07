@@ -1,57 +1,53 @@
-from copy import copy
+import warnings
 from typing import Any, Optional, Sequence, Union
 
 from biocframe import BiocFrame
+from summarizedexperiment import SummarizedExperiment
 
 from .build_single_reference import build_single_reference
 from .classify_single_reference import classify_single_reference
-from .fetch_reference import fetch_github_reference, realize_github_markers
 
 
-def _resolve_reference(
-    ref_data, ref_labels, ref_features, cache_dir, build_args, test_features_set
-):
-    if isinstance(ref_data, str):
-        ref = fetch_github_reference(ref_data, cache_dir=cache_dir)
-        ref_features = ref.row_data.column(ref_features)
+def _resolve_reference(ref_data, ref_labels, ref_features, build_args):
+    if isinstance(ref_data, SummarizedExperiment) or issubclass(type(ref_data), SummarizedExperiment):
+        if ref_features is None:
+            ref_features = ref_data.get_row_names()
+        elif isinstance(ref_features, str):
+            ref_features = ref_data.get_row_data().column(ref_features)
 
-        num_de = None
-        if "marker_args" in build_args:
-            marker_args = build_args["marker_args"]
-            if "num_de" in marker_args:
-                num_de = marker_args["num_de"]
+        ref_features = list(ref_features)
 
-        ref_markers = realize_github_markers(
-            ref.metadata[ref_labels],
-            ref_features,
-            num_markers=num_de,
-            restrict_to=test_features_set,
-        )
+        if ref_labels is None:
+            ref_labels = ref_data.get_column_names()
+        elif isinstance(ref_labels, str):
+            ref_labels = ref_data.get_column_data().column(ref_labels)
 
-        ref_data = ref.assay("ranks")
-        ref_labels = ref.col_data.column(ref_labels)
-    else:
-        ref_markers = None
+        ref_labels = list(ref_labels)
 
-    return ref_data, ref_labels, ref_features, ref_markers
+        try:
+            _default_asy = "logcounts"
+            if "assay_type" in build_args:
+                _default_asy = build_args["assay_type"]
 
+            ref_data = ref_data.assay(_default_asy)
+        except Exception as _:
+            raise ValueError(f"Reference dataset must contain log-normalized count ('{_default_asy}') assay.")
 
-def _attach_markers(markers, build_args):
-    if markers is not None and "markers" not in build_args:
-        tmp = copy(build_args)
-        tmp["markers"] = markers
-        print(tmp)
-        return tmp
-    return build_args
+    if ref_labels is None:
+        raise ValueError("'ref_labels' cannot be `None`.")
+
+    if ref_features is None:
+        raise ValueError("'ref_features' cannot be `None`.")
+
+    return ref_data, ref_labels, ref_features
 
 
 def annotate_single(
     test_data: Any,
-    test_features: Sequence,
     ref_data: Any,
-    ref_labels: Union[Sequence, str],
-    ref_features: Union[Sequence, str],
-    cache_dir: Optional[str] = None,
+    ref_labels: Optional[Union[Sequence, str]],
+    test_features: Optional[Union[Sequence, str]] = None,
+    ref_features: Optional[Union[Sequence, str]] = None,
     build_args: dict = {},
     classify_args: dict = {},
     num_threads: int = 1,
@@ -74,36 +70,41 @@ def annotate_single(
             Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
+            Alternatively, if ``test_data`` is a ``SummarizedExperiment``, ``test_features``
+            may be a string speciying the column name in `row_data` that contains the
+            features. It can also be set to `None`, to use the `row_names` of
+            the experiment as features.
+
         ref_data:
             A matrix-like object representing the reference dataset, where rows
             are features and columns are samples. Entries should be expression values,
             usually log-transformed (see comments for the ``ref`` argument in
             :py:meth:`~singler.build_single_reference.build_single_reference`).
 
-            Alternatively, a string that can be passed as ``name`` to
-            :py:meth:`~singler.fetch_reference.fetch_github_reference`.
-            This will use the specified dataset as the reference.
+            Alternatively, a
+            :py:class:`~summarizedexperiment.SummarizedExperiment.SummarizedExperiment`
+            containing such a matrix in one of its assays. Non-default assay
+            types can be specified in ``classify_args``.
 
         ref_labels:
             If ``ref_data`` is a matrix-like object, ``ref_labels`` should be
             a sequence of length equal to the number of columns of ``ref_data``,
             containing the label associated with each column.
 
-            If ``ref_data`` is a string, ``ref_labels`` should be a string
-            specifying the label type to use, e.g., "main", "fine", "ont".
+            Alternatively, if ``ref_data`` is a ``SummarizedExperiment``, 
+            ``ref_labels`` may be a string specifying the label type to use,
+            e.g., "main", "fine", "ont". It can also be set to `None`, to use 
+            the `row_names` of the experiment as features.
 
         ref_features:
             If ``ref_data`` is a matrix-like object, ``ref_features`` should be
             a sequence of length equal to the number of rows of ``ref_data``,
             containing the feature identifier associated with each row.
 
-            If ``ref_data`` is a string, ``ref_features`` should be a string
-            specifying the label type to use, e.g., "ensembl", "symbol".
-
-        cache_dir:
-            Path to a cache directory for downloading reference files, see
-            :py:meth:`~singler.fetch_reference.fetch_github_reference` for details.
-            Only used if ``ref_data`` is a string.
+            Alternatively, if ``ref_data`` is a ``SummarizedExperiment``, 
+            ``ref_features`` may be a string speciying the column name in `column_data`
+            that contains the features. It can also be set to `None`, to use the 
+            `row_names` of the experiment as features.
 
         build_args:
             Further arguments to pass to
@@ -123,24 +124,36 @@ def annotate_single(
         specifying the markers that were used for each pairwise comparison
         between labels; and a list of ``unique_markers`` across all labels.
     """
-    test_features_set = set(test_features)
 
-    ref_data, ref_labels, ref_features, markers = _resolve_reference(
+    if isinstance(test_data, SummarizedExperiment):
+        if test_features is None:
+            test_features = test_data.get_row_names()
+        elif isinstance(test_features, str):
+            test_features = test_data.get_row_data().column(test_features)
+
+    if test_features is None:
+        raise ValueError("'test_features' cannot be `None`.")
+
+    test_features_set = set(test_features)
+    if len(test_features_set) != len(test_features):
+        warnings.warn("'test_features' is not unique, subsetting test matrix...", UserWarning)
+        _idxs = [test_features.index(x) for x in test_features_set]
+        print("modifying test data")
+        test_data = test_data[_idxs,]
+
+    ref_data, ref_labels, ref_features = _resolve_reference(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
-        cache_dir=cache_dir,
         build_args=build_args,
-        test_features_set=test_features_set,
     )
 
-    bargs = _attach_markers(markers, build_args)
     built = build_single_reference(
         ref_data=ref_data,
         ref_labels=ref_labels,
         ref_features=ref_features,
         restrict_to=test_features_set,
-        **bargs,
+        **build_args,
         num_threads=num_threads,
     )
 
