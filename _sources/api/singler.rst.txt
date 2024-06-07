@@ -52,14 +52,6 @@ singler.classify\_single\_reference module
    :undoc-members:
    :show-inheritance:
 
-singler.fetch\_reference module
--------------------------------
-
-.. automodule:: singler.fetch_reference
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 singler.get\_classic\_markers module
 ------------------------------------
 
