@@ -33,6 +33,19 @@ mat = data.assay("counts")
 features = [str(x) for x in data.row_data["name"]]
 ```
 
+or if you are coming from scverse ecosystem, i.e. `AnnData`, simply read the object as `SingleCellExperiment` and extract the matrix and the features.
+Read more on [SingleCellExperiment here](https://biocpy.github.io/tutorial/chapters/experiments/single_cell_experiment.html).
+
+
+```python
+import singlecellexperiment as sce
+
+sce_adata = sce.SingleCellExperiment.from_anndata(adata) 
+
+# or from a h5ad file
+sce_h5ad = sce.read_h5ad("tests/data/adata.h5ad")
+```
+
 Now, we fetch the Blueprint/ENCODE reference:
 
 ```python
