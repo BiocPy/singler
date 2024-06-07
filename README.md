@@ -28,12 +28,9 @@ Firstly, let's load in the famous PBMC 4k dataset from 10X Genomics:
 
 ```python
 import singlecellexperiment as sce
-data = sce.read_tenx_h5("pbmc4k-tenx.h5")
+data = sce.read_tenx_h5("pbmc4k-tenx.h5", realize_assays=True)
 mat = data.assay("counts")
 features = [str(x) for x in data.row_data["name"]]
-
-import delayedarray as da
-mat_csr = da.to_scipy_sparse_matrix(mat, "csr")
 ```
 
 Now, we fetch the Blueprint/ENCODE reference:
@@ -49,7 +46,7 @@ We can annotate each cell in `mat` with the reference:
 ```python
 import singler
 results = singler.annotate_single(
-    test_data = mat_csr,
+    test_data = mat,
     test_features = features,
     ref_data = ref_data,
     ref_labels = "label.main",
@@ -97,7 +94,7 @@ This can be repeated with different datasets that have the same features or a su
 
 ```python
 output = singler.classify_single_reference(
-    mat_csr,
+    mat,
     test_features=features,
     ref_prebuilt=built,
 )
