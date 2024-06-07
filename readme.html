@@ -292,6 +292,16 @@ So kind of like Tinder, but for cells.</p>
 <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">row_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
 </pre></div>
 </div>
+<p>or if you are coming from scverse ecosystem, i.e. <code class="docutils literal notranslate"><span class="pre">AnnData</span></code>, simply read the object as <code class="docutils literal notranslate"><span class="pre">SingleCellExperiment</span></code> and extract the matrix and the features.
+Read more on <a class="reference external" href="https://biocpy.github.io/tutorial/chapters/experiments/single_cell_experiment.html">SingleCellExperiment here</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">singlecellexperiment</span> <span class="k">as</span> <span class="nn">sce</span>
+
+<span class="n">sce_adata</span> <span class="o">=</span> <span class="n">sce</span><span class="o">.</span><span class="n">SingleCellExperiment</span><span class="o">.</span><span class="n">from_anndata</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span> 
+
+<span class="c1"># or from a h5ad file</span>
+<span class="n">sce_h5ad</span> <span class="o">=</span> <span class="n">sce</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="s2">&quot;tests/data/adata.h5ad&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Now, we fetch the Blueprint/ENCODE reference:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">celldex</span>
 
