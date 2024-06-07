@@ -31,19 +31,28 @@ import singlecellexperiment as sce
 data = sce.read_tenx_h5("pbmc4k-tenx.h5")
 mat = data.assay("counts")
 features = [str(x) for x in data.row_data["name"]]
+
+import delayedarray as da
+mat_csr = da.to_scipy_sparse_matrix(mat, "csr")
 ```
 
-Now we use the Blueprint/ENCODE reference to annotate each cell in `mat`:
+Now, we fetch the Blueprint/ENCODE reference:
+
+```python
+import celldex
+
+ref_data = celldex.fetch_reference("blueprint_encode", "2024-02-26", realize_assays=True)
+```
+
+We can annotate each cell in `mat` with the reference:
 
 ```python
 import singler
 results = singler.annotate_single(
-    mat,
-    features,
-    ref_data = "BlueprintEncode",
-    ref_features = "symbol",
-    ref_labels = "main",
-    cache_dir = "_cache"
+    test_data = mat_csr,
+    test_features = features,
+    ref_data = ref_data,
+    ref_labels = "label.main",
 )
 ```
 
@@ -74,34 +83,12 @@ The `annotate_single()` function is a convenient wrapper around a number of lowe
 Advanced users may prefer to build the reference and run the classification separately.
 This allows us to re-use the same reference for multiple datasets without repeating the build step.
 
-We start by fetching the reference of interest from [GitHub](https://github.com/kanaverse/singlepp-references).
-Note the use of `cache_dir` to avoid repeated downloads from GitHub.
-
-```python
-ref = singler.fetch_github_reference("BlueprintEncode", cache_dir="_cache")
-```
-
-We'll be using the gene symbols here with the markers for the main labels.
-We need to set `restrict_to` to the features in our test data, so as to avoid picking marker genes in the reference that won't be present in the test.
-
-```python
-ref_features = ref.row_data.column("symbol")
-
-markers = singler.realize_github_markers(
-    ref.metadata["main"],
-    ref_features,
-    restrict_to=set(features),
-)
-```
-
-Now we build the reference from the ranked expression values and the associated labels in the reference:
-
 ```python
 built = singler.build_single_reference(
-    ref_data=ref.assay("ranks"),
-    ref_labels=ref.col_data.column("main"),
-    ref_features=ref_features,
-    markers=markers,
+    ref_data=ref_data.assay("logcounts"),
+    ref_labels=ref_data.col_data.column("label.main"),
+    ref_features=ref_data.get_row_names(),
+    restrict_to=features,
 )
 ```
 
@@ -110,7 +97,7 @@ This can be repeated with different datasets that have the same features or a su
 
 ```python
 output = singler.classify_single_reference(
-    mat,
+    mat_csr,
     test_features=features,
     ref_prebuilt=built,
 )
@@ -134,14 +121,17 @@ We can use annotations from multiple references through the `annotate_integrated
 
 ```python
 import singler
+import celldex
+
+blueprint_ref = celldex.fetch_reference("blueprint_encode", "2024-02-26", realize_assays=True)
+
+immune_cell_ref = celldex.fetch_reference("dice", "2024-02-26", realize_assays=True)
+
 single_results, integrated = singler.annotate_integrated(
     mat,
     features,
-    ref_data_list = ("BlueprintEncode", "DatabaseImmuneCellExpression"),
-    ref_features_list= "symbol",
-    ref_labels_list = "main",
-    build_integrated_args = { "ref_names": ("Blueprint", "DICE") },
-    cache_dir = "_cache",
+    ref_data_list = (blueprint_ref, immune_cell_ref),
+    ref_labels_list = "label.main",
     num_threads = 6
 )
 ```

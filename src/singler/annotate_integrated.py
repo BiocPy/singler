@@ -12,15 +12,14 @@ from .classify_single_reference import classify_single_reference
 
 def annotate_integrated(
     test_data: Any,
-    test_features: Sequence,
     ref_data_list: Sequence[Union[Any, str]],
-    ref_labels_list: Union[str, Sequence[Union[Sequence, str]]],
-    ref_features_list: Union[str, Sequence[Union[Sequence, str]]],
+    test_features: Optional[Union[Sequence, str]] = None,
+    ref_labels_list: Optional[Union[Optional[str], Sequence[Union[Sequence, str]]]] = None,
+    ref_features_list: Optional[Union[Optional[str], Sequence[Union[Sequence, str]]]] = None,
     test_assay_type: Union[str, int] = 0,
     test_check_missing: bool = True,
     ref_assay_type: Union[str, int] = "logcounts",
     ref_check_missing: bool = True,
-    cache_dir: Optional[str] = None,
     build_single_args: dict = {},
     classify_single_args: dict = {},
     build_integrated_args: dict = {},
@@ -44,6 +43,11 @@ def annotate_integrated(
         test_features:
             Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
+
+            Alternatively, if ``test_data`` is a ``SummarizedExperiment``, ``test_features``
+            may be a string speciying the column name in `row_data` that contains the
+            features. It can also be set to `None`, to use the `row_names` of the
+            experiment as features.
 
         ref_data_list:
             Sequence consisting of one or more of the following:
@@ -69,6 +73,10 @@ def annotate_integrated(
             - If ``ref_data_list[i]`` is a string, ``ref_labels_list[i]`` should be a string
               specifying the label type to use, e.g., "main", "fine", "ont".
               If a single string is supplied, it is recycled for all ``ref_data``.
+            - If ``ref_data_list[i]`` is a ``SummarizedExperiment``, ``ref_labels_list[i]``
+              may be a string speciying the column name in `column_data` that contains the
+              features. It can also be set to `None`, to use the `column_names`of the
+              experiment as features.
 
         ref_features_list:
             Sequence of the same length as ``ref_data_list``, where the contents
@@ -80,6 +88,10 @@ def annotate_integrated(
             - If ``ref_data_list[i]`` is a string, ``ref_features_list[i]`` should be a string
               specifying the feature type to use, e.g., "ensembl", "symbol".
               If a single string is supplied, it is recycled for all ``ref_data``.
+            - If ``ref_data_list[i]`` is a ``SummarizedExperiment``, ``ref_features_list[i]``
+              may be a string speciying the column name in `row_data` that contains the
+              features. It can also be set to `None`, to use the `row_names` of the
+              experiment as features.
 
         test_assay_type:
             Assay of ``test_data`` containing the expression matrix, if ``test_data`` is a
@@ -94,11 +106,6 @@ def annotate_integrated(
 
         ref_check_missing:
             Whether to check for and remove missing (i.e., NaN) values from the reference datasets.
-
-        cache_dir:
-            Path to a cache directory for downloading reference files, see
-            :py:meth:`~singler.fetch_reference.fetch_github_reference` for details.
-            Only used if ``ref_data`` is a string.
 
         build_single_args:
             Further arguments to pass to
@@ -131,12 +138,18 @@ def annotate_integrated(
 
     if isinstance(ref_labels_list, str):
         ref_labels_list = [ref_labels_list] * nrefs
-    elif nrefs != len(ref_labels_list):
+    elif ref_labels_list is None:
+        ref_labels_list = [None] * nrefs
+
+    if nrefs != len(ref_labels_list):
         raise ValueError("'ref_data_list' and 'ref_labels_list' must be the same length")
 
     if isinstance(ref_features_list, str):
         ref_features_list = [ref_features_list] * nrefs
-    elif nrefs != len(ref_features_list):
+    elif ref_features_list is None:
+        ref_features_list = [None] * nrefs
+
+    if nrefs != len(ref_features_list):
         raise ValueError("'ref_data_list' and 'ref_features_list' must be the same length")
 
     test_ptr, test_features = _clean_matrix(

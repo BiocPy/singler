@@ -1,3 +1,4 @@
+import warnings
 from typing import Any, Optional, Sequence, Union
 
 from biocframe import BiocFrame
@@ -8,9 +9,7 @@ from .classify_single_reference import classify_single_reference
 
 
 def _resolve_reference(ref_data, ref_labels, ref_features, build_args):
-    if isinstance(ref_data, SummarizedExperiment) or issubclass(
-        type(ref_data), SummarizedExperiment
-    ):
+    if isinstance(ref_data, SummarizedExperiment) or issubclass(type(ref_data), SummarizedExperiment):
         if ref_features is None:
             ref_features = ref_data.get_row_names()
         elif isinstance(ref_features, str):
@@ -32,9 +31,7 @@ def _resolve_reference(ref_data, ref_labels, ref_features, build_args):
 
             ref_data = ref_data.assay(_default_asy)
         except Exception as _:
-            raise ValueError(
-                f"Reference dataset must contain log-normalized count ('{_default_asy}') assay."
-            )
+            raise ValueError(f"Reference dataset must contain log-normalized count ('{_default_asy}') assay.")
 
     if ref_labels is None:
         raise ValueError("'ref_labels' cannot be `None`.")
@@ -73,10 +70,10 @@ def annotate_single(
             Sequence of length equal to the number of rows in
             ``test_data``, containing the feature identifier for each row.
 
-            If ``test_data`` is a ``SummarizedExperiment``, ``test_features``
-            may be a string speciying the column name in `row_data`that contains the
-            features. Alternatively can be set to `None`, to use the `row_names` of
-            the experiment as used as features.
+            Alternatively, if ``test_data`` is a ``SummarizedExperiment``, ``test_features``
+            may be a string speciying the column name in `row_data` that contains the
+            features. It can also be set to `None`, to use the `row_names` of
+            the experiment as features.
 
         ref_data:
             A matrix-like object representing the reference dataset, where rows
@@ -94,20 +91,20 @@ def annotate_single(
             a sequence of length equal to the number of columns of ``ref_data``,
             containing the label associated with each column.
 
-            If ``ref_data`` is a ``SummarizedExperiment``, ``ref_labels``
-            may be a string specifying the label type to use,
-            e.g., "main", "fine", "ont". Alternatively can be set to
-            `None`, to use the `row_names` of the experiment as used as features.
+            Alternatively, if ``ref_data`` is a ``SummarizedExperiment``, 
+            ``ref_labels`` may be a string specifying the label type to use,
+            e.g., "main", "fine", "ont". It can also be set to `None`, to use 
+            the `row_names` of the experiment as features.
 
         ref_features:
             If ``ref_data`` is a matrix-like object, ``ref_features`` should be
             a sequence of length equal to the number of rows of ``ref_data``,
             containing the feature identifier associated with each row.
 
-            If ``ref_data`` is a ``SummarizedExperiment``, ``ref_features``
-            may be a string speciying the column name in `column_data`
-            that contains the features. Alternatively can be set to
-            `None`, to use the `row_names` of the experiment as used as features.
+            Alternatively, if ``ref_data`` is a ``SummarizedExperiment``, 
+            ``ref_features`` may be a string speciying the column name in `column_data`
+            that contains the features. It can also be set to `None`, to use the 
+            `row_names` of the experiment as features.
 
         build_args:
             Further arguments to pass to
@@ -138,6 +135,10 @@ def annotate_single(
         raise ValueError("'test_features' cannot be `None`.")
 
     test_features_set = set(test_features)
+    if len(test_features_set) != len(test_features):
+        warnings.warn("'test_features' is not unique, subsetting test matrix...", UserWarning)
+        _idxs = [test_features.index(x) for x in test_features_set]
+        test_data = test_data[_idxs,]
 
     ref_data, ref_labels, ref_features = _resolve_reference(
         ref_data=ref_data,
@@ -157,7 +158,7 @@ def annotate_single(
 
     output = classify_single_reference(
         test_data,
-        test_features=test_features,
+        test_features=test_features_set,
         ref_prebuilt=built,
         **classify_args,
         num_threads=num_threads,
