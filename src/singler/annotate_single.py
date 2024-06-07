@@ -138,6 +138,7 @@ def annotate_single(
     if len(test_features_set) != len(test_features):
         warnings.warn("'test_features' is not unique, subsetting test matrix...", UserWarning)
         _idxs = [test_features.index(x) for x in test_features_set]
+        print("modifying test data")
         test_data = test_data[_idxs,]
 
     ref_data, ref_labels, ref_features = _resolve_reference(
@@ -158,7 +159,7 @@ def annotate_single(
 
     output = classify_single_reference(
         test_data,
-        test_features=test_features_set,
+        test_features=test_features,
         ref_prebuilt=built,
         **classify_args,
         num_threads=num_threads,
