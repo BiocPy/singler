@@ -100,7 +100,7 @@ def test_clean_matrix():
     assert (ptr.column(4) == out[:, 4]).all()
 
     tmp = np.copy(out)
-    tmp[0, 5] = np.NaN
+    tmp[0, 5] = np.nan
     ptr, feats = _clean_matrix(
         tmp, features, assay_type=None, check_missing=True, num_threads=1
     )
